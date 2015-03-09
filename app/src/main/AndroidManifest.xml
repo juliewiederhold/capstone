@@ -30,6 +30,10 @@
             android:name=".Welcome"
             android:label="@string/title_activity_welcome" >
         </activity>
+        <activity
+            android:name=".SafetyZone"
+            android:label="@string/title_activity_safety_zone" >
+        </activity>
     </application>
 
 </manifest>
