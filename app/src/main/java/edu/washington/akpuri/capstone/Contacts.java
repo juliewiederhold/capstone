@@ -2,7 +2,10 @@ package edu.washington.akpuri.capstone;
 
 import android.app.ActionBar;
 import android.app.FragmentTransaction;
+import android.app.ListActivity;
+import android.app.LoaderManager;
 import android.content.ContentResolver;
+import android.content.Loader;
 import android.database.Cursor;
 import android.provider.ContactsContract;
 import android.support.v7.app.ActionBarActivity;
@@ -22,6 +25,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.SimpleCursorAdapter;
 import android.widget.TextView;
 
 import java.io.Serializable;
@@ -38,7 +42,7 @@ public class Contacts extends ActionBarActivity {
         //ContentResolver is used to query the contacts database to return a cursor
         ContentResolver contentResolver = getContentResolver();
         //The cursor is like an iterator, it contains the entirety of the contacts when we pass it null paramaters
-        Cursor cur = contentResolver.query(ContactsContract.Contacts.CONTENT_URI, null, null, null, null);
+        Cursor cur = contentResolver.query(ContactsContract.Contacts.CONTENT_URI, new String[] {android.provider.Contacts.People._ID, android.provider.Contacts.People.NAME, android.provider.Contacts.People.NUMBER}, null, null, null);
         //Check to see if the cursor actually got contacts back
         if (cur.getCount() > 0) {
             while(cur.moveToNext()) {
@@ -50,6 +54,15 @@ public class Contacts extends ActionBarActivity {
                 Log.i("Contacts", "Contact: " + name + " has ID of " + id);
             }
         }
+
+        Button next = (Button) findViewById(R.id.contactsNext);
+        next.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent safeZones = new Intent(Contacts.this, SafetyZone.class);
+                startActivity(safeZones);
+            }
+        });
 
 
         /*final ActionBar actionBar = getActionBar();
