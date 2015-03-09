@@ -15,5 +15,6 @@
     <string name="welcome_message">To get started, lets setup your Default Settings! </string>
     <string name="title_activity_contacts">Contacts</string>
     <string name="hello_world">Hello world!</string>
+    <string name="title_activity_safety_zone">SafetyZone</string>
 
 </resources>
