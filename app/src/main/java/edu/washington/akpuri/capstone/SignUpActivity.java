@@ -13,6 +13,7 @@ import android.view.View;
 import android.view.inputmethod.EditorInfo;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -59,6 +60,9 @@ public class SignUpActivity extends ActionBarActivity {
                 return false;
             }
         });
+
+        ImageView image = (ImageView) findViewById(R.id.image_icon);
+        image.setImageResource(R.drawable.picholdericon);
 
         // Set up the submit button click handler
         Button mActionButton = (Button) findViewById(R.id.action_button);

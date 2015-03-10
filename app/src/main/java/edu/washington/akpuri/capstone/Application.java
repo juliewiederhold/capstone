@@ -38,7 +38,7 @@ public class Application extends android.app.Application {
         testObject.put("foo", "bar");
         testObject.saveInBackground();
 
-        preferences = getSharedPreferences("hello.jcw27.washington.edu.so_so", Context.MODE_PRIVATE);
+        preferences = getSharedPreferences("edu.washington.akpuri.capstone", Context.MODE_PRIVATE);
 
         configHelper = new ConfigHelper();
         configHelper.fetchConfigIfNeeded();
