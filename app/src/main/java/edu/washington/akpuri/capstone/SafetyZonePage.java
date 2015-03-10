@@ -44,7 +44,7 @@ public class SafetyZonePage extends ActionBarActivity {
 
         lv.setTextFilterEnabled(true);
 
-        lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+       /* lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
@@ -58,20 +58,7 @@ public class SafetyZonePage extends ActionBarActivity {
                 }
                 finish();
             }
-        });
-
-        // How do I fill out multiple fragments for each safetyZone that exists?
-        if(existingSafetyZones.size() > 0){
-            if(existingSafetyZones.size() > 0){
-                for(int i = 0; i < existingSafetyZones.size(); i++){
-                    if (saved == null) {
-                        getSupportFragmentManager().beginTransaction()
-                                .add(R.id.container, new CurrentSafetyZone())
-                                .commit();
-                    }
-                }
-            }
-        }
+        });*/
 
         // Add Safety Zone to list
         addZone.setOnClickListener(new View.OnClickListener() {
@@ -88,19 +75,23 @@ public class SafetyZonePage extends ActionBarActivity {
 
     }
 
-  /*  private void initList(){
-        for(int i = 0; i < 3; i++){
-            topicsList.add(createTopic("topics", QuizApp.getInstance().getTopicAt(i),
-                    "description", QuizApp.getInstance().getDescriptionShortAt(i)));
+    private void initList(){
+        for(int i = 0; i < existingSafetyZones.size(); i++){
+            SafetyZone zone = existingSafetyZones.get(i);
+            safetyZoneInformation.add(createTopic(zone.getName(), zone.getAddress(), zone.getCity(), zone.getState(), Integer.toString(zone.getZip())));
         }
     }
 
-    private HashMap<String, String> createTopic(String key1, String value1, String key2, String value2){
-        HashMap<String, String> topic = new HashMap<>();
-        topic.put(key1, value1);
-        topic.put(key2, value2);
-        return topic;
-    }*/
+    private HashMap<String, String> createTopic(String nameValue, String addressValue, String cityValue, String stateValue, String zipValue){
+        HashMap<String, String> zoneInformation = new HashMap<>();
+        zoneInformation.put("name", nameValue);
+        zoneInformation.put("address", addressValue);
+        zoneInformation.put("city", cityValue);
+        zoneInformation.put("state", stateValue);
+        zoneInformation.put("zip", zipValue);
+
+        return zoneInformation;
+    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
