@@ -1,27 +1,21 @@
 package edu.washington.akpuri.capstone;
 
-import android.app.ActionBar;
-import android.app.FragmentTransaction;
+import android.content.ContentResolver;
+import android.database.Cursor;
+import android.provider.ContactsContract;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.content.Intent;
-import android.os.Bundle;
 //import android.support.v4.app.Fragment;
 //import android.support.v4.app.FragmentManager;
 //import android.support.v4.app.FragmentTransaction;
 //import android.support.v7.app.ActionBarActivity;
 // import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.TextView;
-
-import java.io.Serializable;
-import java.util.ArrayList;
 
 
 public class Contacts extends ActionBarActivity {
@@ -31,7 +25,34 @@ public class Contacts extends ActionBarActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_contacts);
 
-        final ActionBar actionBar = getActionBar();
+        //ContentResolver is used to query the contacts database to return a cursor
+        ContentResolver contentResolver = getContentResolver();
+        //The cursor is like an iterator, it contains the entirety of the contacts when we pass it null paramaters
+        Cursor cur = contentResolver.query(ContactsContract.Contacts.CONTENT_URI, null, null, null, null);
+        //Check to see if the cursor actually got contacts back
+        if (cur.getCount() > 0) {
+            while(cur.moveToNext()) {
+                //Use cursor to query, here we grab the current contacts ID which can be used to get
+                //More information for that particular contact later
+                String id = cur.getString(cur.getColumnIndex(ContactsContract.Contacts._ID));
+                String name = cur.getString(cur.getColumnIndex(ContactsContract.Contacts.DISPLAY_NAME));
+                //Contact phone numbers are stored in a separate database table so must be queried separately
+                Log.i("Contacts", "Contact: " + name + " has ID of " + id);
+            }
+        }
+
+        Button button = (Button) findViewById(R.id.button);
+
+        button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent create_account = new Intent(Contacts.this, SafetyZonePage.class);
+                startActivity(create_account);
+            }
+        });
+
+
+        /*final ActionBar actionBar = getActionBar();
         //actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
 
         ActionBar.TabListener tabListener = new ActionBar.TabListener() {
@@ -59,7 +80,7 @@ public class Contacts extends ActionBarActivity {
                     actionBar.newTab()
                             .setText("Tab " + (i + 1))
                             .setTabListener(tabListener));
-        }
+        }*/
     }
 
 
