@@ -66,7 +66,7 @@ public class Contacts extends ActionBarActivity {
             }
             cur.close();
 
-            ListView contactListView = (ListView) findViewById(R.id.contactListView);
+            ListView contactListView = (ListView) findViewById(R.id.listView);
             ListAdapter adapter = new ContactAdapter(this, R.id.contactListItem, allContacts);
             contactListView.setAdapter(adapter);
         }
