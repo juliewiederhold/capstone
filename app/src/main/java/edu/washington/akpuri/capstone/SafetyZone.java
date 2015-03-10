@@ -1,66 +1,60 @@
 package edu.washington.akpuri.capstone;
 
-import android.support.v7.app.ActionBarActivity;
-import android.support.v7.app.ActionBar;
-import android.support.v4.app.Fragment;
-import android.os.Bundle;
-import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuItem;
-import android.view.View;
-import android.view.ViewGroup;
-import android.os.Build;
+/**
+ * Created by Julie on 3/10/15.
+ */
+public class SafetyZone {
+    public String name;
+    public String address;
+    public String city;
+    public int zip;
+    public String state;
 
-
-public class SafetyZone extends ActionBarActivity {
-
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_safety_zone);
-        if (savedInstanceState == null) {
-            getSupportFragmentManager().beginTransaction()
-                    .add(R.id.container, new AddSafetyZone())
-                    .commit();
-        }
+    public SafetyZone(String name, String address, String city, int zip, String state){
+        this.name = name;
+        this.address = address;
+        this.city = city;
+        this.zip = zip;
+        this.state = state;
     }
 
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_safety_zone, menu);
-        return true;
+    public String getName() {
+        return name;
     }
 
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
-        }
-
-        return super.onOptionsItemSelected(item);
+    public void setName(String name) {
+        this.name = name;
     }
 
-    /**
-     * A placeholder fragment containing a simple view.
-     */
-    public static class AddSafetyZone extends Fragment {
+    public String getAddress() {
+        return address;
+    }
 
-        public AddSafetyZone() {
-        }
+    public void setAddress(String address) {
+        this.address = address;
+    }
 
-        @Override
-        public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                                 Bundle savedInstanceState) {
-            View rootView = inflater.inflate(R.layout.fragment_safety_zone, container, false);
-            return rootView;
-        }
+    public String getCity() {
+        return city;
+    }
+
+    public void setCity(String city) {
+        this.city = city;
+    }
+
+    public int getZip() {
+        return zip;
+    }
+
+    public void setZip(int zip) {
+        this.zip = zip;
+    }
+
+    public String getState() {
+        return state;
+    }
+
+    public void setState(String state) {
+        this.state = state;
     }
 }

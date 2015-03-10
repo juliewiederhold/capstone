@@ -27,6 +27,12 @@
     <ListView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:id="@+id/listView" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="New Button"
         android:id="@+id/contactListView"
         android:layout_centerHorizontal="true"
         android:layout_below="@+id/textView2"

@@ -1,4 +1,46 @@
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools" android:id="@+id/container"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent" android:layout_height="match_parent"
-    tools:context="edu.washington.akpuri.capstone.SafetyZone" tools:ignore="MergeRootFrame" />
+    tools:context="edu.washington.akpuri.capstone.SafetyZonePage" tools:ignore="MergeRootFrame" >
+
+    <FrameLayout android:id="@+id/container" android:layout_weight="1"
+        android:layout_width="fill_parent" android:layout_height="137dp"
+        android:layout_below="@+id/textView"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
+        android:layout_marginTop="75dp">
+
+    </FrameLayout>
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:text="Safety Zones"
+        android:id="@+id/textView"
+        android:layout_alignParentTop="true"
+        android:layout_alignBottom="@+id/addZone"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_toLeftOf="@+id/addZone"
+        android:layout_toStartOf="@+id/addZone"
+        android:textSize="40dp"
+        android:layout_marginTop="25dp"
+        android:layout_marginLeft="45dp" />
+
+    <Button
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:text="+"
+        android:id="@+id/addZone"
+        android:layout_marginTop="25dp"
+        android:layout_marginLeft="300dp" />
+
+    <FrameLayout
+        android:id="@+id/current_safety_zones"
+        android:layout_width="fill_parent"
+        android:layout_height="360dp"
+        android:layout_gravity="center_horizontal|bottom"></FrameLayout>
+
+</FrameLayout>

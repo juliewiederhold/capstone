@@ -78,41 +78,11 @@ public class Contacts extends ActionBarActivity {
         next.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent safeZones = new Intent(Contacts.this, SafetyZone.class);
+                Intent safeZones = new Intent(Contacts.this, SafetyZonePage.class);
                 startActivity(safeZones);
             }
         });
 
-
-        /*final ActionBar actionBar = getActionBar();
-        //actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
-
-        ActionBar.TabListener tabListener = new ActionBar.TabListener() {
-            public void onTabSelected(ActionBar.Tab tab, FragmentTransaction ft) {
-                TextView tabSelect = (TextView) findViewById(R.id.tab1);
-                tabSelect.setText("Tab is selected!");
-            }
-
-            public void onTabUnselected(ActionBar.Tab tab, FragmentTransaction ft) {
-                // hide the given tab
-                TextView tabUnselect = (TextView) findViewById(R.id.tab1);
-                tabUnselect.setText("Tab is unselected!");
-            }
-
-            public void onTabReselected(ActionBar.Tab tab, FragmentTransaction ft) {
-                // probably ignore this event
-                TextView tabReselect = (TextView) findViewById(R.id.tab1);
-                tabReselect.setText("Tab is reselected!");
-            }
-        };
-
-        // Add 3 tabs, specifying the tab's text and TabListener
-        for (int i = 0; i < 3; i++) {
-            actionBar.addTab(
-                    actionBar.newTab()
-                            .setText("Tab " + (i + 1))
-                            .setTabListener(tabListener));
-        }*/
     }
 
 
