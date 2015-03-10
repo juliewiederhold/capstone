@@ -56,10 +56,22 @@ public class MainActivity extends ActionBarActivity {
                 Intent intent = new Intent(this, SettingsActivity.class);
                 this.startActivity(intent);
                 break;
+            case R.id.action_logout:
+                logout();
+                break;
             default:
                 return super.onOptionsItemSelected(item);
         }
-
         return true;
+    }
+
+    private void logout() {
+        // Call the Parse log out method
+        ParseUser.logOut();
+        // Start and intent for the dispatch activity
+        // Below will start invalidate user's session and redirect to WelcomeActivity
+        Intent intent = new Intent(this, DispatchActivity.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+        startActivity(intent);
     }
 }

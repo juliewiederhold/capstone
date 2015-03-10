@@ -14,7 +14,7 @@ import com.parse.ParseUser;
  * Checks for a valid ParseUser, then routes the user to MainActivity.
  * Keeps the user logged-in by caching ParseUser object when a user logs in.
  */
-public class DispatchActivity extends ActionBarActivity {
+public class DispatchActivity extends Activity {
     public DispatchActivity() {
     }
 
