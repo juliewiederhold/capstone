@@ -2,10 +2,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="edu.washington.akpuri.capstone" >
 
-    <permission
-        android:name="com.parse.anywall.permission.MAPS_RECEIVE"
-        android:protectionLevel="signature" >
-    </permission>
+
 
     <uses-permission android:name="com.parse.anywall.permission.MAPS_RECEIVE" />
     <uses-permission android:name="android.permission.INTERNET" />

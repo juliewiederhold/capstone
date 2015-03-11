@@ -162,7 +162,9 @@ public class Contacts extends ActionBarActivity {
                                 });
                             }
                             Log.e("Contacts", "Should've saved contacts.");
-                            savedSuccesfully(parseObject);
+                            parseObject.addAllUnique("contacts", pendingParseContacts);
+                            parseObject.saveInBackground();
+//                            savedSuccesfully(parseObject);
 //                            parseObject.put("contacts", pendingParseContacts);
                         } else {
                             // Something went wrong
