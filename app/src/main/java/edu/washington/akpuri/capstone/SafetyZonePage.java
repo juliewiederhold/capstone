@@ -1,5 +1,6 @@
 package edu.washington.akpuri.capstone;
 
+import android.support.v4.app.FragmentManager;
 import android.content.Context;
 import android.content.Intent;
 import android.support.v4.app.Fragment;
@@ -35,33 +36,54 @@ public class SafetyZonePage extends ActionBarActivity {
         final Bundle saved = savedInstanceState;
         Button addZone = (Button)findViewById(R.id.addZone);
 
-        ListView lv = (ListView) findViewById(R.id.listView);
+        if (savedInstanceState == null) {
+            getSupportFragmentManager().beginTransaction()
+                    .add(R.id.current_safety_zones, new CurrentSafetyZone())
+                    .commit();
+        }
 
-        SimpleAdapter simpleAdpt = new SimpleAdapter(this, safetyZoneInformation, android.R.layout.simple_list_item_2,
-                new String[] {"name", "address", "city", "state", "zip"}, new int[] {android.R.id.text1, android.R.id.text2});
+        Button add_safety_zone_location = (Button) findViewById(R.id.add_safety_zone_location);
 
-        lv.setAdapter(simpleAdpt);
-
-        lv.setTextFilterEnabled(true);
-
-       /* lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        add_safety_zone_location.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+            public void onClick(View v) {
+                EditText nameText = (EditText) findViewById(R.id.safety_zone_name);
+                EditText addressText = (EditText) findViewById(R.id.address);
+                EditText cityText = (EditText) findViewById(R.id.city);
+                EditText zipText = (EditText) findViewById(R.id.zip);
+                EditText stateText = (EditText) findViewById(R.id.state);
 
-                String topic = ((TextView) view.findViewById(android.R.id.text1)).getText().toString();
-                if(topic.equals("Math")){
-                    QuizApp.getInstance().setCurrTopic(0);
-                } else if(topic.equals("Physics")){
-                    QuizApp.getInstance().setCurrTopic(1);
-                } else if(topic.equals("Marvel Super Heroes")) {
-                    QuizApp.getInstance().setCurrTopic(2);
+                String name = nameText.getText().toString();
+                String address = addressText.getText().toString();
+                String city = cityText.getText().toString();
+                String zip = zipText.getText().toString();
+                String state = stateText.getText().toString();
+
+                if(!name.equals("") && !address.equals("") && !city.equals("")&& !zip.equals("") && !stateText.equals("")){
+                    SafetyZone newZone = new SafetyZone(name, address, city, Integer.parseInt(zip), state);
+                    existingSafetyZones.add(newZone);
+                    updateCurrentSafetyZone();
+
+                    nameText.setText("");
+                    addressText.setText("");
+                    cityText.setText("");
+                    stateText.setText("");
+                    zipText.setText("");
+
+                } else {
+                    Context context = getApplicationContext();
+                    CharSequence text = "All fields must be filled out";
+                    int duration = Toast.LENGTH_SHORT;
+
+                    Toast toast = Toast.makeText(context, text, duration);
+                    toast.show();
                 }
-                finish();
             }
-        });*/
+        });
 
-        // Add Safety Zone to list
-        addZone.setOnClickListener(new View.OnClickListener() {
+
+        // Add Safety Zone to list through clicking button
+      /*  addZone.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (saved == null) {
@@ -70,25 +92,32 @@ public class SafetyZonePage extends ActionBarActivity {
                             .commit();
                 }
             }
-        });
+        });*/
 
 
     }
 
-    private void initList(){
+    private void updateCurrentSafetyZone(){
+        FragmentManager fm = getSupportFragmentManager();
+        FragmentTransaction ft = fm.beginTransaction();
+        CurrentSafetyZone fragment = new CurrentSafetyZone();
+        ft.replace(R.id.current_safety_zones, fragment);   // replace instead of add
+        ft.addToBackStack("Update Current Safety Zones");
+        ft.commit();
+    }
+
+    private static void initList(){
+        safetyZoneInformation = new ArrayList<>();
         for(int i = 0; i < existingSafetyZones.size(); i++){
             SafetyZone zone = existingSafetyZones.get(i);
             safetyZoneInformation.add(createTopic(zone.getName(), zone.getAddress(), zone.getCity(), zone.getState(), Integer.toString(zone.getZip())));
         }
     }
 
-    private HashMap<String, String> createTopic(String nameValue, String addressValue, String cityValue, String stateValue, String zipValue){
+    private static HashMap<String, String> createTopic(String nameValue, String addressValue, String cityValue, String stateValue, String zipValue){
         HashMap<String, String> zoneInformation = new HashMap<>();
         zoneInformation.put("name", nameValue);
-        zoneInformation.put("address", addressValue);
-        zoneInformation.put("city", cityValue);
-        zoneInformation.put("state", stateValue);
-        zoneInformation.put("zip", zipValue);
+        zoneInformation.put("address", addressValue + ", " + cityValue + ", " + stateValue + " " + zipValue);
 
         return zoneInformation;
     }
@@ -115,58 +144,6 @@ public class SafetyZonePage extends ActionBarActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    /**
-     * A placeholder fragment containing a simple view.
-     */
-    public static class AddSafetyZone extends Fragment {
-
-        public AddSafetyZone() {
-        }
-
-        @Override
-        public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                                 Bundle savedInstanceState) {
-            final View rootView = inflater.inflate(R.layout.fragment_safety_zone, container, false);
-
-            Button add_safety_zone_location = (Button) rootView.findViewById(R.id.add_safety_zone_location);
-
-            add_safety_zone_location.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    EditText nameText = (EditText) rootView.findViewById(R.id.safety_zone_name);
-                    EditText addressText = (EditText)rootView.findViewById(R.id.address);
-                    EditText cityText = (EditText)rootView.findViewById(R.id.city);
-                    EditText zipText = (EditText)rootView.findViewById(R.id.zip);
-                    EditText stateText = (EditText)rootView.findViewById(R.id.state);
-
-                    String name = nameText.getText().toString();
-                    String address = addressText.getText().toString();
-                    String city = cityText.getText().toString();
-                    String zip = zipText.getText().toString();
-                    String state = stateText.getText().toString();
-
-                    if(!name.equals("") && !address.equals("") && !city.equals("")&& !zip.equals("") && !stateText.equals("")){
-                        SafetyZone newZone = new SafetyZone(name, address, city, Integer.parseInt(zip), state);
-
-                        existingSafetyZones.add(newZone);
-                        FragmentTransaction transaction = getFragmentManager().beginTransaction().replace(R.id.container, new CurrentSafetyZone());
-                        transaction.addToBackStack("questions");
-                        transaction.commit();
-                    } else {
-                        Context context = rootView.getContext().getApplicationContext();
-                        CharSequence text = "All fields must be filled out";
-                        int duration = Toast.LENGTH_SHORT;
-
-                        Toast toast = Toast.makeText(context, text, duration);
-                        toast.show();
-                    }
-                }
-            });
-
-            return rootView;
-        }
-    }
-
     public static class CurrentSafetyZone extends Fragment {
         public CurrentSafetyZone(){
         }
@@ -174,9 +151,18 @@ public class SafetyZonePage extends ActionBarActivity {
         @Override
         public View onCreateView(LayoutInflater inflater, ViewGroup container,
                                  Bundle savedInstanceState) {
-            View rootView = inflater.inflate(R.layout.fragment_safety_zone, container, false);
+            View rootView = inflater.inflate(R.layout.current_safety_zone_view, container, false);
 
-            TextView name = (TextView) container.findViewById(R.id.safety_zone_name);
+            int size = existingSafetyZones.size();
+            ListView lv = (ListView) rootView.findViewById(R.id.listView_safety_zones);
+            initList();
+
+            SimpleAdapter simpleAdpt = new SimpleAdapter(rootView.getContext(), safetyZoneInformation, android.R.layout.simple_list_item_2,
+                    new String[] {"name", "address"}, new int[] {android.R.id.text1, android.R.id.text2});
+
+            lv.setAdapter(simpleAdpt);
+
+            lv.setTextFilterEnabled(true);
 
             return rootView;
         }

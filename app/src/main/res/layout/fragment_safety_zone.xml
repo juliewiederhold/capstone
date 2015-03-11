@@ -10,15 +10,20 @@
         android:id="@+id/safety_zone_name"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
+        android:padding="2dp"
         android:hint="@string/safety_zone_name"
         android:inputType="text"
         android:layout_alignParentStart="true"
-        android:layout_alignParentLeft="true" />
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentTop="true"
+        android:layout_alignRight="@+id/address"
+        android:layout_alignEnd="@+id/address" />
 
     <EditText
         android:id="@+id/address"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
+        android:padding="2dp"
         android:hint="@string/address"
         android:inputType="text"
         android:layout_below="@+id/safety_zone_name"
@@ -29,6 +34,7 @@
         android:id="@+id/city"
         android:layout_width="180dp"
         android:layout_height="wrap_content"
+        android:padding="2dp"
         android:hint="@string/city"
         android:inputType="text"
         android:layout_below="@+id/address"
@@ -39,6 +45,7 @@
         android:id="@+id/state"
         android:layout_width="180dp"
         android:layout_height="wrap_content"
+        android:padding="2dp"
         android:hint="@string/state"
         android:inputType="text"
         android:layout_below="@+id/address"
@@ -49,6 +56,7 @@
         android:id="@+id/zip"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
+        android:padding="2dp"
         android:hint="@string/zip"
         android:inputType="number"
         android:layout_below="@+id/city"
@@ -57,7 +65,8 @@
 
     <Button
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_height="30dp"
+        android:padding="2dp"
         android:text="@string/add_button_text"
         android:id="@+id/add_safety_zone_location"
         android:layout_below="@+id/zip"
