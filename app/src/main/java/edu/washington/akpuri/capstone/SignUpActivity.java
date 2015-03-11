@@ -172,6 +172,20 @@ public class SignUpActivity extends ActionBarActivity {
             }
         });
 
+        final ParseObject safetyzones = new ParseObject("SafetyZonesObject");
+        safetyzones.put("user", email);
+        safetyzones.put("safetyzones", new ArrayList<SafetyZone>());
+        safetyzones.saveInBackground( new SaveCallback() {
+            @Override
+            public void done(ParseException e) {
+                if (e == null) {
+                    // Saved successfully
+                } else {
+                    Log.e(TAG, "Error saving contactsId: " + e);
+                }
+            }
+        });
+
 
 
         // Call the Parse signup method

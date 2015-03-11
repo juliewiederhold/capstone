@@ -59,6 +59,14 @@ public class MainActivity extends ActionBarActivity {
             case R.id.action_logout:
                 logout();
                 break;
+            case R.id.action_safetyzones:
+                Intent intent2 = new Intent(this, SafetyZonePage.class);
+                this.startActivity(intent2);
+                break;
+            case R.id.action_contacts:
+                Intent intent3 = new Intent(this, Contacts.class);
+                this.startActivity(intent3);
+                break;
             default:
                 return super.onOptionsItemSelected(item);
         }

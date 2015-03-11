@@ -31,5 +31,7 @@
     <string name="reset_password">Reset Password</string>
     <string name="welcome">Welcome</string>
     <string name="save_changes">Save changes</string>
+    <string name="action_safetyzones">Safety Zones</string>
+    <string name="action_contacts">Contacts</string>
 
 </resources>
