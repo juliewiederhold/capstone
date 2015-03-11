@@ -71,61 +71,64 @@ public class Contacts extends ActionBarActivity {
             @Override
             public void onClick(View v) {
                 Log.e(TAG, "contactsNext button pressed");
+                if (allowContactRetrieval) {
+                    final String user = ParseUser.getCurrentUser().getString("email");
+                    ParseQuery<ParseObject> query = ParseQuery.getQuery("ContactsObject");
+                    query.whereEqualTo("user", user); // query.whereEqualTo("parent", user);
+                    query.getFirstInBackground(new GetCallback<ParseObject>() {
+                        @Override
+                        public void done(ParseObject parseObject, ParseException e) {
+                            if (parseObject != null) {
+                                for(int i = 0; i < pendingContacts.size(); i++) {
+                                    final String name = pendingContacts.get(i).getName();
+                                    final String phone = pendingContacts.get(i).getPhone();
+                                    final int id = pendingContacts.get(i).getId();
+                                    pendingContacts.get(i).setHasBeenAdded(true);
+                                    ParseQuery<ParseObject> query = ParseQuery.getQuery("contact");
+                                    query.whereEqualTo("user", user);
+                                    query.whereEqualTo("phone", pendingContacts.get(i).getPhone());
+                                    query.getFirstInBackground(new GetCallback<ParseObject>() {
+                                        @Override
+                                        public void done(final ParseObject parseObject, ParseException e) {
+                                            if (parseObject != null) {
+                                                Log.e(TAG, "Contact exists");
+                                            } else {
+                                                Log.e(TAG, "Contact DNE yet");
+                                                final ParseObject contact = new ParseObject("contact");
+                                                contact.put("name", name);
+                                                contact.put("phone", phone);    //
+                                                contact.put("user", user);
+                                                contact.put("id", id);
+                                                contact.saveInBackground(new SaveCallback() {
+                                                    @Override
+                                                    public void done(ParseException e) {
+                                                        if (e == null) {
+                                                            pendingParseContacts.add(contact);
+                                                        } else {
+                                                            Log.e("Contacts.java", "Error saving contactsId: " + e);
+                                                        }
+                                                    }
+                                                });
+                                            }
+                                        }
+                                    });
+                                }
+                                Log.e("Contacts", "Should've saved contacts.");
+                                parseObject.addAllUnique("contacts", pendingParseContacts);
+                                parseObject.saveInBackground();
+                            } else {
+                                // Something went wrong
+                                Log.e("Contacts", "Failed to retrieve contactsObject: " + e);
+                            }
+                        }
+                    });
+                }
                 Intent safeZones = new Intent(Contacts.this, SafetyZonePage.class);
                 startActivity(safeZones);
             }
         });
 
-        final String user = ParseUser.getCurrentUser().getString("email");
-        ParseQuery<ParseObject> query = ParseQuery.getQuery("ContactsObject");
-        query.whereEqualTo("user", user); // query.whereEqualTo("parent", user);
-        query.getFirstInBackground(new GetCallback<ParseObject>() {
-            @Override
-            public void done(ParseObject parseObject, ParseException e) {
-                if (parseObject != null) {
-                    for(int i = 0; i < pendingContacts.size(); i++) {
-                        final String name = pendingContacts.get(i).getName();
-                        final String phone = pendingContacts.get(i).getPhone();
-                        final int id = pendingContacts.get(i).getId();
-                        pendingContacts.get(i).setHasBeenAdded(true);
-                        ParseQuery<ParseObject> query = ParseQuery.getQuery("contact");
-                        query.whereEqualTo("user", user);
-                        query.whereEqualTo("phone", pendingContacts.get(i).getPhone());
-                        query.getFirstInBackground(new GetCallback<ParseObject>() {
-                            @Override
-                            public void done(final ParseObject parseObject, ParseException e) {
-                                if (parseObject != null) {
-                                    Log.e(TAG, "Contact exists");
-                                } else {
-                                    Log.e(TAG, "Contact DNE yet");
-                                    final ParseObject contact = new ParseObject("contact");
-                                    contact.put("name", name);
-                                    contact.put("phone", phone);    //
-                                    contact.put("user", user);
-                                    contact.put("id", id);
-                                    contact.saveInBackground(new SaveCallback() {
-                                        @Override
-                                        public void done(ParseException e) {
-                                            if (e == null) {
-                                                pendingParseContacts.add(contact);
-                                            } else {
-                                                Log.e("Contacts.java", "Error saving contactsId: " + e);
-                                            }
-                                        }
-                                    });
-                                }
-                            }
-                        });
-                    }
-                    Log.e("Contacts", "Should've saved contacts.");
-                    parseObject.addAllUnique("contacts", pendingParseContacts);
-                    parseObject.saveInBackground();
-                } else {
-                    // Something went wrong
-                    Log.e("Contacts", "Failed to retrieve contactsObject: " + e);
-                }
-            }
-        });
+
 
     }
 
