@@ -30,6 +30,8 @@ import java.util.ArrayList;
 
 public class Contacts extends ActionBarActivity {
 
+    private final static String TAG = "Contacts.java";
+
     private static boolean objectExists;
     private static String objectId;
     private static ArrayList<Contact> allContacts;
@@ -68,6 +70,7 @@ public class Contacts extends ActionBarActivity {
         next.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                Log.e(TAG, "contactsNext button pressed");
                 Intent safeZones = new Intent(Contacts.this, SafetyZonePage.class);
                 startActivity(safeZones);
             }
@@ -92,20 +95,14 @@ public class Contacts extends ActionBarActivity {
                             @Override
                             public void done(final ParseObject parseObject, ParseException e) {
                                 if (parseObject != null) {
-                                    Log.e("Contacts.java", "Contact exists");
+                                    Log.e(TAG, "Contact exists");
                                 } else {
-                                    Log.e("Contacts.java", "Contact DNE yet");
+                                    Log.e(TAG, "Contact DNE yet");
                                     final ParseObject contact = new ParseObject("contact");
                                     contact.put("name", name);
                                     contact.put("phone", phone);    //
                                     contact.put("user", user);
                                     contact.put("id", id);
-//                                            try {
-//                                                contact.save();
-//                                                pendingParseContacts.add(contact);
-//                                            } catch (ParseException err) {
-//                                                err.printStackTrace();
-//                                            }
                                     contact.saveInBackground(new SaveCallback() {
                                         @Override
                                         public void done(ParseException e) {
@@ -123,8 +120,6 @@ public class Contacts extends ActionBarActivity {
                     Log.e("Contacts", "Should've saved contacts.");
                     parseObject.addAllUnique("contacts", pendingParseContacts);
                     parseObject.saveInBackground();
-//                            savedSuccesfully(parseObject);
-//                            parseObject.put("contacts", pendingParseContacts);
                 } else {
                     // Something went wrong
                     Log.e("Contacts", "Failed to retrieve contactsObject: " + e);
@@ -132,28 +127,6 @@ public class Contacts extends ActionBarActivity {
             }
         });
 
-    }
-
-    private void savedSuccesfully(ParseObject parseObject) {
-        parseObject.addAllUnique("contacts", pendingParseContacts);
-        parseObject.saveInBackground();
-    }
-    public static void objectExists(String user, String phone){
-        objectExists = false;
-        objectId = null;
-        ParseQuery<ParseObject> query = ParseQuery.getQuery("contact");
-        query.whereEqualTo("user", user);
-        query.whereEqualTo("phone", phone);
-        query.getFirstInBackground(new GetCallback<ParseObject>() {
-            @Override
-            public void done(ParseObject parseObject, ParseException e) {
-                if (parseObject != null) {
-                    objectExists = true;
-                } else {
-                    Log.e("Contacts.java", "Failed to retrieve object");
-                }
-            }
-        });
     }
 
     @Override

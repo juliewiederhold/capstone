@@ -2,6 +2,7 @@
 <resources>
 
     <string name="app_name">So-So</string>
+    <string name="logo_desc">So-So Logo</string>
     <string name="username">Enter Username/Email Address</string>
     <string name="password">Enter Password</string>
     <string name="create_account">Create an Account</string>
@@ -33,5 +34,6 @@
     <string name="save_changes">Save changes</string>
     <string name="action_safetyzones">Safety Zones</string>
     <string name="action_contacts">Contacts</string>
+    <string name="next">Next</string>
 
 </resources>

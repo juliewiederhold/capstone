@@ -25,7 +25,7 @@ import com.parse.ParseUser;
  * Handles log in. When submit button is clicked and validation checks pass,
  * logInInBackground method is called to log in the user and handle the response.
  */
-public class LoginActivity extends ActionBarActivity {
+public class LoginActivity extends Activity {
     private EditText usernameEditText;          // username = email address
     private EditText passwordEditText;
     private final static String TAG = "LoginActivity";
@@ -119,28 +119,5 @@ public class LoginActivity extends ActionBarActivity {
                 }
             }
         });
-    }
-
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_login, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
-        }
-
-        return super.onOptionsItemSelected(item);
     }
 }
