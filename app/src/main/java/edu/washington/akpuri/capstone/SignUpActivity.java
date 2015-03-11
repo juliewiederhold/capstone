@@ -67,6 +67,11 @@ public class SignUpActivity extends ActionBarActivity {
 
         ImageView image = (ImageView) findViewById(R.id.image_icon);
         image.setImageResource(R.drawable.picholdericon);
+        image.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View view) {
+
+            }
+        });
 
         // Set up the submit button click handler
         Button mActionButton = (Button) findViewById(R.id.action_button);
