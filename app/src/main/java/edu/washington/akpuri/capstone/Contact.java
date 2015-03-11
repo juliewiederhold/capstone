@@ -13,6 +13,7 @@ public class Contact {
     private int id;
     private boolean hasSoSo;
     private boolean selected;
+    private boolean hasBeenAdded;
 
 
     public Contact(String name, String phone, int id) {
@@ -20,7 +21,8 @@ public class Contact {
         this.phone = phone;
         this.id = id;
         this.hasSoSo = false;
-        selected = false;
+        this.selected = false;
+        this.hasBeenAdded = false;
     }
 
     public String getName() {
@@ -46,6 +48,14 @@ public class Contact {
 
     public void setSelected(boolean selected) {
         this.selected = selected;
+    }
+
+    public boolean hasBeenAdded() {
+        return hasBeenAdded;
+    }
+
+    public void setHasBeenAdded(boolean hasBeenAdded) {
+        this.hasBeenAdded = hasBeenAdded;
     }
 
 
