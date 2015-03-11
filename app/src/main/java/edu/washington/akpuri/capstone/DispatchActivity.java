@@ -24,10 +24,19 @@ public class DispatchActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         Log.e(TAG, "DispatchActivity fired");
+
+        ParseUser currentUser = ParseUser.getCurrentUser();
+
         // Check if there is current user info
-        if (ParseUser.getCurrentUser() != null) {
-            // Start an intent for the logged in activity
-            startActivity(new Intent(this, MainActivity.class));
+        if (currentUser != null) {
+            if (currentUser.isNew()) {
+                Log.e(TAG, "NEW NEW");
+                startActivity(new Intent(this, Welcome.class));
+            } else {
+                Log.e(TAG, "isNew(): " + currentUser.isNew());
+                // Start an intent for the logged in activity
+                startActivity(new Intent(this, MainActivity.class));
+            }
         } else {
             // Start an intent for the logged out activity
             startActivity(new Intent(this, WelcomeActivity.class));
