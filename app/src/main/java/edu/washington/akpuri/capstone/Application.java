@@ -29,14 +29,15 @@ public class Application extends android.app.Application {
         super.onCreate();
 
         Log.e(TAG, "Application fired");
+
         // Enable Local Datastore.
         Parse.enableLocalDatastore(this);
 
         Parse.initialize(this, "Ip7MwttReawlDBFXZqAtfCu0AxI1H73kxF49aBW9", "8iLDRvHPSehyMHUrew3NGISpY4XVOk9CLEJzesh7");
 
-        ParseObject testObject = new ParseObject("TestObject");
-        testObject.put("foo", "bar");
-        testObject.saveInBackground();
+//        ParseObject testObject = new ParseObject("TestObject");
+//        testObject.put("foo", "bar");
+//        testObject.saveInBackground();
 
         preferences = getSharedPreferences("edu.washington.akpuri.capstone", Context.MODE_PRIVATE);
 

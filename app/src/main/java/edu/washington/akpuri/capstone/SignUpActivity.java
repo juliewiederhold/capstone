@@ -18,8 +18,12 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.parse.ParseException;
+import com.parse.ParseObject;
 import com.parse.ParseUser;
+import com.parse.SaveCallback;
 import com.parse.SignUpCallback;
+
+import java.util.ArrayList;
 
 
 public class SignUpActivity extends ActionBarActivity {
@@ -144,7 +148,7 @@ public class SignUpActivity extends ActionBarActivity {
         dialog.show();
 
         // Set up a new Parse user
-        ParseUser user = new ParseUser();
+        final ParseUser user = new ParseUser();
         user.setUsername(email);
         user.setPassword(password);
         user.setEmail(email);
@@ -152,6 +156,23 @@ public class SignUpActivity extends ActionBarActivity {
         user.put("firstname", firstname);
         user.put("lastname", lastname);
         user.put("phone", phone);
+
+        final ParseObject contacts = new ParseObject("ContactsObject");
+        contacts.put("user", email); // contacts.put("parent", email);
+        contacts.put("contacts", new ArrayList<Contact>());
+        contacts.saveInBackground( new SaveCallback() {
+            @Override
+            public void done(ParseException e) {
+                if (e == null) {
+                    // Saved successfully
+
+                } else {
+                    Log.e(TAG, "Error saving contactsId: " + e);
+                }
+            }
+        });
+
+
 
         // Call the Parse signup method
         user.signUpInBackground(new SignUpCallback() {
