@@ -1,6 +1,8 @@
 package edu.washington.akpuri.capstone;
 
 import android.app.ActionBar;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.support.v4.app.Fragment;
 import android.content.ContentResolver;
 import android.database.Cursor;
@@ -25,30 +27,30 @@ import com.parse.ParseUser;
 import com.parse.SaveCallback;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 
 public class Contacts extends ActionBarActivity {
 
     private static boolean objectExists;
     private static String objectId;
-
-    ArrayList<Contact> allContacts;
-    ArrayList<Contact> pendingContacts;
-    ArrayList<ParseObject> pendingParseContacts;
-    android.support.v7.app.ActionBar actionBar;
+    private static ArrayList<Contact> allContacts;
+    private static ArrayList<Contact> pendingContacts;
+    private static ArrayList<ParseObject> pendingParseContacts;
+    private static boolean allowContactRetrieval;
+    private android.support.v7.app.ActionBar actionBar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.fragment_contacts);
+        setContentView(R.layout.activity_contacts);
+        allowContactRetrieval = false;
         //Get the actionbar
         // setup action bar for tabs
         actionBar = this.getSupportActionBar();
         if (actionBar == null) {
             Log.e("Action Bar", "Action Bar is Null");
         }
-          actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
-          actionBar.setDisplayShowTitleEnabled(false);
+        actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
+        actionBar.setDisplayShowTitleEnabled(false);
 
         android.support.v7.app.ActionBar.Tab first = actionBar.newTab()
                 .setText("Contacts")
@@ -62,73 +64,16 @@ public class Contacts extends ActionBarActivity {
                         this, "groups", GroupsFragment.class));
         actionBar.addTab(second);
 
-
-        //ContentResolver is used to query the contacts database to return a cursor
-        ContentResolver contentResolver = getContentResolver();
-        //The cursor is like an iterator, it contains the entirety of the contacts when we pass it null paramaters
-        Cursor cur = contentResolver.query(ContactsContract.Contacts.CONTENT_URI, null, null, null, null);
-
-        allContacts = new ArrayList<Contact>();
-        pendingContacts = new ArrayList<Contact>();
-        pendingParseContacts = new ArrayList<ParseObject>();
-        //Check to see if the cursor actually got contacts back
-        if (cur.getCount() > 0) {
-            while(cur.moveToNext()) {
-                //Use cursor to query, here we grab the current contacts ID which can be used to get
-                //More information for that particular contact later
-                int id = Integer.parseInt(cur.getString(cur.getColumnIndex(ContactsContract.Contacts._ID)));
-                String name = cur.getString(cur.getColumnIndex(ContactsContract.Contacts.DISPLAY_NAME));
-                String phone = "";
-                //Check to see if contact has a phone number
-                if (Integer.parseInt(cur.getString(
-                        cur.getColumnIndex(ContactsContract.Contacts.HAS_PHONE_NUMBER))) > 0) {
-                    //If they do have a phone number, we need to create a new cursor for phone because
-                    //Contact phone numbers are stored in a separate database table so must be queried separately
-                    Cursor phoneCur = contentResolver.query(
-                            ContactsContract.CommonDataKinds.Phone.CONTENT_URI,
-                            null,
-                            ContactsContract.CommonDataKinds.Phone.CONTACT_ID + " = ?",
-                            new String[]{id + ""}, null);
-                    while (phoneCur.moveToNext()) {
-                        int type = phoneCur.getInt(phoneCur.getColumnIndex(ContactsContract.CommonDataKinds.Phone.TYPE));
-                        //We only want to grab the mobile phone number of a contact
-                        if (type == ContactsContract.CommonDataKinds.Phone.TYPE_MOBILE) {
-                            phone = phoneCur.getString(phoneCur.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER));
-                        }
-                    }
-                    phoneCur.close();
-                }
-                //If a contact does not have a phone number stored or their phone number is shorter than
-                //a length of 7 (example: AT&T service numbers for things like checking data are only 4 characters long)
-                //
-                Contact person = new Contact(name, phone, id);
-                if (phone.length() >= 7) {
-                    allContacts.add(person);
-                    Log.i("Contacts", "Contact: " + name + " has ID of " + id + " and phone number of " + phone);
-                }
+        Button next = (Button) findViewById(R.id.contactsNext);
+        next.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent safeZones = new Intent(Contacts.this, SafetyZonePage.class);
+                startActivity(safeZones);
             }
-            cur.close();
+        });
 
-            ListView contactListView = (ListView) findViewById(R.id.listView);
-            ListAdapter adapter = new ContactAdapter(this, R.id.contactListItem, allContacts, pendingContacts);
-            contactListView.setAdapter(adapter);
-
-//            contactListView.setOnItemClickListener(new OnItemClickListener() {
-//                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-//                    Contact person = (Contact) parent.getItemAtPosition(position);
-//                    Toast.makeText(getApplicationContext(),
-//                            "Clicked on Row: " + person.getName(),
-//                            Toast.LENGTH_LONG).show();
-//                }
-//            });
-
-        }
-
-        //We now have all relevant contacts stored in our ArrayList of Contacts with their name, and phone number
-        //Now we need to set up the array adapter
-
-
-       /* final String user = ParseUser.getCurrentUser().getString("email");
+        final String user = ParseUser.getCurrentUser().getString("email");
         ParseQuery<ParseObject> query = ParseQuery.getQuery("ContactsObject");
         query.whereEqualTo("user", user); // query.whereEqualTo("parent", user);
         query.getFirstInBackground(new GetCallback<ParseObject>() {
@@ -186,75 +131,6 @@ public class Contacts extends ActionBarActivity {
                 }
             }
         });
-        */
-
-        Button next = (Button) findViewById(R.id.contactsNext);
-        next.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent safeZones = new Intent(Contacts.this, SafetyZonePage.class);
-                startActivity(safeZones);
-            }
-        });
-
-        final String user = ParseUser.getCurrentUser().getString("email");
-                ParseQuery<ParseObject> query = ParseQuery.getQuery("ContactsObject");
-                query.whereEqualTo("user", user); // query.whereEqualTo("parent", user);
-                query.getFirstInBackground(new GetCallback<ParseObject>() {
-                    @Override
-                    public void done(ParseObject parseObject, ParseException e) {
-                    if (parseObject != null) {
-                        for(int i = 0; i < pendingContacts.size(); i++) {
-                            final String name = pendingContacts.get(i).getName();
-                            final String phone = pendingContacts.get(i).getPhone();
-                            final int id = pendingContacts.get(i).getId();
-                            pendingContacts.get(i).setHasBeenAdded(true);
-                            ParseQuery<ParseObject> query = ParseQuery.getQuery("contact");
-                            query.whereEqualTo("user", user);
-                            query.whereEqualTo("phone", pendingContacts.get(i).getPhone());
-                            query.getFirstInBackground(new GetCallback<ParseObject>() {
-                                @Override
-                                public void done(final ParseObject parseObject, ParseException e) {
-                                    if (parseObject != null) {
-                                        Log.e("Contacts.java", "Contact exists");
-                                    } else {
-                                        Log.e("Contacts.java", "Contact DNE yet");
-                                        final ParseObject contact = new ParseObject("contact");
-                                        contact.put("name", name);
-                                        contact.put("phone", phone);    //
-                                        contact.put("user", user);
-                                        contact.put("id", id);
-//                                            try {
-//                                                contact.save();
-//                                                pendingParseContacts.add(contact);
-//                                            } catch (ParseException err) {
-//                                                err.printStackTrace();
-//                                            }
-                                        contact.saveInBackground(new SaveCallback() {
-                                            @Override
-                                            public void done(ParseException e) {
-                                                if (e == null) {
-                                                    pendingParseContacts.add(contact);
-                                                } else {
-                                                    Log.e("Contacts.java", "Error saving contactsId: " + e);
-                                                }
-                                            }
-                                        });
-                                    }
-                                }
-                            });
-                        }
-                        Log.e("Contacts", "Should've saved contacts.");
-                        parseObject.addAllUnique("contacts", pendingParseContacts);
-                        parseObject.saveInBackground();
-//                            savedSuccesfully(parseObject);
-//                            parseObject.put("contacts", pendingParseContacts);
-                    } else {
-                        // Something went wrong
-                        Log.e("Contacts", "Failed to retrieve contactsObject: " + e);
-                    }
-                }
-            });
 
     }
 
@@ -289,6 +165,9 @@ public class Contacts extends ActionBarActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle action bar item clicks here. The action bar will
+        // automatically handle clicks on the Home/Up button, so long
+        // as you specify a parent activity in AndroidManifest.xml.
         switch (item.getItemId()) {
             case R.id.action_settings:
                 Intent intent = new Intent(this, SettingsActivity.class);
@@ -296,14 +175,6 @@ public class Contacts extends ActionBarActivity {
                 break;
             case R.id.action_logout:
                 logout();
-                break;
-            case R.id.action_safetyzones:
-                Intent intent2 = new Intent(this, SafetyZonePage.class);
-                this.startActivity(intent2);
-                break;
-            case R.id.action_contacts:
-                Intent intent3 = new Intent(this, Contacts.class);
-                this.startActivity(intent3);
                 break;
             default:
                 return super.onOptionsItemSelected(item);
@@ -322,6 +193,7 @@ public class Contacts extends ActionBarActivity {
     }
 
     //FRAGMENTS for the two tabs
+
     public static class ContactsFragment extends Fragment {
         //Empty Constructor
         public ContactsFragment(){}
@@ -329,24 +201,128 @@ public class Contacts extends ActionBarActivity {
         @Override
         public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
             final View rootView = inflater.inflate(R.layout.fragment_contacts, container, false);
+            pendingContacts = new ArrayList<Contact>();
+            pendingParseContacts = new ArrayList<ParseObject>();
 
+            Button importContacts = (Button) rootView.findViewById(R.id.importContacts);
+            if (allowContactRetrieval) {
+                importContacts.setVisibility(View.GONE);
+            }
+            importContacts.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+                    builder.setMessage("Allow So-So to use your Contacts? It's awfully Risky you know")
+                            .setTitle("Import Contacts");
+                    builder.setPositiveButton("Allow", new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int id) {
+                            // User clicked OK button
+                            allowContactRetrieval = true;
+                        }
+                    });
+                    builder.setNegativeButton("Deny", new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int id) {
+                            // User cancelled the dialog
+                            //allowContactRetrieval is still false
+                        }
+                    });
+                    AlertDialog dialog = builder.create();
+                    dialog.show();
+                }
+            });
+            //Popup dialog for contact retrieval
+            if(!allowContactRetrieval) {
+
+                //Store contacts in the Singleton Object Contacs
+                SingletonContacts instance = SingletonContacts.getInstance();
+                //If the Singleton already has a list on contacs, then there is no need to query all of them
+                //again
+                if (!instance.hasContacts()) {
+                    allContacts = new ArrayList<Contact>();
+                    //ContentResolver is used to query the contacts database to return a cursor
+                    ContentResolver contentResolver = rootView.getContext().getContentResolver();
+                    //The cursor is like an iterator, it contains the entirety of the contacts when we pass it null paramaters
+                    Cursor cur = contentResolver.query(ContactsContract.Contacts.CONTENT_URI, null, null, null, null);
+                    //Check to see if the cursor actually got contacts back
+                    Log.i("Querying Contacts", "Cur Count is :" + cur.getCount());
+                    if (cur.getCount() > 0) {
+                        while (cur.moveToNext()) {
+                            //Use cursor to query, here we grab the current contacts ID which can be used to get
+                            //More information for that particular contact later
+                            int id = Integer.parseInt(cur.getString(cur.getColumnIndex(ContactsContract.Contacts._ID)));
+                            String name = cur.getString(cur.getColumnIndex(ContactsContract.Contacts.DISPLAY_NAME));
+                            String phone = "";
+                            //Check to see if contact has a phone number
+                            if (Integer.parseInt(cur.getString(
+                                    cur.getColumnIndex(ContactsContract.Contacts.HAS_PHONE_NUMBER))) > 0) {
+                                //If they do have a phone number, we need to create a new cursor for phone because
+                                //Contact phone numbers are stored in a separate database table so must be queried separately
+                                Cursor phoneCur = contentResolver.query(
+                                        ContactsContract.CommonDataKinds.Phone.CONTENT_URI,
+                                        null,
+                                        ContactsContract.CommonDataKinds.Phone.CONTACT_ID + " = ?",
+                                        new String[]{id + ""}, null);
+                                while (phoneCur.moveToNext()) {
+                                    int type = phoneCur.getInt(phoneCur.getColumnIndex(ContactsContract.CommonDataKinds.Phone.TYPE));
+                                    //We only want to grab the mobile phone number of a contact
+                                    if (type == ContactsContract.CommonDataKinds.Phone.TYPE_MOBILE) {
+                                        phone = phoneCur.getString(phoneCur.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER));
+                                    }
+                                }
+                                phoneCur.close();
+                            }
+                            //If a contact does not have a phone number stored or their phone number is shorter than
+                            //a length of 7 (example: AT&T service numbers for things like checking data are only 4 characters long)
+                            //
+                            Contact person = new Contact(name, phone, id);
+                            if (phone.length() >= 7) {
+                                allContacts.add(person);
+                                Log.i("Contacts", "Contact: " + name + " has ID of " + id + " and phone number of " + phone);
+                            }
+                        }
+                        cur.close();
+                        instance.setContacts(allContacts);
+                    }
+                    //            contactListView.setOnItemClickListener(new OnItemClickListener() {
+                    //                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                    //                    Contact person = (Contact) parent.getItemAtPosition(position);
+                    //                    Toast.makeText(getApplicationContext(),
+                    //                            "Clicked on Row: " + person.getName(),
+                    //                            Toast.LENGTH_LONG).show();
+                    //                }
+                    //            });
+
+                }
+                allContacts = instance.getContacts();
+                //We now have all relevant contacts stored in our ArrayList of Contacts with their name, and phone number
+                //Now we need to set up the array adapter
+
+                ListView contactListView = (ListView) rootView.findViewById(R.id.listView);
+                ListAdapter adapter = new ContactAdapter(rootView.getContext(), R.id.contactListItem, allContacts, pendingContacts);
+                contactListView.setAdapter(adapter);
+            }
 
             return rootView;
         }
 
     }
 
+    //
     public static class GroupsFragment extends Fragment {
         //Empty Constructor
         public GroupsFragment(){}
 
         @Override
         public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-            final View rootView = inflater.inflate(R.layout.fragment_contacts, container, false);
+            final View rootView = inflater.inflate(R.layout.fragment_group, container, false);
 
 
             return rootView;
         }
+    }
+
+    public void getContacts() {
+
     }
 
 }
