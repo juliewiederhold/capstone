@@ -2,20 +2,25 @@ package edu.washington.akpuri.capstone;
 
 import android.util.Log;
 
+
 /**
  * Created by Akash on 3/9/2015.
  */
+
 public class Contact {
     private String name;
     private String phone;
     private int id;
     private boolean hasSoSo;
+    private boolean selected;
+
 
     public Contact(String name, String phone, int id) {
         this.name = name;
         this.phone = phone;
         this.id = id;
         this.hasSoSo = false;
+        selected = false;
     }
 
     public String getName() {
@@ -34,4 +39,14 @@ public class Contact {
     public int getId() {
         return id;
     }
+
+    public boolean isSelected() {
+        return selected;
+    }
+
+    public void setSelected(boolean selected) {
+        this.selected = selected;
+    }
+
+
 }

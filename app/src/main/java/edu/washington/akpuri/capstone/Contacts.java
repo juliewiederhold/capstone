@@ -10,12 +10,29 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.content.Intent;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.Button;
+import android.widget.CompoundButton;
 import android.widget.ListAdapter;
 import android.widget.ListView;
+import android.widget.Toast;
+import android.widget.AdapterView.OnItemClickListener;
+
+import com.parse.FindCallback;
+import com.parse.GetCallback;
+import com.parse.ParseException;
+import com.parse.ParseObject;
+import com.parse.ParseQuery;
+import com.parse.ParseUser;
+
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 public class Contacts extends ActionBarActivity {
+
+    ArrayList<Contact> allContacts;
+    ArrayList<Contact> pendingContacts;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -27,7 +44,8 @@ public class Contacts extends ActionBarActivity {
         //The cursor is like an iterator, it contains the entirety of the contacts when we pass it null paramaters
         Cursor cur = contentResolver.query(ContactsContract.Contacts.CONTENT_URI, null, null, null, null);
 
-        ArrayList<Contact> allContacts = new ArrayList<Contact>();
+        allContacts = new ArrayList<Contact>();
+        pendingContacts = new ArrayList<Contact>();
         //Check to see if the cursor actually got contacts back
         if (cur.getCount() > 0) {
             while(cur.moveToNext()) {
@@ -67,8 +85,18 @@ public class Contacts extends ActionBarActivity {
             cur.close();
 
             ListView contactListView = (ListView) findViewById(R.id.listView);
-            ListAdapter adapter = new ContactAdapter(this, R.id.contactListItem, allContacts);
+            ListAdapter adapter = new ContactAdapter(this, R.id.contactListItem, allContacts, pendingContacts);
             contactListView.setAdapter(adapter);
+
+//            contactListView.setOnItemClickListener(new OnItemClickListener() {
+//                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+//                    Contact person = (Contact) parent.getItemAtPosition(position);
+//                    Toast.makeText(getApplicationContext(),
+//                            "Clicked on Row: " + person.getName(),
+//                            Toast.LENGTH_LONG).show();
+//                }
+//            });
+
         }
 
         //We now have all relevant contacts stored in our ArrayList of Contacts with their name, and phone number
@@ -78,8 +106,29 @@ public class Contacts extends ActionBarActivity {
         next.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent safeZones = new Intent(Contacts.this, SafetyZonePage.class);
-                startActivity(safeZones);
+//                Intent safeZones = new Intent(Contacts.this, SafetyZonePage.class);
+//                startActivity(safeZones);
+                String user = ParseUser.getCurrentUser().getString("email");
+                ParseQuery<ParseObject> query = ParseQuery.getQuery("ContactsObject");
+                query.whereEqualTo("user", user); // query.whereEqualTo("parent", user);
+                query.getFirstInBackground(new GetCallback<ParseObject>() {
+                    @Override
+                    public void done(ParseObject parseObject, ParseException e) {
+                        if (parseObject != null) {
+                            // Object will be ContactsObject
+                            // Add to pending contacts to ContactsObject
+//                            parseObject.addAllUnique("contacts", pendingContacts);
+
+                            Log.e("Contacts", pendingContacts.getClass().getName());
+//                            parseObject.put("contacts", Arrays.asList(pendingContacts));
+//                            parseObject.saveInBackground();
+                        } else {
+                            // Something went wrong
+                            Log.e("Contacts", "Failed to retrieve contactsObject");
+                        }
+                    }
+                });
+
             }
         });
 
