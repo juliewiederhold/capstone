@@ -9,13 +9,15 @@
     tools:context=".Contacts">
 
     <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Import Contacts"
+        android:layout_width="35dp"
+        android:layout_height="35dp"
+        android:text="+"
         android:id="@+id/importContacts"
-        android:layout_below="@+id/textView2"
-        android:layout_alignLeft="@+id/textView2"
-        android:layout_alignStart="@+id/textView2" />
+        android:layout_alignParentTop="true"
+        android:layout_toRightOf="@+id/textView2"
+        android:layout_toEndOf="@+id/textView2"
+        android:layout_marginLeft="29dp"
+        android:layout_marginStart="29dp" />
 
     <TextView
         android:layout_width="wrap_content"
@@ -23,14 +25,16 @@
         android:textAppearance="?android:attr/textAppearanceLarge"
         android:text="Invite Friends"
         android:id="@+id/textView2"
+        android:layout_alignBottom="@+id/importContacts"
         android:layout_centerHorizontal="true" />
 
 
     <ListView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
         android:id="@+id/listView"
         android:layout_centerHorizontal="true"
-        android:layout_below="@+id/importContacts" />
+        android:layout_below="@+id/importContacts"
+        android:layout_marginBottom="70dp" />
 
 </RelativeLayout>
