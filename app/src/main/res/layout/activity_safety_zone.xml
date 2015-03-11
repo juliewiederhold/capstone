@@ -3,14 +3,6 @@
     android:layout_width="match_parent" android:layout_height="match_parent"
     tools:context="edu.washington.akpuri.capstone.SafetyZonePage" tools:ignore="MergeRootFrame" >
 
-    <Button
-        android:layout_width="38dp"
-        android:layout_height="38dp"
-        android:text="+"
-        android:id="@+id/addZone"
-        android:layout_marginTop="22dp"
-        android:layout_marginLeft="300dp" />
-
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -25,7 +17,7 @@
         android:layout_toStartOf="@+id/addZone"
         android:textSize="28dp"
         android:layout_marginTop="25dp"
-        android:layout_marginLeft="75dp"
+        android:layout_marginLeft="115dp"
         android:layout_gravity="left|top" />
 
     <EditText
