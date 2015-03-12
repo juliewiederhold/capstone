@@ -199,9 +199,6 @@ public class Contacts extends ActionBarActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
         switch (item.getItemId()) {
             case R.id.action_settings:
                 Intent intent = new Intent(this, SettingsActivity.class);
@@ -209,6 +206,14 @@ public class Contacts extends ActionBarActivity {
                 break;
             case R.id.action_logout:
                 logout();
+                break;
+            case R.id.action_safetyzones:
+                Intent intent2 = new Intent(this, SafetyZonePage.class);
+                this.startActivity(intent2);
+                break;
+            case R.id.action_contacts:
+                Intent intent3 = new Intent(this, Contacts.class);
+                this.startActivity(intent3);
                 break;
             default:
                 return super.onOptionsItemSelected(item);

@@ -4,4 +4,10 @@
     tools:context="edu.washington.akpuri.capstone.AddFriends">
     <item android:id="@+id/action_settings" android:title="@string/action_settings"
         android:orderInCategory="100" app:showAsAction="never" />
+    <item android:id="@+id/action_contacts" android:title="@string/action_contacts"
+        android:orderInCategory="400" app:showAsAction="never" />
+    <item android:id="@+id/action_safetyzones" android:title="@string/action_safetyzones"
+        android:orderInCategory="300" app:showAsAction="never" />
+    <item android:id="@+id/action_logout" android:title="@string/action_logout"
+        android:orderInCategory="200" app:showAsAction="never" />
 </menu>
