@@ -41,5 +41,7 @@
     <string name="contact_group_message_when_contacts_empty">You currently do not have any So-So friends. Add contacts from the Contacts Tab or wait for your friends to accept your invite!</string>
     <string name="title_activity_add_friends">AddFriends</string>
     <string name="hello_world">Hello world!</string>
+    <string name="start_night_out">Start Night Out</string>
+    <string name="edit_default_settings">Edit Default Settings</string>
 
 </resources>

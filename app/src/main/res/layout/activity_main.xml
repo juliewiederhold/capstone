@@ -1,46 +1,58 @@
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
 xmlns:tools="http://schemas.android.com/tools"
-android:id="@+id/LinearLayout1"
 android:layout_width="match_parent"
 android:layout_height="match_parent"
-android:orientation="vertical"
-android:paddingBottom="@dimen/activity_vertical_margin"
 android:paddingLeft="@dimen/activity_horizontal_margin"
 android:paddingRight="@dimen/activity_horizontal_margin"
 android:paddingTop="@dimen/activity_vertical_margin"
-tools:context=".MainActivity" >
+android:paddingBottom="@dimen/activity_vertical_margin"
+tools:context=".MainActivity">
 
-
+    <ImageView
+        android:id="@+id/logo"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:src="@drawable/logososo"
+        android:contentDescription="So-So Logo"
+        android:layout_alignStart="@+id/edit_default_settings"
+        android:layout_alignEnd="@+id/edit_default_settings"
+        android:layout_alignBottom="@id/edit_default_settings"
+        android:layout_alignParentEnd="false"
+        android:layout_alignParentStart="false"
+        android:layout_marginTop="20dp"
+        android:layout_marginBottom="150dp"/>
 
     <TextView
         android:id="@+id/welcome"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="53dp"
         android:text="@string/welcome"
-        android:textAppearance="?android:attr/textAppearanceLarge" />
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:layout_above="@+id/edit_default_settings"
+        android:layout_marginBottom="30dp"
+        />
 
-<Button
-    android:id="@+id/post_button"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:text="@string/post"
-    android:textAppearance="?android:attr/textAppearanceSmallInverse" />
+    <Button
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/edit_default_settings"
+        android:id="@+id/edit_default_settings"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="115dp"
+        />
 
-<!--<fragment-->
-    <!--android:id="@+id/map_fragment"-->
-    <!--android:name="com.google.android.gms.maps.SupportMapFragment"-->
-    <!--android:layout_width="fill_parent"-->
-    <!--android:layout_height="fill_parent"-->
-    <!--android:layout_weight="1"-->
-    <!--android:layout_marginTop="16dp" />-->
+    <Button
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/start_night_out"
+        android:id="@+id/start_night_out"
+        android:layout_alignTop="@+id/edit_default_settings"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="48dp"
+        />
 
-<!--<ListView-->
-    <!--android:id="@+id/posts_listview"-->
-    <!--android:layout_width="fill_parent"-->
-    <!--android:layout_height="fill_parent"-->
-    <!--android:layout_weight="1" />-->
 
-</LinearLayout>
+</RelativeLayout>
