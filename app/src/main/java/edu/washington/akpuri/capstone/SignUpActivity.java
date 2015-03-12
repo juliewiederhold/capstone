@@ -161,6 +161,9 @@ public class SignUpActivity extends ActionBarActivity {
         user.put("firstname", firstname);
         user.put("lastname", lastname);
         user.put("phone", phone);
+        user.put("setupdone", false);
+
+        user.put("contacts", new ArrayList<>());
 
         final ParseObject contacts = new ParseObject("ContactsObject");
         contacts.put("user", email); // contacts.put("parent", email);
