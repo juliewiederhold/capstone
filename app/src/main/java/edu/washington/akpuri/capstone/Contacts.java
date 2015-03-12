@@ -48,6 +48,7 @@ public class Contacts extends ActionBarActivity {
         instance = SingletonContacts.getInstance();
         allContacts = instance.getAllContacts();
         pendingContacts = instance.getPendingContacts();
+        pContacts = new ArrayList<String>();
 
         //Get the actionbar
         // setup action bar for tabs

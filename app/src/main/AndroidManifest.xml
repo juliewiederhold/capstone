@@ -99,6 +99,9 @@
             android:name=".SafetyZonePage"
             android:label="@string/title_activity_safety_zone" >
         </activity>
+        <activity android:name=".AddFriends"
+            android:label="Add Friends">
+        </activity>
         <!-- For push notifications -->
         <service android:name="com.parse.PushService" />
 
