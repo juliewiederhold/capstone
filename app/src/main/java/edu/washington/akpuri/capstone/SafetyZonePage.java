@@ -9,7 +9,6 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -22,12 +21,8 @@ import android.widget.ListView;
 import android.widget.SimpleAdapter;
 import android.widget.Toast;
 
-import com.parse.GetCallback;
-import com.parse.ParseException;
 import com.parse.ParseObject;
-import com.parse.ParseQuery;
 import com.parse.ParseUser;
-import com.parse.SaveCallback;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -35,17 +30,12 @@ import java.util.HashMap;
 
 public class SafetyZonePage extends ActionBarActivity {
     private static ArrayList<SafetyZone> existingSafetyZones = new ArrayList<>();
-    private static ArrayList<ParseObject> pendingSafetyZones;                              // parse
     private static ArrayList<HashMap<String, String>> safetyZoneInformation = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_safety_zone);
-
-        pendingSafetyZones = new ArrayList<ParseObject>();                  // parse
-
-        final Bundle saved = savedInstanceState;
 
         if (savedInstanceState == null) {
             getSupportFragmentManager().beginTransaction()
@@ -66,38 +56,60 @@ public class SafetyZonePage extends ActionBarActivity {
         add_safety_zone_location.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                EditText nameText = (EditText) findViewById(R.id.safety_zone_name);
-                EditText addressText = (EditText) findViewById(R.id.address);
-                EditText cityText = (EditText) findViewById(R.id.city);
-                EditText zipText = (EditText) findViewById(R.id.zip);
-                EditText stateText = (EditText) findViewById(R.id.state);
+                LayoutInflater inflater = getLayoutInflater();
 
-                String name = nameText.getText().toString();
-                String address = addressText.getText().toString();
-                String city = cityText.getText().toString();
-                String zip = zipText.getText().toString();
-                String state = stateText.getText().toString();
+                final View fragmentView = inflater.inflate(R.layout.fragment_safety_zone, null);
+                AlertDialog.Builder builder = new AlertDialog.Builder(fragmentView.getContext());
 
-                if(!name.equals("") && !address.equals("") && !city.equals("")&& !zip.equals("") && !stateText.equals("")){
-                    SafetyZone newZone = new SafetyZone(name, address, city, Integer.parseInt(zip), state);
-                    existingSafetyZones.add(newZone);
+                // Inflate and set the layout for the dialog
+                // Pass null as the parent view because its going in the dialog layout
+                builder.setView(fragmentView)
+                        // Add action buttons
+                        .setPositiveButton("Add", new DialogInterface.OnClickListener(){
+                            @Override
+                            public void onClick(DialogInterface dialog, int id) {
+                                EditText nameText = (EditText) fragmentView.findViewById(R.id.safety_zone_name);
+                                EditText addressText = (EditText) fragmentView.findViewById(R.id.address);
+                                EditText cityText = (EditText) fragmentView.findViewById(R.id.city);
+                                EditText zipText = (EditText) fragmentView.findViewById(R.id.zip);
+                                EditText stateText = (EditText) fragmentView.findViewById(R.id.state);
 
-                    updateCurrentSafetyZone();
+                                String name = nameText.getText().toString();
+                                String address = addressText.getText().toString();
+                                String city = cityText.getText().toString();
+                                String zip = zipText.getText().toString();
+                                String state = stateText.getText().toString();
 
-                    nameText.setText("");
-                    addressText.setText("");
-                    cityText.setText("");
-                    stateText.setText("");
-                    zipText.setText("");
+                                if(!name.equals("") && !address.equals("") && !city.equals("")&& !zip.equals("") && !stateText.equals("")){
+                                    SafetyZone newZone = new SafetyZone(name, address, city, Integer.parseInt(zip), state);
+                                    existingSafetyZones.add(newZone);
 
-                } else {
-                    Context context = getApplicationContext();
-                    CharSequence text = "All fields must be filled out";
-                    int duration = Toast.LENGTH_SHORT;
+                                    updateCurrentSafetyZone();
 
-                    Toast toast = Toast.makeText(context, text, duration);
-                    toast.show();
-                }
+                                    nameText.setText("");
+                                    addressText.setText("");
+                                    cityText.setText("");
+                                    stateText.setText("");
+                                    zipText.setText("");
+
+                                } else {
+                                    Context context = getApplicationContext();
+                                    CharSequence text = "All fields must be filled out";
+                                    int duration = Toast.LENGTH_SHORT;
+
+                                    Toast toast = Toast.makeText(context, text, duration);
+                                    toast.show();
+                                }
+                            }
+                        })
+                        .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int id) {
+
+                            }
+                        });
+
+                builder.create();
+                builder.show();
             }
         });
 

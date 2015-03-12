@@ -20,7 +20,7 @@
         android:layout_marginLeft="115dp"
         android:layout_gravity="left|top" />
 
-    <EditText
+    <!--<EditText
         android:id="@+id/safety_zone_name"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
@@ -83,24 +83,7 @@
         android:layout_marginTop="105dp"
         android:layout_gravity="right|top" />
 
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="30dp"
-        android:padding="2dp"
-        android:text="@string/add_button_text"
-        android:id="@+id/add_safety_zone_location"
-        android:layout_below="@+id/zip"
-        android:layout_centerHorizontal="true"
-        android:layout_gravity="center_horizontal|top"
-        android:layout_marginTop="155dp" />
-
-    <FrameLayout
-        android:layout_width="fill_parent"
-        android:layout_height="289dp"
-        android:layout_gravity="center_horizontal"
-        android:id="@+id/current_safety_zones"
-        android:layout_marginTop="200dp"></FrameLayout>
-
+     -->
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -108,5 +91,23 @@
         android:id="@+id/safteyNext"
         android:layout_gravity="center_horizontal|bottom"
         android:layout_marginBottom="15dp" />
+
+    <FrameLayout
+        android:layout_width="fill_parent"
+        android:layout_height="430dp"
+        android:layout_gravity="right|top"
+        android:id="@+id/current_safety_zones"
+        android:layout_marginTop="60dp"></FrameLayout>
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="26dp"
+        android:padding="2dp"
+        android:text="@string/add_button_text"
+        android:id="@+id/add_safety_zone_location"
+        android:layout_below="@+id/zip"
+        android:layout_centerHorizontal="true"
+        android:layout_gravity="right|bottom"
+        android:layout_marginBottom="40dp" />
 
 </FrameLayout>
