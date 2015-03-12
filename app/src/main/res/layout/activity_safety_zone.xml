@@ -105,7 +105,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/next"
-        android:id="@+id/button"
+        android:id="@+id/safteyNext"
         android:layout_gravity="center_horizontal|bottom"
         android:layout_marginBottom="15dp" />
 

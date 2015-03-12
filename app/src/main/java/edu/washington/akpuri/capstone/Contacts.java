@@ -50,7 +50,7 @@ public class Contacts extends ActionBarActivity {
         allowContactRetrieval = false;
         pendingParseContacts = null;
         instance = SingletonContacts.getInstance();
-        pendingContacts = instance.getPendingContacts();
+        pendingContacts = new ArrayList<Contact>();
         pContacts = new ArrayList<String>();
 
         //Get the actionbar
@@ -168,37 +168,50 @@ public class Contacts extends ActionBarActivity {
         public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
             Log.i("ContactsFragment", "onCreateView Fired for FriendsFrgment");
             final View rootView = inflater.inflate(R.layout.fragment_friends, container, false);
-            //ListView contactListView = (ListView) container.findViewById(R.id.friendListView);
-            //ListAdapter adapter = new FriendAdapter(getActivity(), R.id.contactListItem, allContacts, pendingContacts);
-            //contactListView.setAdapter(adapter);
-            TextView noFriends = (TextView) container.findViewById(R.id.noFriends);
             //pendngParseContacs = Array of Contact Object id's as strings?
             //Need to iterate through this array of Parse objects and look up each of the contacts through their id
             //THen we need to create a contact and add it to an arraylist to pass to the array adapter
-            //JSONArray contacts = ParseUser.getCurrentUser().get("contacts");
-            ArrayList<String> contacts = ParseUser.getCurrentUser().get("contacts")();
-            Log.e(TAG, "" + );
-            /*if (contacts == null)
-                Log.e(TAG, "Pulled empty array from Parse");
 
-            for (int i = 0; i < contacts.length(); i++) {
-                String id = null;
-                try {
-                    id = contacts.get(i).toString();
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-                if (id != null) {
-                    ParseQuery<ParseObject> query = ParseQuery.getQuery("User");
-                    query.whereEqualTo("objectId", ); // query.whereEqualTo("parent", user);
-                    query.getFirstInBackground(new GetCallback<ParseObject>() {
-                        @Override
-                        public void done(final ParseObject parseObject, ParseException e) {
+            /*if (ParseUser.getCurrentUser().get("contacts") != null) {
 
-                }*/
+                JSONArray contacts = ParseUser.getCurrentUser().getJSONArray("contacts");
+                Log.e(TAG, contacts.toString());
+                pendingContacts = null;
+                for (int i = 0; i < contacts.length(); i++) {
+                    String id = null;
+                    try {
+                        id = contacts.get(i).toString();
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                    Log.e(TAG, id);
+                    if (id != null) {
+                        ParseQuery<ParseObject> query = ParseQuery.getQuery("contact");
+                        query.whereEqualTo("objectId", id); // query.whereEqualTo("parent", user);
+                        query.getFirstInBackground(new GetCallback<ParseObject>() {
+                            @Override
+                            public void done(final ParseObject parseObject, ParseException e) {
+                                    Log.i(TAG, parseObject.getString("name"));
+                                    Log.i(TAG, parseObject.getString("phone"));
+                                    Contact currentFriend = new Contact(parseObject.getString("name"),
+                                                                       parseObject.getString("phone"), 0);
+                                pendingContacts.add(currentFriend);
+                                }
 
-            //}
+                            });
+                        }
+                   }
+                //Log.i(TAG, pendingContacts.toString());
 
+                ListView contactListView = (ListView) rootView.findViewById(R.id.friendListView);
+                ListAdapter adapter = new FriendAdapter(getActivity(), R.id.contactListItem, pendingContacts);
+                contactListView.setAdapter(adapter);
+
+                TextView noFriends = (TextView) rootView.findViewById(R.id.noFriends);
+
+                noFriends.setVisibility(View.GONE);
+
+            }*/
 
 
 

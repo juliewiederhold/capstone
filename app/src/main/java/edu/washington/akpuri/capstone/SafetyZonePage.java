@@ -57,6 +57,14 @@ public class SafetyZonePage extends ActionBarActivity {
                     .add(R.id.current_safety_zones, new CurrentSafetyZone())
                     .commit();
         }
+        Button nextButton = (Button) findViewById(R.id.safteyNext);
+        nextButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent next = new Intent(SafetyZonePage.this, MainActivity.class);
+                startActivity(next);
+            }
+        });
 
         Button add_safety_zone_location = (Button) findViewById(R.id.add_safety_zone_location);
 
