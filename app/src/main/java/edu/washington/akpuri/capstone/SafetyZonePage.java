@@ -156,20 +156,6 @@ public class SafetyZonePage extends ActionBarActivity {
             }
         });
 
-
-        // Add Safety Zone to list through clicking button
-      /*  addZone.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (saved == null) {
-                    getSupportFragmentManager().beginTransaction()
-                            .add(R.id.container, new AddSafetyZone())
-                            .commit();
-                }
-            }
-        });*/
-
-
     }
 
     private void updateCurrentSafetyZone(){
@@ -246,8 +232,8 @@ public class SafetyZonePage extends ActionBarActivity {
         public View onCreateView(LayoutInflater inflater, ViewGroup container,
                                  Bundle savedInstanceState) {
             final View rootView = inflater.inflate(R.layout.current_safety_zone_view, container, false);
-
             final ListView lv = (ListView) rootView.findViewById(R.id.listView_safety_zones);
+
             initList();
 
             SimpleAdapter simpleAdpt = new SimpleAdapter(rootView.getContext(), safetyZoneInformation, android.R.layout.simple_list_item_2,
@@ -260,82 +246,88 @@ public class SafetyZonePage extends ActionBarActivity {
             lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                 @Override
                 public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                    AlertDialog.Builder builder = new AlertDialog.Builder(view.getContext());
                     LayoutInflater inflater = getActivity().getLayoutInflater();
+
+                    final View fragmentView = inflater.inflate(R.layout.fragment_safety_zone, null);
+                    AlertDialog.Builder builder = new AlertDialog.Builder(fragmentView.getContext());
 
                     String itemSelected = lv.getItemAtPosition(position).toString();
                     String[] fullAddress = itemSelected.split(",");
                     String addressSelected = fullAddress[0].split("=")[1];
-                    String citySelected = fullAddress[1];
-                    String stateSeleced = fullAddress[2].split(" ")[0];
-                    String zipSeleced = fullAddress[2].split(" ")[1];
-                    String nameSelected = fullAddress[3].split("=")[1];
 
-                    EditText nameText = (EditText) view.findViewById(R.id.safety_zone_name);
-                    EditText addressText = (EditText) view.findViewById(R.id.address);
-                    EditText cityText = (EditText) view.findViewById(R.id.city);
-                    EditText zipText = (EditText) view.findViewById(R.id.zip);
-                    EditText stateText = (EditText) view.findViewById(R.id.state);
+                    int index = 0;
 
-                   // nameText.setText(nameSelected);
-//                    addressText.setText(addressSelected);
-  //                  cityText.setText(citySelected);
-    //                zipText.getText();
-      //             stateText.getText();
+                    for(int i = 0; i < existingSafetyZones.size(); i++){
+                        if(addressSelected.equals(existingSafetyZones.get(i).getAddress())){
+                            index = i;
+                            break;
+                        }
+                    }
+
+                    final int indexOfZone = index;
+                    final SafetyZone currentZone = existingSafetyZones.get(indexOfZone);
+
+                    String citySelected = currentZone.getCity();
+                    String stateSeleced = currentZone.getState();
+                    String zipSelected = Integer.toString(currentZone.getZip());
+                    String nameSelected = currentZone.getName();
+
+                    EditText nameText = (EditText) fragmentView.findViewById(R.id.safety_zone_name);
+                    EditText addressText = (EditText) fragmentView.findViewById(R.id.address);
+                    EditText cityText = (EditText) fragmentView.findViewById(R.id.city);
+                    EditText zipText = (EditText) fragmentView.findViewById(R.id.zip);
+                    EditText stateText = (EditText) fragmentView.findViewById(R.id.state);
+
+                    nameText.setText(nameSelected);
+                    addressText.setText(addressSelected);
+                    cityText.setText(citySelected);
+                    zipText.setText(zipSelected);
+                    stateText.setText(stateSeleced);
 
                     // Inflate and set the layout for the dialog
                     // Pass null as the parent view because its going in the dialog layout
-                    builder.setView(inflater.inflate(R.layout.fragment_safety_zone, null))
+                    builder.setView(fragmentView)
                             // Add action buttons
-                            .setPositiveButton(/*R.string.update_safety_zone*/citySelected, new DialogInterface.OnClickListener(){
+                            .setPositiveButton(R.string.update_safety_zone, new DialogInterface.OnClickListener(){
                                 @Override
                                 public void onClick(DialogInterface dialog, int id) {
-                                    // sign in the user ...
+                                    EditText nameText = (EditText) fragmentView.findViewById(R.id.safety_zone_name);
+                                    EditText addressText = (EditText) fragmentView.findViewById(R.id.address);
+                                    EditText cityText = (EditText) fragmentView.findViewById(R.id.city);
+                                    EditText zipText = (EditText) fragmentView.findViewById(R.id.zip);
+                                    EditText stateText = (EditText) fragmentView.findViewById(R.id.state);
+
+                                    currentZone.setName(nameText.getText().toString());
+                                    currentZone.setAddress(addressText.getText().toString());
+                                    currentZone.setCity(cityText.getText().toString());
+                                    currentZone.setZip(Integer.parseInt(zipText.getText().toString()));
+                                    currentZone.setState(stateText.getText().toString());
+
+                                    existingSafetyZones.set(indexOfZone, currentZone);
+                                    updateCurrentSafetyZone();
                                 }
                             })
                             .setNegativeButton(R.string.delete, new DialogInterface.OnClickListener() {
                                 public void onClick(DialogInterface dialog, int id) {
-                                    //CurrentSafetyZone.this.getDialog().cancel();
+                                    existingSafetyZones.remove(indexOfZone);
+                                    updateCurrentSafetyZone();
                                 }
                             });
+
                     builder.create();
                     builder.show();
                 }
             });
-
-
-
             return rootView;
         }
-    }
 
-
-
-    public static class DialogBox extends DialogFragment {
-        public DialogBox(){
-
-        }
-        public Dialog onCreateDialog(Bundle savedInstanceState) {
-            AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-            // Get the layout inflater
-            LayoutInflater inflater = getActivity().getLayoutInflater();
-
-            // Inflate and set the layout for the dialog
-            // Pass null as the parent view because its going in the dialog layout
-            builder.setView(inflater.inflate(R.layout.fragment_safety_zone, null))
-                    // Add action buttons
-                    .setPositiveButton(R.string.update_safety_zone, new DialogInterface.OnClickListener(){
-                        @Override
-                        public void onClick(DialogInterface dialog, int id) {
-                            // sign in the user ...
-                        }
-                    })
-                    .setNegativeButton(R.string.delete, new DialogInterface.OnClickListener() {
-                        public void onClick(DialogInterface dialog, int id) {
-                            DialogBox.this.getDialog().cancel();
-                        }
-                    });
-            return builder.create();
+        private void updateCurrentSafetyZone(){
+            FragmentManager fm = getActivity().getSupportFragmentManager();
+            FragmentTransaction ft = fm.beginTransaction();
+            CurrentSafetyZone fragment = new CurrentSafetyZone();
+            ft.replace(R.id.current_safety_zones, fragment);   // replace instead of add
+            ft.addToBackStack("Update Current Safety Zones");
+            ft.commit();
         }
     }
 }
