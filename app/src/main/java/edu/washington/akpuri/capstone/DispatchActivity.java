@@ -29,8 +29,9 @@ public class DispatchActivity extends Activity {
 
         // Check if there is current user info
         if (currentUser != null) {
+            // Nicole: Need another flag to mark if user has gone through setting up for the first time
+            // hasSetUp
             if (currentUser.isNew()) {
-                Log.e(TAG, "NEW NEW");
                 startActivity(new Intent(this, Welcome.class));
             } else {
                 Log.e(TAG, "isNew(): " + currentUser.isNew());
@@ -39,7 +40,7 @@ public class DispatchActivity extends Activity {
             }
         } else {
             // Start an intent for the logged out activity
-            startActivity(new Intent(this, WelcomeActivity.class));
+            startActivity(new Intent(this, Login.class));
         }
     }
 }
