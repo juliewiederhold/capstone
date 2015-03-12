@@ -1,5 +1,10 @@
 package edu.washington.akpuri.capstone;
 
+import android.app.AlertDialog;
+import android.app.Dialog;
+import android.app.DialogFragment;
+import android.content.DialogInterface;
+import android.database.Cursor;
 import android.support.v4.app.FragmentManager;
 import android.content.Context;
 import android.content.Intent;
@@ -240,10 +245,9 @@ public class SafetyZonePage extends ActionBarActivity {
         @Override
         public View onCreateView(LayoutInflater inflater, ViewGroup container,
                                  Bundle savedInstanceState) {
-            View rootView = inflater.inflate(R.layout.current_safety_zone_view, container, false);
+            final View rootView = inflater.inflate(R.layout.current_safety_zone_view, container, false);
 
-            int size = existingSafetyZones.size();
-            ListView lv = (ListView) rootView.findViewById(R.id.listView_safety_zones);
+            final ListView lv = (ListView) rootView.findViewById(R.id.listView_safety_zones);
             initList();
 
             SimpleAdapter simpleAdpt = new SimpleAdapter(rootView.getContext(), safetyZoneInformation, android.R.layout.simple_list_item_2,
@@ -253,7 +257,85 @@ public class SafetyZonePage extends ActionBarActivity {
 
             lv.setTextFilterEnabled(true);
 
+            lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                @Override
+                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                    AlertDialog.Builder builder = new AlertDialog.Builder(view.getContext());
+                    LayoutInflater inflater = getActivity().getLayoutInflater();
+
+                    String itemSelected = lv.getItemAtPosition(position).toString();
+                    String[] fullAddress = itemSelected.split(",");
+                    String addressSelected = fullAddress[0].split("=")[1];
+                    String citySelected = fullAddress[1];
+                    String stateSeleced = fullAddress[2].split(" ")[0];
+                    String zipSeleced = fullAddress[2].split(" ")[1];
+                    String nameSelected = fullAddress[3].split("=")[1];
+
+                    EditText nameText = (EditText) view.findViewById(R.id.safety_zone_name);
+                    EditText addressText = (EditText) view.findViewById(R.id.address);
+                    EditText cityText = (EditText) view.findViewById(R.id.city);
+                    EditText zipText = (EditText) view.findViewById(R.id.zip);
+                    EditText stateText = (EditText) view.findViewById(R.id.state);
+
+                   // nameText.setText(nameSelected);
+//                    addressText.setText(addressSelected);
+  //                  cityText.setText(citySelected);
+    //                zipText.getText();
+      //             stateText.getText();
+
+                    // Inflate and set the layout for the dialog
+                    // Pass null as the parent view because its going in the dialog layout
+                    builder.setView(inflater.inflate(R.layout.fragment_safety_zone, null))
+                            // Add action buttons
+                            .setPositiveButton(/*R.string.update_safety_zone*/citySelected, new DialogInterface.OnClickListener(){
+                                @Override
+                                public void onClick(DialogInterface dialog, int id) {
+                                    // sign in the user ...
+                                }
+                            })
+                            .setNegativeButton(R.string.delete, new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int id) {
+                                    //CurrentSafetyZone.this.getDialog().cancel();
+                                }
+                            });
+                    builder.create();
+                    builder.show();
+                }
+            });
+
+
+
             return rootView;
+        }
+    }
+
+
+
+    public static class DialogBox extends DialogFragment {
+        public DialogBox(){
+
+        }
+        public Dialog onCreateDialog(Bundle savedInstanceState) {
+            AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+            // Get the layout inflater
+            LayoutInflater inflater = getActivity().getLayoutInflater();
+
+            // Inflate and set the layout for the dialog
+            // Pass null as the parent view because its going in the dialog layout
+            builder.setView(inflater.inflate(R.layout.fragment_safety_zone, null))
+                    // Add action buttons
+                    .setPositiveButton(R.string.update_safety_zone, new DialogInterface.OnClickListener(){
+                        @Override
+                        public void onClick(DialogInterface dialog, int id) {
+                            // sign in the user ...
+                        }
+                    })
+                    .setNegativeButton(R.string.delete, new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int id) {
+                            DialogBox.this.getDialog().cancel();
+                        }
+                    });
+            return builder.create();
         }
     }
 }

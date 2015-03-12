@@ -52,7 +52,7 @@ public class LoginActivity extends Activity {
             }
         });
 
-        // Log in button click handler
+        // Forgot password click handler
         TextView forgotTextView = (TextView) findViewById(R.id.forgot_password);
         forgotTextView.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {

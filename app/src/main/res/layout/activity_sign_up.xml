@@ -88,13 +88,13 @@ tools:context="hello.jcw27.washington.edu.so_so.SignUpActivity" >
 
         <Button
             android:id="@+id/action_button"
-            android:layout_width="wrap_content"
+            android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="end"
             android:layout_marginTop="16dp"
             android:paddingLeft="32dp"
             android:paddingRight="32dp"
-            android:text="@string/create_account" />
+            android:text="@string/signup" />
     </LinearLayout>
 </ScrollView>
 
