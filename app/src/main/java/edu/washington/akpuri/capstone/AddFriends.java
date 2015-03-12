@@ -1,6 +1,7 @@
 package edu.washington.akpuri.capstone;
 
 import android.content.ContentResolver;
+import android.content.Intent;
 import android.database.Cursor;
 import android.provider.ContactsContract;
 import android.support.v7.app.ActionBarActivity;
@@ -8,8 +9,11 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.Button;
 import android.widget.ListAdapter;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import java.security.cert.CertificateParsingException;
 import java.util.ArrayList;
@@ -73,6 +77,19 @@ public class AddFriends extends ActionBarActivity {
             ListAdapter adapter = new ContactAdapter(this, R.id.contactListItem, allContacts, pendingContacts);
             contactListView.setAdapter(adapter);
         }
+
+        Button sendRequest = (Button) findViewById(R.id.sendFriendRequest);
+        sendRequest.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //Need to do something here with selected friends
+                //Intent backToFriends = new Intent(AddFriends.this, Contacts.class);
+                //startActivity(backToFriends);
+                Toast mes = Toast.makeText(getApplicationContext(), "Friend Requests Sent", Toast.LENGTH_LONG);
+                mes.show();
+                finish();
+            }
+        });
     }
 
 

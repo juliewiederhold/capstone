@@ -17,6 +17,8 @@ import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ListAdapter;
 import android.widget.ListView;
+import android.widget.TextView;
+
 import com.parse.GetCallback;
 import com.parse.ParseException;
 import com.parse.ParseObject;
@@ -156,7 +158,7 @@ public class Contacts extends ActionBarActivity {
             }
         });
 
-        ImageButton addContacts = (ImageButton) findViewById(R.id.addFriends);
+        Button addContacts = (Button) findViewById(R.id.addFriends);
         addContacts.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -234,6 +236,11 @@ public class Contacts extends ActionBarActivity {
         public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
             Log.i("ContactsFragment", "onCreateView Fired for FriendsFrgment");
             final View rootView = inflater.inflate(R.layout.fragment_friends, container, false);
+            //ListView contactListView = (ListView) container.findViewById(R.id.friendListView);
+            //ListAdapter adapter = new FriendAdapter(getActivity(), R.id.contactListItem, allContacts, pendingContacts);
+            //contactListView.setAdapter(adapter);
+            TextView noFriends = (TextView) container.findViewById(R.id.noFriends);
+            //Hide noFriends if there are friends
             return rootView;
         }
     }

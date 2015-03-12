@@ -18,7 +18,7 @@
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:text="Send Friend Request"
-        android:id="@+id/friendRequest"
+        android:id="@+id/sendFriendRequest"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true" />
 
@@ -28,6 +28,6 @@
         android:id="@+id/addFriendsList"
         android:layout_centerHorizontal="true"
         android:layout_below="@+id/textView3"
-        android:layout_above="@+id/friendRequest" />
+        android:layout_above="@+id/sendFriendRequest" />
 
 </RelativeLayout>

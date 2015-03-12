@@ -1,6 +1,5 @@
 package edu.washington.akpuri.capstone;
 
-import android.app.Activity;
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -13,10 +12,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
-import java.util.List;
-
-import edu.washington.akpuri.capstone.Contact;
-import edu.washington.akpuri.capstone.R;
 
 /**
  * Created by Akash on 3/9/2015.
@@ -48,7 +43,7 @@ public class ContactAdapter extends ArrayAdapter<Contact> {
         View view = null;
         if (convertView == null) {
             LayoutInflater inflater = LayoutInflater.from(getContext());
-            view = inflater.inflate(R.layout.contact_list_item, parent, false);
+            view = inflater.inflate(R.layout.friend_list_item, parent, false);
 
             final ViewHolder viewHolder = new ViewHolder();
             viewHolder.contactName = (TextView) view.findViewById(R.id.contactName);
