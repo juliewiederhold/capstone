@@ -12,30 +12,39 @@ import java.util.ArrayList;
  */
 public class SingletonContacts {
     private static SingletonContacts instance = null;
-    private static ArrayList<Contact> contacts;
+    private static ArrayList<Contact> allContacts;
+    private static ArrayList<Contact> pendingContacts;
     //Empty Constructor, it's a singleton
     protected SingletonContacts() {
-
     }
 
     public static SingletonContacts getInstance() {
         if (instance == null) {
             instance = new SingletonContacts();
-            contacts = new ArrayList<Contact>();
+            allContacts = new ArrayList<Contact>();
+            pendingContacts = new ArrayList<Contact>();
         }
         return instance;
     }
 
     public boolean hasContacts() {
-        return (contacts.size() != 0);
+        return (allContacts.size() != 0);
     }
 
-    public ArrayList<Contact> getContacts() {
-        return contacts;
+    public ArrayList<Contact> getAllContacts() {
+        return allContacts;
     }
 
     public void setContacts(ArrayList<Contact> contacts) {
-        this.contacts = contacts;
+        this.allContacts = contacts;
+    }
+
+    public void setPendingContacts(ArrayList<Contact> pendingContacts) {
+        this.pendingContacts = pendingContacts;
+    }
+
+    public ArrayList<Contact> getPendingContacts() {
+        return pendingContacts;
     }
 
 }

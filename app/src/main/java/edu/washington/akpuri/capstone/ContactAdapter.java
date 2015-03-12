@@ -23,15 +23,17 @@ import edu.washington.akpuri.capstone.R;
  */
 public class ContactAdapter extends ArrayAdapter<Contact> {
 
-    private final List<Contact> list;
+    private final ArrayList<Contact> list;
     private final Context context;
-    private final List<Contact> pendingList;
+    private final ArrayList<Contact> pendingList;
+    private final SingletonContacts instance;
 
-    public ContactAdapter (Context context, int resource, ArrayList<Contact> contacts, ArrayList<Contact> pendingList) {
+    public ContactAdapter(Context context, int resource, ArrayList<Contact> contacts, ArrayList<Contact> pendingList) {
         super(context, resource, contacts);
         this.context = context;
         this.list = contacts;
         this.pendingList = pendingList;
+        this.instance = SingletonContacts.getInstance();
     }
 
     static class ViewHolder {
@@ -74,7 +76,9 @@ public class ContactAdapter extends ArrayAdapter<Contact> {
                                         "Removed: " + person.getName(),
                                         Toast.LENGTH_SHORT).show();
                                 pendingList.remove(person);
+
                             }
+                            instance.setPendingContacts(pendingList);
 
                         }
                     });
@@ -91,28 +95,4 @@ public class ContactAdapter extends ArrayAdapter<Contact> {
         holder.checkbox.setChecked(list.get(position).isSelected());
         return view;
     }
-
-    // AKASH's version
-//    @Override
-//    public View getView(int position, View convertView, ViewGroup parent) {
-//        View v = convertView;
-//
-//        if (v == null) {
-//            LayoutInflater vi;
-//            vi = LayoutInflater.from(getContext());
-//            v = vi.inflate(R.layout.contact_list_item, parent, false);
-//        }
-//
-//        Contact contact = getItem(position);
-//
-//        ImageView contactIcon = (ImageView) v.findViewById(R.id.contactIcon);
-//        TextView contactName = (TextView) v.findViewById(R.id.contactName);
-//        TextView contactNumber = (TextView) v.findViewById(R.id.contactNumber);
-//        contactName.setText(contact.getName());
-//        contactNumber.setText(contact.getPhone());
-//        //LayoutInflater inflater = (LayoutInflater) context
-//        //        .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-//        //View rowView = inflater.inflate(R.layout.rowlayout, parent, false);
-//        return v;
-//    }
 }
