@@ -26,6 +26,9 @@ import com.parse.ParseQuery;
 import com.parse.ParseUser;
 import com.parse.SaveCallback;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 
@@ -33,9 +36,8 @@ public class Contacts extends ActionBarActivity {
 
     private final static String TAG = "Contacts.java";
 
-    private static ArrayList<Contact> allContacts;
     private static ArrayList<Contact> pendingContacts;
-    private static ArrayList<ParseObject> pendingParseContacts;
+    private static ParseObject pendingParseContacts;
     private static ArrayList<String> pContacts;
     private static boolean allowContactRetrieval;
     private android.support.v7.app.ActionBar actionBar;
@@ -46,9 +48,8 @@ public class Contacts extends ActionBarActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_contacts);
         allowContactRetrieval = false;
-        pendingParseContacts = new ArrayList<ParseObject>();
+        pendingParseContacts = null;
         instance = SingletonContacts.getInstance();
-        allContacts = instance.getAllContacts();
         pendingContacts = instance.getPendingContacts();
         pContacts = new ArrayList<String>();
 
@@ -78,81 +79,6 @@ public class Contacts extends ActionBarActivity {
             @Override
             public void onClick(View v) {
                 Log.e(TAG, "contactsNext button pressed");
-                if (allowContactRetrieval) {
-                    final String user = ParseUser.getCurrentUser().getString("email");
-                    ParseQuery<ParseObject> query = ParseQuery.getQuery("ContactsObject");
-                    query.whereEqualTo("user", user); // query.whereEqualTo("parent", user);
-                    query.getFirstInBackground(new GetCallback<ParseObject>() {
-                        @Override
-                        public void done(final ParseObject parseObject, ParseException e) {
-                            if (parseObject != null) {
-                                for (int i = 0; i < pendingContacts.size(); i++) {
-                                    final String name = pendingContacts.get(i).getName();
-                                    final String phone = pendingContacts.get(i).getPhone();
-                                    final int id = pendingContacts.get(i).getId();
-                                    pendingContacts.get(i).setHasBeenAdded(true);
-                                    ParseQuery<ParseObject> query = ParseQuery.getQuery("contact");
-                                    query.whereEqualTo("user", user);
-                                    query.whereEqualTo("phone", pendingContacts.get(i).getPhone());
-                                    query.getFirstInBackground(new GetCallback<ParseObject>() {
-                                        @Override
-                                        public void done(final ParseObject parseObject, ParseException e) {
-                                            if (parseObject != null) {
-                                                Log.e(TAG, "Contact exists");
-                                            } else {
-                                                Log.e(TAG, "Contact DNE yet");
-                                                final ParseObject contact = new ParseObject("contact");
-                                                contact.put("name", name);
-                                                contact.put("phone", phone);    //
-                                                contact.put("user", user);
-                                                contact.put("id", id);
-                                                contact.saveInBackground(new SaveCallback() {
-                                                    @Override
-                                                    public void done(ParseException e) {
-                                                        if (e != null) {
-                                                            Log.e(TAG, "Error saving contactsId: " + e);
-                                                        } else {
-                                                            pContacts.add(contact.getObjectId());
-                                                            Log.e(TAG, pContacts.toString());
-                                                            pendingParseContacts.add(contact);
-
-                                                            // WIP: parseObject (ContactsObject) not saving correctly
-                                                            // save in ParseUser for now
-                                                            ParseUser.getCurrentUser().put("contacts", pContacts);  // need to check if overwrites
-                                                                                              // might have to retrieve current copy, then overwrite
-                                                            ParseUser.getCurrentUser().addAllUnique("contacts", pContacts);
-                                                            ParseUser.getCurrentUser().saveInBackground();
-
-                                                        }
-                                                    }
-                                                });
-                                            }
-                                        }
-                                    });
-
-                                }
-                                Log.e("Contacts", "Should've saved contacts.");
-                                Log.e(TAG, pendingParseContacts.toString());
-//                                parseObject.addAllUnique("contacts", pContacts);
-                                parseObject.put("contacts", pContacts);
-                                parseObject.saveInBackground(new SaveCallback() {
-                                    @Override
-                                    public void done(ParseException e) {
-
-                                        // TO-DO: Remove contacts who have been added from the Contacts List
-                                        // Set pendingContacts and pendingParseContacts to empty
-                                        Log.e(TAG, "ContactsObject: " + parseObject.get("contacts").toString());
-                                        pendingContacts.clear();
-                                        pendingParseContacts.clear();
-                                    }
-                                });
-                            } else {
-                                // Something went wrong
-                                Log.e("Contacts", "Failed to retrieve contactsObject: " + e);
-                            }
-                        }
-                    });
-                }
                 Intent safeZones = new Intent(Contacts.this, SafetyZonePage.class);
                 startActivity(safeZones);
             }
@@ -235,7 +161,8 @@ public class Contacts extends ActionBarActivity {
 
     public static class FriendsFragment extends Fragment {
         //Empty Constructor
-        public FriendsFragment(){}
+        public FriendsFragment() {
+        }
 
         @Override
         public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -245,6 +172,37 @@ public class Contacts extends ActionBarActivity {
             //ListAdapter adapter = new FriendAdapter(getActivity(), R.id.contactListItem, allContacts, pendingContacts);
             //contactListView.setAdapter(adapter);
             TextView noFriends = (TextView) container.findViewById(R.id.noFriends);
+            //pendngParseContacs = Array of Contact Object id's as strings?
+            //Need to iterate through this array of Parse objects and look up each of the contacts through their id
+            //THen we need to create a contact and add it to an arraylist to pass to the array adapter
+            //JSONArray contacts = ParseUser.getCurrentUser().get("contacts");
+            ArrayList<String> contacts = ParseUser.getCurrentUser().get("contacts")();
+            Log.e(TAG, "" + );
+            /*if (contacts == null)
+                Log.e(TAG, "Pulled empty array from Parse");
+
+            for (int i = 0; i < contacts.length(); i++) {
+                String id = null;
+                try {
+                    id = contacts.get(i).toString();
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+                if (id != null) {
+                    ParseQuery<ParseObject> query = ParseQuery.getQuery("User");
+                    query.whereEqualTo("objectId", ); // query.whereEqualTo("parent", user);
+                    query.getFirstInBackground(new GetCallback<ParseObject>() {
+                        @Override
+                        public void done(final ParseObject parseObject, ParseException e) {
+
+                }*/
+
+            //}
+
+
+
+
+
             //Hide noFriends if there are friends
             return rootView;
         }
