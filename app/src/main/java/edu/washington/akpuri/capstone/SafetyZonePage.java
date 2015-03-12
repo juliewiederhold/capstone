@@ -1,10 +1,7 @@
 package edu.washington.akpuri.capstone;
 
 import android.app.AlertDialog;
-import android.app.Dialog;
-import android.app.DialogFragment;
 import android.content.DialogInterface;
-import android.database.Cursor;
 import android.support.v4.app.FragmentManager;
 import android.content.Context;
 import android.content.Intent;
@@ -23,7 +20,6 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.SimpleAdapter;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.parse.GetCallback;
@@ -39,7 +35,7 @@ import java.util.HashMap;
 
 public class SafetyZonePage extends ActionBarActivity {
     private static ArrayList<SafetyZone> existingSafetyZones = new ArrayList<>();
-    ArrayList<ParseObject> pendingSafetyZones;                              // parse
+    private static ArrayList<ParseObject> pendingSafetyZones;                              // parse
     private static ArrayList<HashMap<String, String>> safetyZoneInformation = new ArrayList<>();
 
     @Override
@@ -50,7 +46,6 @@ public class SafetyZonePage extends ActionBarActivity {
         pendingSafetyZones = new ArrayList<ParseObject>();                  // parse
 
         final Bundle saved = savedInstanceState;
-        Button addZone = (Button)findViewById(R.id.addZone);
 
         if (savedInstanceState == null) {
             getSupportFragmentManager().beginTransaction()
@@ -78,64 +73,6 @@ public class SafetyZonePage extends ActionBarActivity {
                 if(!name.equals("") && !address.equals("") && !city.equals("")&& !zip.equals("") && !stateText.equals("")){
                     SafetyZone newZone = new SafetyZone(name, address, city, Integer.parseInt(zip), state);
                     existingSafetyZones.add(newZone);
-
-                    ///// begin parse
-                    /// Nicole: is it possible to assign IDs to safetyzones? going by name for uniqueness check atm
-
-                    final String user = ParseUser.getCurrentUser().getString("email");
-                    ParseQuery<ParseObject> query = ParseQuery.getQuery("SafetyZonesObject");
-                    query.whereEqualTo("user", user); // query.whereEqualTo("parent", user);
-                    query.getFirstInBackground(new GetCallback<ParseObject>() {
-                        @Override
-                        public void done(ParseObject parseObject, ParseException e) {
-                            if (parseObject != null) {
-                                for(int i = 0; i < existingSafetyZones.size(); i++) {
-                                    final String name = existingSafetyZones.get(i).getName();
-                                    final String address = existingSafetyZones.get(i).getAddress();
-                                    final String city = existingSafetyZones.get(i).getCity();
-                                    final int zip = existingSafetyZones.get(i).getZip();
-                                    final String state = existingSafetyZones.get(i).getState();
-                                    ParseQuery<ParseObject> query = ParseQuery.getQuery("safetyzone");
-                                    query.whereEqualTo("user", user);
-                                    query.whereEqualTo("name", name);
-                                    query.getFirstInBackground(new GetCallback<ParseObject>() {
-                                        @Override
-                                        public void done(final ParseObject parseObject, ParseException e) {
-                                            if (parseObject != null) {
-                                                Log.e("Contacts.java", "Contact exists");
-                                            } else {
-                                                Log.e("Contacts.java", "Contact DNE yet");
-                                                final ParseObject safetyzone = new ParseObject("safetyzone");
-                                                safetyzone.put("user", user);
-                                                safetyzone.put("name", name);
-                                                safetyzone.put("address", address);    //
-                                                safetyzone.put("city", city);
-                                                safetyzone.put("zip", zip);
-                                                safetyzone.put("state", state);
-                                                safetyzone.saveInBackground(new SaveCallback() {
-                                                    @Override
-                                                    public void done(ParseException e) {
-                                                        if (e == null) {
-                                                            pendingSafetyZones.add(safetyzone);
-                                                        } else {
-                                                            Log.e("Contacts.java", "Error saving contactsId: " + e);
-                                                        }
-                                                    }
-                                                });
-                                            }
-                                        }
-                                    });
-                                }
-                                Log.e("SafetyZonePage.java", "Doesn't really save to SafetyZone object yet.");
-                                parseObject.addAllUnique("contacts", pendingSafetyZones);
-                                parseObject.saveInBackground();
-                            } else {
-                                // Something went wrong
-                                Log.e("SafetyZonePage", "Failed to retrieve contactsObject: " + e);
-                            }
-                        }
-                    });
-                    ///// end parse
 
                     updateCurrentSafetyZone();
 
@@ -224,6 +161,75 @@ public class SafetyZonePage extends ActionBarActivity {
         startActivity(intent);
     }
 
+    public static void updateParse(){
+        ///// begin parse
+        /// Nicole: is it possible to assign IDs to safetyzones? going by name for uniqueness check atm
+
+        final String user = ParseUser.getCurrentUser().getString("email");
+        ParseQuery<ParseObject> query = ParseQuery.getQuery("SafetyZonesObject");
+        query.whereEqualTo("user", user); // query.whereEqualTo("parent", user);
+        query.getFirstInBackground(new GetCallback<ParseObject>() {
+            @Override
+            public void done(ParseObject parseObject, ParseException e) {
+                if (parseObject != null) {
+                    for(int i = 0; i < existingSafetyZones.size(); i++) {
+                        final String name = existingSafetyZones.get(i).getName();
+                        final String address = existingSafetyZones.get(i).getAddress();
+                        final String city = existingSafetyZones.get(i).getCity();
+                        final int zip = existingSafetyZones.get(i).getZip();
+                        final String state = existingSafetyZones.get(i).getState();
+                        final ParseQuery<ParseObject> query = ParseQuery.getQuery("safetyzone");
+                        query.whereEqualTo("user", user);
+                        query.whereEqualTo("name", name);
+                        query.getFirstInBackground(new GetCallback<ParseObject>() {
+
+                            @Override
+                            public void done(final ParseObject parseObject, ParseException e) {
+                                if (parseObject != null) {
+                                    Log.e("SafetyZonePage.java", "SafetyZone exists");
+                            /*        parseObject.put("name", name);
+                                    parseObject.put("address", address);    //
+                                    parseObject.put("city", city);
+                                    parseObject.put("zip", zip);
+                                    parseObject.put("state", state);
+
+                                    parseObject.saveInBackground();*/
+
+                                } else {
+                                    Log.e("Contacts.java", "Contact DNE yet");
+                                    final ParseObject safetyzone = new ParseObject("safetyzone");
+                                    safetyzone.put("user", user);
+                                    safetyzone.put("name", name);
+                                    safetyzone.put("address", address);    //
+                                    safetyzone.put("city", city);
+                                    safetyzone.put("zip", zip);
+                                    safetyzone.put("state", state);
+                                    safetyzone.saveInBackground(new SaveCallback() {
+                                        @Override
+                                        public void done(ParseException e) {
+                                            if (e == null) {
+                                                pendingSafetyZones.add(safetyzone);
+                                            } else {
+                                                Log.e("Contacts.java", "Error saving contactsId: " + e);
+                                            }
+                                        }
+                                    });
+                                }
+                            }
+                        });
+                    }
+                    Log.e("SafetyZonePage.java", "Doesn't really save to SafetyZone object yet.");
+                    parseObject.addAllUnique("contacts", pendingSafetyZones);
+                    parseObject.saveInBackground();
+                } else {
+                    // Something went wrong
+                    Log.e("SafetyZonePage", "Failed to retrieve contactsObject: " + e);
+                }
+            }
+        });
+        ///// end parse
+    }
+
     public static class CurrentSafetyZone extends Fragment {
         public CurrentSafetyZone(){
         }
@@ -233,6 +239,8 @@ public class SafetyZonePage extends ActionBarActivity {
                                  Bundle savedInstanceState) {
             final View rootView = inflater.inflate(R.layout.current_safety_zone_view, container, false);
             final ListView lv = (ListView) rootView.findViewById(R.id.listView_safety_zones);
+
+            updateParse();
 
             initList();
 
@@ -268,7 +276,7 @@ public class SafetyZonePage extends ActionBarActivity {
                     final SafetyZone currentZone = existingSafetyZones.get(indexOfZone);
 
                     String citySelected = currentZone.getCity();
-                    String stateSeleced = currentZone.getState();
+                    String stateSelected = currentZone.getState();
                     String zipSelected = Integer.toString(currentZone.getZip());
                     String nameSelected = currentZone.getName();
 
@@ -282,7 +290,7 @@ public class SafetyZonePage extends ActionBarActivity {
                     addressText.setText(addressSelected);
                     cityText.setText(citySelected);
                     zipText.setText(zipSelected);
-                    stateText.setText(stateSeleced);
+                    stateText.setText(stateSelected);
 
                     // Inflate and set the layout for the dialog
                     // Pass null as the parent view because its going in the dialog layout
@@ -325,7 +333,7 @@ public class SafetyZonePage extends ActionBarActivity {
             FragmentManager fm = getActivity().getSupportFragmentManager();
             FragmentTransaction ft = fm.beginTransaction();
             CurrentSafetyZone fragment = new CurrentSafetyZone();
-            ft.replace(R.id.current_safety_zones, fragment);   // replace instead of add
+            ft.replace(R.id.current_safety_zones, fragment);
             ft.addToBackStack("Update Current Safety Zones");
             ft.commit();
         }
