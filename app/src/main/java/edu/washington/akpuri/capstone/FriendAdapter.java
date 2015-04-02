@@ -5,7 +5,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
-import android.widget.CheckBox;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -31,9 +30,9 @@ public class FriendAdapter extends ArrayAdapter<Contact> {
         LayoutInflater inflater = LayoutInflater.from(getContext());
         view = inflater.inflate(R.layout.contact_friend_list_item, parent, false);
 
-        TextView contactName = (TextView) view.findViewById(R.id.contactName);
+        TextView contactName = (TextView) view.findViewById(R.id.appName);
         TextView contactNumber = (TextView) view.findViewById(R.id.contactNumber);
-        ImageView contactIcon = (ImageView) view.findViewById(R.id.contactIcon);
+        ImageView contactIcon = (ImageView) view.findViewById(R.id.appIcon);
         contactName.setText(list.get(position).getName());
         contactNumber.setText(list.get(position).getPhone());
         return view;

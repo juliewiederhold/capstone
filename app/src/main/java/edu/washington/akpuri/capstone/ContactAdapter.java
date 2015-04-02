@@ -46,10 +46,10 @@ public class ContactAdapter extends ArrayAdapter<Contact> {
             view = inflater.inflate(R.layout.friend_list_item, parent, false);
 
             final ViewHolder viewHolder = new ViewHolder();
-            viewHolder.contactName = (TextView) view.findViewById(R.id.contactName);
+            viewHolder.contactName = (TextView) view.findViewById(R.id.appName);
             viewHolder.contactNumber = (TextView) view.findViewById(R.id.contactNumber);
-            viewHolder.contactIcon = (ImageView) view.findViewById(R.id.contactIcon);
-            viewHolder.checkbox = (CheckBox) view.findViewById(R.id.contactInvite);
+            viewHolder.contactIcon = (ImageView) view.findViewById(R.id.appIcon);
+            viewHolder.checkbox = (CheckBox) view.findViewById(R.id.appBlock);
             viewHolder.checkbox
                     .setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
 
@@ -60,9 +60,6 @@ public class ContactAdapter extends ArrayAdapter<Contact> {
                                     .getTag();
                             person.setSelected(buttonView.isChecked());
                             if (person.isSelected()) {
-                                Toast.makeText(context,
-                                        "Added: " + person.getName(),
-                                        Toast.LENGTH_SHORT).show();
                                 // Add to pending list
                                 pendingList.add(person);
                             } else {

@@ -19,6 +19,7 @@
     <string name="action_safetyzones">Safety Zones</string>
     <string name="action_contacts">Contacts</string>
     <string name="edit_default_settings">Edit Default Settings</string>
+    <string name="title_activity_app_blocking">Block Apps and Phone Numbers</string>
 
     <!-- Safety Zone Information -->
     <string name="address">Address</string>
@@ -52,6 +53,8 @@
     <string name="reset_password">Reset Password</string>
     <string name="app_name">So-So</string>
     <string name="logo_desc">So-So Logo</string>
+    <string name="appNumberBlock">When in a Night Out, you will not be able to open any of the selected apps or call or text the selected phone numbers.</string>
+
 
 
 </resources>

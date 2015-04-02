@@ -88,7 +88,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/next"
-        android:id="@+id/safteyNext"
+        android:id="@+id/next"
         android:layout_gravity="center_horizontal|bottom"
         android:layout_marginBottom="15dp" />
 

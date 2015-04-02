@@ -2,7 +2,6 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="edu.washington.akpuri.capstone" >
 
-
     <uses-permission android:name="com.parse.anywall.permission.MAPS_RECEIVE" />
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
@@ -27,7 +26,6 @@
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
     <uses-permission android:name="android.permission.GET_ACCOUNTS" />
     <uses-permission android:name="com.google.android.c2dm.permission.RECEIVE" />
-
     <uses-permission android:name="edu.washington.akpuri.capstone.permission.C2D_MESSAGE" />
 
     <uses-feature
@@ -38,7 +36,6 @@
     <uses-permission
         android:name="android.permission.READ_EXTERNAL_STORAGE"
         android:maxSdkVersion="18" />
-
     <uses-permission android:name="android.permission.READ_CONTACTS" />
 
     <application
@@ -99,8 +96,9 @@
             android:name=".SafetyZonePage"
             android:label="@string/app_name" >
         </activity>
-        <activity android:name=".AddFriends"
-            android:label="@string/app_name">
+        <activity
+            android:name=".AddFriends"
+            android:label="@string/app_name" >
         </activity>
         <!-- For push notifications -->
         <service android:name="com.parse.PushService" />
@@ -127,10 +125,15 @@
                 <action android:name="com.google.android.c2dm.intent.RECEIVE" />
                 <action android:name="com.google.android.c2dm.intent.REGISTRATION" />
 
-                <!--                   IMPORTANT: Change "com.parse.starter" to match your app's package name. -->
+                <!-- IMPORTANT: Change "com.parse.starter" to match your app's package name. -->
                 <category android:name="edu.washington.akpuri.capstone" />
             </intent-filter>
         </receiver>
+
+        <activity
+            android:name=".AppBlocking"
+            android:label="@string/title_activity_app_blocking" >
+        </activity>
     </application>
 
 </manifest>

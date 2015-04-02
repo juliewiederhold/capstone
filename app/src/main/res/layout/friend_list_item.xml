@@ -6,7 +6,7 @@
     android:id="@+id/contactListItem">
 
     <ImageView
-        android:id="@+id/contactIcon"
+        android:id="@+id/appIcon"
         android:layout_width="wrap_content"
         android:layout_height="fill_parent"
         android:layout_alignParentBottom="true"
@@ -19,41 +19,41 @@
         android:layout_width="fill_parent"
         android:layout_height="26dip"
         android:layout_alignParentBottom="true"
-        android:layout_toRightOf="@id/contactIcon"
+        android:layout_toRightOf="@id/appIcon"
         android:ellipsize="marquee"
         android:singleLine="true"
         android:text="Phone Number"
         android:textSize="12sp"
         android:gravity="center_horizontal"
-        android:layout_alignLeft="@+id/contactName"
-        android:layout_toLeftOf="@+id/contactInvite"
-        android:layout_toStartOf="@+id/contactInvite" />
+        android:layout_alignLeft="@+id/appName"
+        android:layout_toLeftOf="@+id/appBlock"
+        android:layout_toStartOf="@+id/appBlock" />
 
     <TextView
-        android:id="@+id/contactName"
+        android:id="@+id/appName"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_above="@+id/contactNumber"
         android:layout_alignParentTop="true"
         android:layout_alignWithParentIfMissing="true"
-        android:layout_toRightOf="@id/contactIcon"
+        android:layout_toRightOf="@id/appIcon"
         android:gravity="center_vertical|center_horizontal"
         android:text="Name"
         android:textSize="16sp"
         android:textStyle="bold"
         android:layout_below="@+id/contactNumber"
-        android:layout_toLeftOf="@+id/contactInvite"
-        android:layout_toStartOf="@+id/contactInvite" />
+        android:layout_toLeftOf="@+id/appBlock"
+        android:layout_toStartOf="@+id/appBlock" />
 
     <CheckBox
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/contactInvite"
+        android:id="@+id/appBlock"
         android:layout_alignParentRight="true"
         android:layout_alignParentEnd="true"
         android:checked="false"
-        android:layout_alignTop="@+id/contactIcon"
-        android:layout_below="@+id/contactIcon"
+        android:layout_alignTop="@+id/appIcon"
+        android:layout_below="@+id/appIcon"
         android:layout_alignBottom="@+id/contactNumber"
         android:enabled="true"
         android:focusable="false" />
