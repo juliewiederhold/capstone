@@ -40,7 +40,7 @@ public class AppNumberAdapter extends ArrayAdapter<String> {
         View view = null;
         if (convertView == null) {
             LayoutInflater inflater = LayoutInflater.from(getContext());
-            view = inflater.inflate(R.layout.friend_list_item, parent, false);
+            view = inflater.inflate(R.layout.app_block_item, parent, false);
 
             final ViewHolder viewHolder = new ViewHolder();
             viewHolder.appName = (TextView) view.findViewById(R.id.appName);
@@ -68,7 +68,7 @@ public class AppNumberAdapter extends ArrayAdapter<String> {
             ((ViewHolder) view.getTag()).checkbox.setTag(appList.get(position));
         }
         ViewHolder holder = (ViewHolder) view.getTag();
-        //holder.appName.setText(appList.get(position).getName());
+        holder.appName.setText(appList.get(position));
 
         // ImageView?
         //holder.checkbox.setChecked(appList.get(position).isSelected());
