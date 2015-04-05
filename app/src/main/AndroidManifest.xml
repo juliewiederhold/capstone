@@ -134,6 +134,10 @@
             android:name=".AppNumberBlocking"
             android:label="@string/title_activity_app_blocking" >
         </activity>
+        <activity
+            android:name=".BlockContacts"
+            android:label="@string/title_activity_block_contacts" >
+        </activity>
     </application>
 
 </manifest>

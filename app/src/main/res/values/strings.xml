@@ -54,6 +54,9 @@
     <string name="app_name">So-So</string>
     <string name="logo_desc">So-So Logo</string>
     <string name="appNumberBlock">When in a Night Out, you will not be able to open any of the selected apps or call or text the selected phone numbers.</string>
+    <string name="title_activity_block_contacts">BlockContacts</string>
+
+    <string name="hello_world">Hello world!</string>
 
 
 

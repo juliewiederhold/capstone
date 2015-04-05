@@ -9,25 +9,24 @@ import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import java.util.ArrayList;
 
 /**
  * Created by Julie on 4/2/15.
  */
-public class AppNumberAdapter extends ArrayAdapter<String> {
+public class AppNumberAdapter extends ArrayAdapter<App> {
     private final Context context;
-    private final ArrayList<String> appList;
-    private final ArrayList<String> blockedApps;
-    private final SingletonContacts instance;
+    private final SingletonContacts contactsInstance;
+    private final SingletonAppBlocking appInstance;
+    private final ArrayList<Contact> pendingList;
 
-    public AppNumberAdapter(Context context, int resource, ArrayList<String> apps, ArrayList<String> blockedApps) {
+    public AppNumberAdapter(Context context, int resource, ArrayList<App> apps, ArrayList<App> blockedApps) {
         super(context, resource, apps);
         this.context = context;
-        this.appList = apps;
-        this.blockedApps = blockedApps;
-        this.instance = SingletonContacts.getInstance();
+        this.pendingList = new ArrayList<>();
+        this.contactsInstance = SingletonContacts.getInstance();
+        this.appInstance = SingletonAppBlocking.getInstance();
     }
 
     static class ViewHolder {
@@ -52,23 +51,26 @@ public class AppNumberAdapter extends ArrayAdapter<String> {
                         @Override
                         public void onCheckedChanged(CompoundButton buttonView,
                                                      boolean isChecked) {
-                            String app = (String) viewHolder.checkbox
-                                    .getTag();
+                            App app = (App) viewHolder.checkbox.getTag();
                             if (buttonView.isChecked()) {
-                                // Add to pending list
-                                blockedApps.add(app);
+                                   // Add to pending list
+                                appInstance.updateIsSelectedOfAppInAllApps(app, true);
+                            } else {
+                                appInstance.updateIsSelectedOfAppInAllApps(app, false);
                             }
-                          //  instance.setPendingContacts(pendingList);
+                            //contactsInstance.setPendingContacts(pendingList);
                         }
                     });
             view.setTag(viewHolder);
-            viewHolder.checkbox.setTag(appList.get(position));
+            viewHolder.checkbox.setTag(appInstance.getAllApps().get(position));
         } else {
             view = convertView;
-            ((ViewHolder) view.getTag()).checkbox.setTag(appList.get(position));
+            ((ViewHolder) view.getTag()).checkbox.setTag(appInstance.getAllApps().get(position));
         }
         ViewHolder holder = (ViewHolder) view.getTag();
-        holder.appName.setText(appList.get(position));
+        holder.appName.setText(appInstance.getAllApps().get(position).getName());
+
+        holder.checkbox.setChecked(appInstance.getAllApps().get(position).isSelected());
 
         // ImageView?
         //holder.checkbox.setChecked(appList.get(position).isSelected());

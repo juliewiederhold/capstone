@@ -10,6 +10,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
+import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.Toast;
 
@@ -18,8 +19,10 @@ import java.util.ArrayList;
 
 public class AppNumberBlocking extends ActionBarActivity {
     AppNumberAdapter adapter = null;
-    ArrayList<String> apps;
-    ArrayList<String> blockedApps;
+    //ArrayList<String> apps;
+    //ArrayList<String> blockedApps;
+    private SingletonAppBlocking appInstance;
+    private SingletonContacts contactsInstance;
     private static boolean allowContactRetrieval;
 
     @Override
@@ -27,6 +30,8 @@ public class AppNumberBlocking extends ActionBarActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_app_blocking);
         allowContactRetrieval = false;
+        contactsInstance = SingletonContacts.getInstance();
+        appInstance = SingletonAppBlocking.getInstance();
 
         displayListView();
 
@@ -41,7 +46,7 @@ public class AppNumberBlocking extends ActionBarActivity {
                     builder.setPositiveButton("Allow", new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int id) {
                             allowContactRetrieval = true;
-                            Intent addFriends = new Intent(AppNumberBlocking.this, AddFriends.class);
+                            Intent addFriends = new Intent(AppNumberBlocking.this, BlockContacts.class);
                             startActivity(addFriends);
                         }
                     });
@@ -55,11 +60,19 @@ public class AppNumberBlocking extends ActionBarActivity {
                     dialog.show();
                 }
                 if (allowContactRetrieval) {
-                    Intent addFriends = new Intent(AppNumberBlocking.this, AddFriends.class);
+                    Intent addFriends = new Intent(AppNumberBlocking.this, BlockContacts.class);
                     startActivity(addFriends);
                 }
             }
         });
+
+        if(contactsInstance.getBlockedContacts() != null){
+            ListView blockedNumberListView = (ListView) findViewById(R.id.blockedContacts);
+            ListAdapter simpleAdpt = new ContactAdapter(this, R.layout.friend_list_item, contactsInstance.getAllContacts(), contactsInstance.getBlockedContacts());
+
+           // ListAdapter adapter = new ContactAdapter(this, R.id.contactListItem, allContacts, pendingContacts);
+            blockedNumberListView.setAdapter(simpleAdpt);
+        }
 
         Button nextButton = (Button) findViewById(R.id.next);
         nextButton.setOnClickListener(new View.OnClickListener() {
@@ -72,13 +85,11 @@ public class AppNumberBlocking extends ActionBarActivity {
     }
 
     private void displayListView(){
-        apps = new ArrayList<String>();
-        blockedApps = new ArrayList<String>();
-        apps.add("Facebook");
-        apps.add("SnapChat");
-        apps.add("Twitter");
+        appInstance.addAppToAllApps(new App("Facebook"));
+        appInstance.addAppToAllApps(new App("SnapChat"));
+        appInstance.addAppToAllApps(new App("Twitter"));
 
-        adapter = new AppNumberAdapter(this, R.layout.app_block_item, apps, blockedApps);
+        adapter = new AppNumberAdapter(this, R.layout.app_block_item, appInstance.getAllApps(), appInstance.getBlockedApps());
         ListView view = (ListView) findViewById(R.id.appContainer);
         view.setAdapter(adapter);
 

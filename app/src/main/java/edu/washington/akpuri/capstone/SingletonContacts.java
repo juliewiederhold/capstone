@@ -14,6 +14,7 @@ public class SingletonContacts {
     private static SingletonContacts instance = null;
     private static ArrayList<Contact> allContacts;
     private static ArrayList<Contact> pendingContacts;
+    private static ArrayList<Contact> blockedContacts;
     //Empty Constructor, it's a singleton
     protected SingletonContacts() {
     }
@@ -38,6 +39,10 @@ public class SingletonContacts {
     public void setContacts(ArrayList<Contact> contacts) {
         this.allContacts = contacts;
     }
+
+    public void setBlockedContacts(ArrayList<Contact> contacts) {this.blockedContacts = contacts;}
+
+    public ArrayList<Contact> getBlockedContacts() {return blockedContacts;}
 
     public void setPendingContacts(ArrayList<Contact> pendingContacts) {
         this.pendingContacts = pendingContacts;

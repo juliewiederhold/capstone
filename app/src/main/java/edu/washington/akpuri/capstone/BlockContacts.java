@@ -3,9 +3,9 @@ package edu.washington.akpuri.capstone;
 import android.content.ContentResolver;
 import android.content.Intent;
 import android.database.Cursor;
-import android.os.Bundle;
 import android.provider.ContactsContract;
 import android.support.v7.app.ActionBarActivity;
+import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -13,34 +13,22 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ListAdapter;
 import android.widget.ListView;
-import android.widget.Toast;
-
-import com.parse.GetCallback;
-import com.parse.ParseException;
-import com.parse.ParseObject;
-import com.parse.ParseQuery;
-import com.parse.ParseUser;
-import com.parse.SaveCallback;
 
 import java.util.ArrayList;
 
-/**
- * Created by Julie on 4/2/15.
- */
-public class BlockNumbers extends ActionBarActivity {
 
-    private final static String TAG = "BlockNumbers.java";
+public class BlockContacts extends ActionBarActivity {
 
-    private static ArrayList<Contact> numbersToBlock;
+    private final static String TAG = "BlockContacts.java";
+
     private static ArrayList<String> pContacts;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_app_blocking);
+        setContentView(R.layout.activity_add_friends);
 
         ArrayList<Contact> allContacts = new ArrayList<Contact>();
-        numbersToBlock = new ArrayList<Contact>();
         pContacts = new ArrayList<String>();
         SingletonContacts instance = SingletonContacts.getInstance();
 
@@ -86,17 +74,19 @@ public class BlockNumbers extends ActionBarActivity {
                 }
             }
             cur.close();
-            instance.setContacts(allContacts);
+            //instance.setBlockedContacts(allContacts);
             ListView contactListView = (ListView) findViewById(R.id.addFriendsList);
-            ListAdapter adapter = new ContactAdapter(this, R.id.contactListItem, allContacts, numbersToBlock);
+            ListAdapter adapter = new ContactAdapter(this, R.id.contactListItem, allContacts, instance.getBlockedContacts());
             contactListView.setAdapter(adapter);
         }
 
+
         Button sendRequest = (Button) findViewById(R.id.sendFriendRequest);
+        sendRequest.setText("Add to Block Contacts");
         sendRequest.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent backToFriends = new Intent(BlockNumbers.this, AppNumberBlocking.class);
+                Intent backToFriends = new Intent(BlockContacts.this, AppNumberBlocking.class);
                 startActivity(backToFriends);
             }
         });
