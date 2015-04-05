@@ -14,11 +14,9 @@ import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.Toast;
 
-import java.util.ArrayList;
-
 
 public class AppNumberBlocking extends ActionBarActivity {
-    AppNumberAdapter adapter = null;
+    AppBlockingAdapter adapter = null;
     //ArrayList<String> apps;
     //ArrayList<String> blockedApps;
     private SingletonAppBlocking appInstance;
@@ -68,7 +66,7 @@ public class AppNumberBlocking extends ActionBarActivity {
 
         if(contactsInstance.getBlockedContacts() != null){
             ListView blockedNumberListView = (ListView) findViewById(R.id.blockedContacts);
-            ListAdapter simpleAdpt = new ContactAdapter(this, R.layout.friend_list_item, contactsInstance.getAllContacts(), contactsInstance.getBlockedContacts());
+            ListAdapter simpleAdpt = new BlockContactAdapter(this, R.layout.friend_list_item, contactsInstance.getBlockedContacts(), contactsInstance.getBlockedContacts());
 
            // ListAdapter adapter = new ContactAdapter(this, R.id.contactListItem, allContacts, pendingContacts);
             blockedNumberListView.setAdapter(simpleAdpt);
@@ -89,7 +87,7 @@ public class AppNumberBlocking extends ActionBarActivity {
         appInstance.addAppToAllApps(new App("SnapChat"));
         appInstance.addAppToAllApps(new App("Twitter"));
 
-        adapter = new AppNumberAdapter(this, R.layout.app_block_item, appInstance.getAllApps(), appInstance.getBlockedApps());
+        adapter = new AppBlockingAdapter(this, R.layout.app_block_item, appInstance.getAllApps(), appInstance.getBlockedApps());
         ListView view = (ListView) findViewById(R.id.appContainer);
         view.setAdapter(adapter);
 

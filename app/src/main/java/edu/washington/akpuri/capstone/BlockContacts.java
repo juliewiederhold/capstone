@@ -74,20 +74,22 @@ public class BlockContacts extends ActionBarActivity {
                 }
             }
             cur.close();
-            //instance.setBlockedContacts(allContacts);
+            if(instance.getBlockedContacts() == null)
+                instance.setBlockedContacts(new ArrayList<Contact>());
             ListView contactListView = (ListView) findViewById(R.id.addFriendsList);
-            ListAdapter adapter = new ContactAdapter(this, R.id.contactListItem, allContacts, instance.getBlockedContacts());
+            ListAdapter adapter = new BlockContactAdapter(this, R.id.contactListItem, allContacts, instance.getBlockedContacts());
             contactListView.setAdapter(adapter);
         }
 
 
         Button sendRequest = (Button) findViewById(R.id.sendFriendRequest);
+
         sendRequest.setText("Add to Block Contacts");
         sendRequest.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent backToFriends = new Intent(BlockContacts.this, AppNumberBlocking.class);
-                startActivity(backToFriends);
+                Intent backToBlocking = new Intent(BlockContacts.this, AppNumberBlocking.class);
+                startActivity(backToBlocking);
             }
         });
     }
