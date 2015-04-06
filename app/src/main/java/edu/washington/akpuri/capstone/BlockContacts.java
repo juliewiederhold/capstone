@@ -13,6 +13,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ListAdapter;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import java.util.ArrayList;
 
@@ -27,6 +28,9 @@ public class BlockContacts extends ActionBarActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_friends);
+
+        TextView header = (TextView) findViewById(R.id.contactListHeader);
+        header.setText("Block Contacts");
 
         ArrayList<Contact> allContacts = new ArrayList<Contact>();
         pContacts = new ArrayList<String>();

@@ -76,7 +76,7 @@ public class AppNumberBlocking extends ActionBarActivity {
         nextButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent next = new Intent(AppNumberBlocking.this, MainActivity.class);
+                Intent next = new Intent(AppNumberBlocking.this, QuickText.class);
                 startActivity(next);
             }
         });

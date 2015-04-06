@@ -20,6 +20,8 @@
     <string name="action_contacts">Contacts</string>
     <string name="edit_default_settings">Edit Default Settings</string>
     <string name="title_activity_app_blocking">Block Apps and Phone Numbers</string>
+    <string name="title_activity_quick_text">Quick Text</string>
+    <string name="title_activity_block_contacts">Block Contacts</string>
 
     <!-- Safety Zone Information -->
     <string name="address">Address</string>
@@ -28,6 +30,12 @@
     <string name="zip">Zip Code</string>
     <string name="safety_zone_name">Name of Location</string>
     <string name="update_safety_zone">Update Safety Zone</string>
+
+    <!-- Quick Text Information -->
+    <string name="quickTextMessage">Enter Message</string>
+
+    <!-- App/Number Blocking Information -->
+    <string name="appNumberBlock">When in a Night Out, you will not be able to open any of the selected apps or call or text the selected phone numbers.</string>
 
     <!-- Contact / Friends Information -->
     <string name="contact_group_description">Create a group with friends you commonly go out with to make adding inviting friends to a Night Out faster! </string>
@@ -53,10 +61,11 @@
     <string name="reset_password">Reset Password</string>
     <string name="app_name">So-So</string>
     <string name="logo_desc">So-So Logo</string>
-    <string name="appNumberBlock">When in a Night Out, you will not be able to open any of the selected apps or call or text the selected phone numbers.</string>
-    <string name="title_activity_block_contacts">BlockContacts</string>
 
-    <string name="hello_world">Hello world!</string>
+
+
+
+
 
 
 
