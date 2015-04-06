@@ -83,9 +83,11 @@ public class AppNumberBlocking extends ActionBarActivity {
     }
 
     private void displayListView(){
-        appInstance.addAppToAllApps(new App("Facebook"));
-        appInstance.addAppToAllApps(new App("SnapChat"));
-        appInstance.addAppToAllApps(new App("Twitter"));
+        if(appInstance.getAllApps().size() == 0){
+            appInstance.addAppToAllApps(new App("Facebook"));
+            appInstance.addAppToAllApps(new App("SnapChat"));
+            appInstance.addAppToAllApps(new App("Twitter"));
+        }
 
         adapter = new AppBlockingAdapter(this, R.layout.app_block_item, appInstance.getAllApps(), appInstance.getBlockedApps());
         ListView view = (ListView) findViewById(R.id.appContainer);

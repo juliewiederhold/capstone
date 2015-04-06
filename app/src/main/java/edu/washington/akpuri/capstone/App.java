@@ -7,12 +7,10 @@ import android.util.Log;
  */
 public class App {
     private String name;
-    private boolean selected;
     private boolean isBlocked;
 
     public App(String name) {
         this.name = name;
-        this.selected = false;
         this.isBlocked = false;
     }
 
@@ -21,19 +19,10 @@ public class App {
     }
 
 
-    public boolean isSelected() {
-        return selected;
-    }
-
-    public void setSelected(boolean selected) {
-        this.selected = selected;
-    }
-
     public boolean isBlocked() {
         return isBlocked;
     }
 
-    public void setIsBlocked(boolean isBlocked) {
-        this.isBlocked = isBlocked;
-    }
+    public void setIsBlocked(boolean isBlocked) {this.isBlocked = isBlocked;}
+
 }

@@ -17,16 +17,14 @@ import java.util.ArrayList;
  */
 public class AppBlockingAdapter extends ArrayAdapter<App> {
     private final Context context;
-    private final SingletonContacts contactsInstance;
     private final SingletonAppBlocking appInstance;
-    private final ArrayList<Contact> pendingList;
+    ArrayList<App> allApps;
 
     public AppBlockingAdapter(Context context, int resource, ArrayList<App> apps, ArrayList<App> blockedApps) {
         super(context, resource, apps);
         this.context = context;
-        this.pendingList = new ArrayList<>();
-        this.contactsInstance = SingletonContacts.getInstance();
         this.appInstance = SingletonAppBlocking.getInstance();
+        this.allApps = apps;
     }
 
     static class ViewHolder {
@@ -54,23 +52,33 @@ public class AppBlockingAdapter extends ArrayAdapter<App> {
                             App app = (App) viewHolder.checkbox.getTag();
                             if (buttonView.isChecked()) {
                                    // Add to pending list
-                                appInstance.updateIsSelectedOfAppInAllApps(app, true);
+                                //appInstance.updateIsSelectedOfAppInAllApps(app, true);
+                                for(int i = 0; i < appInstance.getAllApps().size(); i++){
+                                    if(app.getName().equals(appInstance.getAllApps().get(i).getName())){
+                                        allApps.get(i).setIsBlocked(true);
+                                    }
+                                }
                             } else {
-                                appInstance.updateIsSelectedOfAppInAllApps(app, false);
+                                //appInstance.updateIsSelectedOfAppInAllApps(app, false);
+                                for(int i = 0; i < appInstance.getAllApps().size(); i++){
+                                    if(app.getName().equals(appInstance.getAllApps().get(i).getName())){
+                                        allApps.get(i).setIsBlocked(false);
+                                    }
+                                }
                             }
                             //contactsInstance.setPendingContacts(pendingList);
                         }
                     });
             view.setTag(viewHolder);
-            viewHolder.checkbox.setTag(appInstance.getAllApps().get(position));
+            viewHolder.checkbox.setTag(allApps.get(position));
         } else {
             view = convertView;
-            ((ViewHolder) view.getTag()).checkbox.setTag(appInstance.getAllApps().get(position));
+            ((ViewHolder) view.getTag()).checkbox.setTag(allApps.get(position));
         }
         ViewHolder holder = (ViewHolder) view.getTag();
-        holder.appName.setText(appInstance.getAllApps().get(position).getName());
+        holder.appName.setText(allApps.get(position).getName());
 
-        holder.checkbox.setChecked(appInstance.getAllApps().get(position).isSelected());
+        holder.checkbox.setChecked(allApps.get(position).isBlocked());
 
         // ImageView?
         //holder.checkbox.setChecked(appList.get(position).isSelected());

@@ -17,7 +17,7 @@ import java.util.ArrayList;
  * Created by Julie on 4/5/15.
  */
 public class BlockContactAdapter extends ArrayAdapter<Contact> {
-    private final ArrayList<Contact> list;
+    private final ArrayList<Contact> contactList;
     private final Context context;
     private final ArrayList<Contact> blockedContacts;
     private final SingletonContacts instance;
@@ -25,7 +25,7 @@ public class BlockContactAdapter extends ArrayAdapter<Contact> {
     public BlockContactAdapter(Context context, int resource, ArrayList<Contact> allContacts, ArrayList<Contact> blockedContacts) {
         super(context, resource, allContacts);
         this.context = context;
-        this.list = allContacts;
+        this.contactList = allContacts;
         this.blockedContacts = blockedContacts;
         this.instance = SingletonContacts.getInstance();
     }
@@ -59,11 +59,11 @@ public class BlockContactAdapter extends ArrayAdapter<Contact> {
                                     .getTag();
                             person.setSelected(buttonView.isChecked());
                             if (person.isSelected()) {
-                                // Add to pending list
+                                // Add to pending contactList
                                 if(!blockedContacts.contains(person))
                                     blockedContacts.add(person);
                             } else {
-                                // Remove from pending list
+                                // Remove from pending contactList
                                 Toast.makeText(context,
                                         "Removed: " + person.getName(),
                                         Toast.LENGTH_SHORT).show();
@@ -75,16 +75,16 @@ public class BlockContactAdapter extends ArrayAdapter<Contact> {
                         }
                     });
             view.setTag(viewHolder);
-            viewHolder.checkbox.setTag(list.get(position));
+            viewHolder.checkbox.setTag(contactList.get(position));
         } else {
             view = convertView;
-            ((ViewHolder) view.getTag()).checkbox.setTag(list.get(position));
+            ((ViewHolder) view.getTag()).checkbox.setTag(contactList.get(position));
         }
         ViewHolder holder = (ViewHolder) view.getTag();
-        holder.contactName.setText(list.get(position).getName());
-        holder.contactNumber.setText(list.get(position).getPhone());
+        holder.contactName.setText(contactList.get(position).getName());
+        holder.contactNumber.setText(contactList.get(position).getPhone());
         // ImageView?
-        holder.checkbox.setChecked(list.get(position).isSelected());
+        holder.checkbox.setChecked(contactList.get(position).isSelected());
         return view;
     }
 }
