@@ -127,6 +127,7 @@ public class AddFriends extends ActionBarActivity {
                                             contact.put("phone", phone);    //
                                             contact.put("user", user);
                                             contact.put("id", id);
+                                            contact.put("pending", true);   // pending So-So friend; will be false once accepted
                                             contact.saveInBackground(new SaveCallback() {
                                                 @Override
                                                 public void done(ParseException e) {

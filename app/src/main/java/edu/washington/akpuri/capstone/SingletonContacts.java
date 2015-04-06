@@ -1,5 +1,6 @@
 package edu.washington.akpuri.capstone;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 
 /**
@@ -7,7 +8,7 @@ import java.util.ArrayList;
  * This Singleton acts as a Global Variable holding the contacts of
  * a user and storing them for easy loading of the listview used by
  * the contacts activity. We need to store these contacts somewhere so that we
- * don't have to query the android contacts database everysingle time we are
+ * don't have to query the android contacts database every single time we are
  * at the contacts page because this takes too long and is too much work
  */
 public class SingletonContacts {
@@ -15,6 +16,7 @@ public class SingletonContacts {
     private static ArrayList<Contact> allContacts;
     private static ArrayList<Contact> pendingContacts;
     private static ArrayList<Contact> blockedContacts;
+    private static ArrayList<Contact> pendingFriends;
     //Empty Constructor, it's a singleton
     protected SingletonContacts() {
     }
@@ -48,6 +50,13 @@ public class SingletonContacts {
         this.pendingContacts = pendingContacts;
     }
 
+    public void setPendingFriends(ArrayList<Contact> pendingFriends) {
+        this.pendingFriends = pendingFriends;
+    }
+
+    public ArrayList<Contact> getPendingFriends() {
+        return pendingFriends;
+    }
     public ArrayList<Contact> getPendingContacts() {
         return pendingContacts;
     }

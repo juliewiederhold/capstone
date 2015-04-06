@@ -64,9 +64,6 @@ public class ContactAdapter extends ArrayAdapter<Contact> {
                                 pendingList.add(person);
                             } else {
                                 // Remove from pending list
-                                Toast.makeText(context,
-                                        "Removed: " + person.getName(),
-                                        Toast.LENGTH_SHORT).show();
                                 pendingList.remove(person);
 
                             }

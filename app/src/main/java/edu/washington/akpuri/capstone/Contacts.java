@@ -2,7 +2,10 @@ package edu.washington.akpuri.capstone;
 
 import android.app.ActionBar;
 import android.app.AlertDialog;
+import android.app.FragmentManager;
+import android.app.FragmentTransaction;
 import android.content.DialogInterface;
+import android.nfc.Tag;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
@@ -14,6 +17,7 @@ import android.content.Intent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.FrameLayout;
 import android.widget.ImageButton;
 import android.widget.ListAdapter;
 import android.widget.ListView;
@@ -43,9 +47,12 @@ public class Contacts extends ActionBarActivity {
     private android.support.v7.app.ActionBar actionBar;
     private SingletonContacts instance;
 
+    private static final int CONTENT_VIEW_ID = 10101010;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         setContentView(R.layout.activity_contacts);
         allowContactRetrieval = false;
         pendingParseContacts = null;
@@ -114,6 +121,52 @@ public class Contacts extends ActionBarActivity {
                 }
             }
         });
+
+        //// Get So-So Friends (current and pending)
+
+        // Not currently loading when you first load "Contacts/Friends" page for some reason....
+        // Should probably download Friends from parse every time app is loaded to get most current list
+        // since users have to accept requests (i.e. changes may occur while user isn't on the app)
+        if (ParseUser.getCurrentUser().get("contacts") != null) {
+            JSONArray contacts = ParseUser.getCurrentUser().getJSONArray("contacts");
+            Log.e(TAG + " Friends", contacts.toString());
+            for (int i = 0; i < contacts.length(); i++) {
+                String id = null;
+                try {
+                    id = contacts.get(i).toString();
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+                Log.e(TAG, id);
+                if (id != null) {
+                    ParseQuery<ParseObject> query = ParseQuery.getQuery("contact");
+                    query.whereEqualTo("objectId", id); // query.whereEqualTo("parent", user);
+                    query.getFirstInBackground(new GetCallback<ParseObject>() {
+                        @Override
+                        public void done(final ParseObject parseObject, ParseException e) {
+                            String name = parseObject.getString("name");
+                            String phone = parseObject.getString("phone");
+                            Log.e(TAG, name + " " + phone);
+                            Contact currentFriend = new Contact(name, phone, 0);
+                            pendingContacts.add(currentFriend);
+                        }
+                    });
+                }
+            }
+            instance.setPendingFriends(pendingContacts);
+        }
+        Log.i(TAG + " Pending Friends", instance.getPendingFriends().toString());
+
+//        if (savedInstanceState == null) {
+//            android.support.v4.app.FragmentManager fragmentManager = getSupportFragmentManager();
+//            android.support.v4.app.FragmentTransaction ft = fragmentManager.beginTransaction();
+//            FriendsFragment ff = new FriendsFragment();
+//            ft.add(R.id.container, ff);
+//            ft.commit();
+//        }
+
+
+
     }
 
     @Override
@@ -166,56 +219,50 @@ public class Contacts extends ActionBarActivity {
 
         @Override
         public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-            Log.i("ContactsFragment", "onCreateView Fired for FriendsFrgment");
+            Log.i("ContactsFragment", "onCreateView Fired for FriendsFragment");
             final View rootView = inflater.inflate(R.layout.fragment_friends, container, false);
             //pendngParseContacs = Array of Contact Object id's as strings?
             //Need to iterate through this array of Parse objects and look up each of the contacts through their id
-            //THen we need to create a contact and add it to an arraylist to pass to the array adapter
+            //Then we need to create a contact and add it to an arraylist to pass to the array adapter
 
-            /*if (ParseUser.getCurrentUser().get("contacts") != null) {
-
-                JSONArray contacts = ParseUser.getCurrentUser().getJSONArray("contacts");
-                Log.e(TAG, contacts.toString());
-                pendingContacts = null;
-                for (int i = 0; i < contacts.length(); i++) {
-                    String id = null;
-                    try {
-                        id = contacts.get(i).toString();
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                    }
-                    Log.e(TAG, id);
-                    if (id != null) {
-                        ParseQuery<ParseObject> query = ParseQuery.getQuery("contact");
-                        query.whereEqualTo("objectId", id); // query.whereEqualTo("parent", user);
-                        query.getFirstInBackground(new GetCallback<ParseObject>() {
-                            @Override
-                            public void done(final ParseObject parseObject, ParseException e) {
-                                    Log.i(TAG, parseObject.getString("name"));
-                                    Log.i(TAG, parseObject.getString("phone"));
-                                    Contact currentFriend = new Contact(parseObject.getString("name"),
-                                                                       parseObject.getString("phone"), 0);
-                                pendingContacts.add(currentFriend);
-                                }
-
-                            });
-                        }
-                   }
-                //Log.i(TAG, pendingContacts.toString());
+//            if (ParseUser.getCurrentUser().get("contacts") != null) {
+//
+//                JSONArray contacts = ParseUser.getCurrentUser().getJSONArray("contacts");
+//                Log.e(TAG + " Friends", contacts.toString());
+////                pendingContacts = null;
+//                for (int i = 0; i < contacts.length(); i++) {
+//                    String id = null;
+//                    try {
+//                        id = contacts.get(i).toString();
+//                    } catch (JSONException e) {
+//                        e.printStackTrace();
+//                    }
+//                    Log.e(TAG, id);
+//                    if (id != null) {
+//                        ParseQuery<ParseObject> query = ParseQuery.getQuery("contact");
+//                        query.whereEqualTo("objectId", id); // query.whereEqualTo("parent", user);
+//                        query.getFirstInBackground(new GetCallback<ParseObject>() {
+//                            @Override
+//                            public void done(final ParseObject parseObject, ParseException e) {
+//                                String name = parseObject.getString("name");
+//                                String phone = parseObject.getString("phone");
+//                                Log.e(TAG, name + " " + phone);
+//                                Contact currentFriend = new Contact(name, phone, 0);
+//                                pendingContacts.add(currentFriend);
+//                                }
+//                            });
+//                        }
+//                   }
+//                Log.i(TAG + " Pending Contacts", pendingContacts.toString());
 
                 ListView contactListView = (ListView) rootView.findViewById(R.id.friendListView);
                 ListAdapter adapter = new FriendAdapter(getActivity(), R.id.contactListItem, pendingContacts);
                 contactListView.setAdapter(adapter);
 
                 TextView noFriends = (TextView) rootView.findViewById(R.id.noFriends);
-
                 noFriends.setVisibility(View.GONE);
 
-            }*/
-
-
-
-
+//            }
             //Hide noFriends if there are friends
             return rootView;
         }

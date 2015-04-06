@@ -1,6 +1,7 @@
 package edu.washington.akpuri.capstone;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -29,6 +30,8 @@ public class FriendAdapter extends ArrayAdapter<Contact> {
     public View getView(int position, View view, ViewGroup parent) {
         LayoutInflater inflater = LayoutInflater.from(getContext());
         view = inflater.inflate(R.layout.contact_friend_list_item, parent, false);
+
+        Log.e("FriendAdapter", instance.getPendingFriends().toString());
 
         TextView contactName = (TextView) view.findViewById(R.id.appName);
         TextView contactNumber = (TextView) view.findViewById(R.id.contactNumber);
