@@ -17,8 +17,6 @@ import android.widget.Toast;
 
 public class AppNumberBlocking extends ActionBarActivity {
     AppBlockingAdapter adapter = null;
-    //ArrayList<String> apps;
-    //ArrayList<String> blockedApps;
     private SingletonAppBlocking appInstance;
     private SingletonContacts contactsInstance;
     private static boolean allowContactRetrieval;
@@ -27,6 +25,7 @@ public class AppNumberBlocking extends ActionBarActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_app_blocking);
+
         allowContactRetrieval = false;
         contactsInstance = SingletonContacts.getInstance();
         appInstance = SingletonAppBlocking.getInstance();

@@ -30,9 +30,11 @@
     <string name="zip">Zip Code</string>
     <string name="safety_zone_name">Name of Location</string>
     <string name="update_safety_zone">Update Safety Zone</string>
+    <string name="no_safety_zone_description">You currently do not have any Safety Zones. Add locations you will end your night. Once you arrive, your friends in your Going Out group will be notified you have arrived!</string>
 
     <!-- Quick Text Information -->
     <string name="quickTextMessage">Enter Message</string>
+    <string name="no_quick_text_description">You currently have no Quick Text. Add messages you want to be able to quickly send to your friends when you go out. Why waste time texting when we can quickly message everyone for you!</string>
 
     <!-- App/Number Blocking Information -->
     <string name="appNumberBlock">When in a Night Out, you will not be able to open any of the selected apps or call or text the selected phone numbers.</string>
