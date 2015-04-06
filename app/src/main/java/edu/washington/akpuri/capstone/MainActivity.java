@@ -9,7 +9,16 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.TextView;
 
+import com.parse.GetCallback;
+import com.parse.ParseException;
+import com.parse.ParseObject;
+import com.parse.ParseQuery;
 import com.parse.ParseUser;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+
+import java.util.ArrayList;
 
 /**
  * Created by NR on 3/4/15.
@@ -21,6 +30,9 @@ public class MainActivity extends ActionBarActivity {
    */
     private final static int CONNECTION_FAILURE_RESOLUTION_REQUEST = 9000;
     private final static String TAG = "MainActivity";
+
+    private SingletonContacts instance;
+    private static ArrayList<Contact> pendingContacts;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,6 +51,38 @@ public class MainActivity extends ActionBarActivity {
             //
         }
 
+        /////
+        instance = SingletonContacts.getInstance();
+        pendingContacts = new ArrayList<Contact>();
+
+        if (ParseUser.getCurrentUser().get("contacts") != null) {
+            JSONArray contacts = ParseUser.getCurrentUser().getJSONArray("contacts");
+            Log.e(TAG + " Friends", contacts.toString());
+            for (int i = 0; i < contacts.length(); i++) {
+                String id = null;
+                try {
+                    id = contacts.get(i).toString();
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+                Log.e(TAG, id);
+                if (id != null) {
+                    ParseQuery<ParseObject> query = ParseQuery.getQuery("contact");
+                    query.whereEqualTo("objectId", id); // query.whereEqualTo("parent", user);
+                    query.getFirstInBackground(new GetCallback<ParseObject>() {
+                        @Override
+                        public void done(final ParseObject parseObject, ParseException e) {
+                            String name = parseObject.getString("name");
+                            String phone = parseObject.getString("phone");
+                            Log.e(TAG, name + " " + phone);
+                            Contact currentFriend = new Contact(name, phone, 0);
+                            pendingContacts.add(currentFriend);
+                        }
+                    });
+                }
+            }
+            instance.setPendingFriends(pendingContacts);
+        }
 
     }
 
