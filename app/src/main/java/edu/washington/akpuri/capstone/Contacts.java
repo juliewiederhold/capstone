@@ -156,9 +156,19 @@ public class Contacts extends ActionBarActivity {
 //            }
 //            instance.setPendingFriends(pendingContacts);
 //        }
-        pendingContacts = instance.getPendingContacts();
+
+
+
+//        for (int i=0; i<instance.getPendingContacts().size(); i++) {
+//            pendingContacts.add(instance.getPendingContacts().get(i));
+//            Log.e(TAG + " adding", instance.getPendingContacts().get(i).toString());
+//        }
+        pendingContacts.addAll(instance.getPendingFriends());
 
         Log.i(TAG + " Pending Friends", instance.getPendingFriends().toString());
+        Log.e(TAG + " adding", instance.getPendingFriends().size() + "");
+        Log.i(TAG + "onCreate Pending Contacts", pendingContacts.toString());
+
 
 //        if (savedInstanceState == null) {
 //            android.support.v4.app.FragmentManager fragmentManager = getSupportFragmentManager();
@@ -272,7 +282,7 @@ public class Contacts extends ActionBarActivity {
 //                   }
 //                Log.i(TAG + " Pending Friends", pendingContacts.toString());
 
-
+            Log.i(TAG + "Frag Pending Contacts", pendingContacts.toString());
                 ListView contactListView = (ListView) rootView.findViewById(R.id.friendListView);
                 ListAdapter adapter = new FriendAdapter(getActivity(), R.id.contactListItem, pendingContacts);
                 contactListView.setAdapter(adapter);
