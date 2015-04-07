@@ -42,6 +42,7 @@ public class SafetyZonePage extends ActionBarActivity {
                     .add(R.id.current_safety_zones, new CurrentSafetyZone())
                     .commit();
         }
+
         Button nextButton = (Button) findViewById(R.id.next);
         nextButton.setOnClickListener(new View.OnClickListener() {
             @Override

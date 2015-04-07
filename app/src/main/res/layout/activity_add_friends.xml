@@ -10,7 +10,7 @@
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
-        android:id="@+id/textView3"
+        android:id="@+id/contactListHeader"
         android:textSize="12pt"
         android:textStyle="bold" />
 
@@ -27,7 +27,7 @@
         android:layout_height="wrap_content"
         android:id="@+id/addFriendsList"
         android:layout_centerHorizontal="true"
-        android:layout_below="@+id/textView3"
+        android:layout_below="@+id/contactListHeader"
         android:layout_above="@+id/sendFriendRequest" />
 
 </RelativeLayout>

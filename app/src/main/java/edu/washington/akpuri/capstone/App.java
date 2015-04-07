@@ -18,7 +18,6 @@ public class App {
         return name;
     }
 
-
     public boolean isBlocked() {
         return isBlocked;
     }

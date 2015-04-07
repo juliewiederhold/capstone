@@ -100,6 +100,19 @@
             android:name=".AddFriends"
             android:label="@string/app_name" >
         </activity>
+        <activity
+            android:name=".AppNumberBlocking"
+            android:label="@string/title_activity_app_blocking" >
+        </activity>
+        <activity
+            android:name=".BlockContacts"
+            android:label="@string/title_activity_block_contacts" >
+        </activity>
+        <activity
+            android:name=".QuickText"
+            android:label="@string/title_activity_quick_text" >
+        </activity>
+
         <!-- For push notifications -->
         <service android:name="com.parse.PushService" />
 
@@ -130,14 +143,6 @@
             </intent-filter>
         </receiver>
 
-        <activity
-            android:name=".AppNumberBlocking"
-            android:label="@string/title_activity_app_blocking" >
-        </activity>
-        <activity
-            android:name=".BlockContacts"
-            android:label="@string/title_activity_block_contacts" >
-        </activity>
     </application>
 
 </manifest>

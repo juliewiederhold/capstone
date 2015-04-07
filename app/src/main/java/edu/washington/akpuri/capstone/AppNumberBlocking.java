@@ -17,8 +17,6 @@ import android.widget.Toast;
 
 public class AppNumberBlocking extends ActionBarActivity {
     AppBlockingAdapter adapter = null;
-    //ArrayList<String> apps;
-    //ArrayList<String> blockedApps;
     private SingletonAppBlocking appInstance;
     private SingletonContacts contactsInstance;
     private static boolean allowContactRetrieval;
@@ -27,6 +25,7 @@ public class AppNumberBlocking extends ActionBarActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_app_blocking);
+
         allowContactRetrieval = false;
         contactsInstance = SingletonContacts.getInstance();
         appInstance = SingletonAppBlocking.getInstance();
@@ -76,7 +75,7 @@ public class AppNumberBlocking extends ActionBarActivity {
         nextButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent next = new Intent(AppNumberBlocking.this, MainActivity.class);
+                Intent next = new Intent(AppNumberBlocking.this, QuickText.class);
                 startActivity(next);
             }
         });
