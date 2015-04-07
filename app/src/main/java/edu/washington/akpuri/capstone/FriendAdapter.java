@@ -37,6 +37,10 @@ public class FriendAdapter extends ArrayAdapter<Contact> {
         TextView contactNumber = (TextView) view.findViewById(R.id.contactNumber);
         ImageView contactIcon = (ImageView) view.findViewById(R.id.appIcon);
         contactName.setText(list.get(position).getName());
+        if (list.get(position).isPending()) {
+            // TEMPORARY ****
+            contactName.setText(contactName.getText() + " Pending");
+        }
         contactNumber.setText(list.get(position).getPhone());
         return view;
     }

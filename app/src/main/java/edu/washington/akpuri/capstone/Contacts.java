@@ -158,34 +158,11 @@ public class Contacts extends ActionBarActivity {
 //        }
 
 
-
-//        for (int i=0; i<instance.getPendingContacts().size(); i++) {
-//            pendingContacts.add(instance.getPendingContacts().get(i));
-//            Log.e(TAG + " adding", instance.getPendingContacts().get(i).toString());
-//        }
         pendingContacts.addAll(instance.getPendingFriends());
 
         Log.i(TAG + " Pending Friends", instance.getPendingFriends().toString());
         Log.e(TAG + " adding", instance.getPendingFriends().size() + "");
         Log.i(TAG + "onCreate Pending Contacts", pendingContacts.toString());
-
-
-//        if (savedInstanceState == null) {
-//            android.support.v4.app.FragmentManager fragmentManager = getSupportFragmentManager();
-//            android.support.v4.app.FragmentTransaction ft = fragmentManager.beginTransaction();
-//            FriendsFragment ff = new FriendsFragment();
-//            ft.add(R.id.container, ff);
-//            ft.commit();
-//        }
-
-
-//        if(findViewById(R.id.container) != null) {
-//            if (savedInstanceState != null) {
-//                return;
-//            }
-//            FriendsFragment ff = new FriendsFragment();
-//            getSupportFragmentManager().beginTransaction().add(R.id.container, ff).commit();
-//        }
     }
 
 

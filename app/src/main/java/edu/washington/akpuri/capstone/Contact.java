@@ -12,6 +12,7 @@ public class Contact {
     private String phone;
     private int id;
     private boolean hasSoSo;
+    private boolean isPending;
     private boolean selected;
     private boolean hasBeenAdded;
 
@@ -23,6 +24,7 @@ public class Contact {
         this.hasSoSo = false;
         this.selected = false;
         this.hasBeenAdded = false;
+        this.isPending = true;
     }
 
     public String getName() {
@@ -58,5 +60,12 @@ public class Contact {
         this.hasBeenAdded = hasBeenAdded;
     }
 
+    public void setIsPending(boolean isPending) {
+        this.isPending = isPending;
+    }
+
+    public boolean isPending(){
+        return isPending;
+    }
 
 }
