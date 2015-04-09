@@ -30,21 +30,32 @@ import java.util.HashMap;
 
 public class QuickText extends ActionBarActivity {
 
-    private static ArrayList<String> existingQuickText = new ArrayList<>();
     private static ArrayList<HashMap<String, String>> quickTextInformation = new ArrayList<>();
+    private static SingletonQuickText quickTextInstance;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_quick_text);
 
-        if(existingQuickText.size() == 0){
-            existingQuickText.add("I'm in the bathroom.");
-            existingQuickText.add("I'm by the bar.");
-            existingQuickText.add("I'm upstairs.");
-            existingQuickText.add("I'm downstairs.");
-            existingQuickText.add("I'm in the basement.");
-            existingQuickText.add("Heading to ");
+        quickTextInstance = SingletonQuickText.getInstance();
+
+        if(quickTextInstance.getIsFirstViewOfQuickTexts()){
+            quickTextInstance.setAllQuickTexts(new ArrayList<String>());
+
+            quickTextInstance.addToAllQuickTexts("I'm in the bathroom.");
+            quickTextInstance.addToAllQuickTexts("I'm by the bar.");
+            quickTextInstance.addToAllQuickTexts("I'm upstairs.");
+            quickTextInstance.addToAllQuickTexts("I'm downstairs.");
+            quickTextInstance.addToAllQuickTexts("I'm in the basement.");
+            quickTextInstance.addToAllQuickTexts("Heading to ");
+
+            quickTextInstance.setIsFirstViewOfQuickTexts(false);
+        }
+
+        if(quickTextInstance.getAllQuickTexts().size() > 0){
+            TextView empty = (TextView) findViewById(R.id.emptyQuickTextMessage);
+            empty.setText("");
         }
 
         if (savedInstanceState == null) {
@@ -88,7 +99,7 @@ public class QuickText extends ActionBarActivity {
                                 String name = message.getText().toString();
 
                                 if (!name.equals("")) {
-                                    existingQuickText.add(name);
+                                    quickTextInstance.addToAllQuickTexts(name);
 
                                     updateCurrentQuickText();
                                     message.setText("");
@@ -126,8 +137,8 @@ public class QuickText extends ActionBarActivity {
 
     private static void initList(){
         quickTextInformation = new ArrayList<>();
-        for(int i = 0; i < existingQuickText.size(); i++){
-            String message = existingQuickText.get(i);
+        for(int i = 0; i < quickTextInstance.getAllQuickTexts().size(); i++){
+            String message = quickTextInstance.getAllQuickTexts().get(i);
             quickTextInformation.add(createTopic(message));
         }
     }
@@ -198,15 +209,15 @@ public class QuickText extends ActionBarActivity {
 
                     int index = 0;
 
-                    for(int i = 0; i < existingQuickText.size(); i++){
-                        if(addressSelected.equals(existingQuickText.get(i))){
+                    for(int i = 0; i < quickTextInstance.getAllQuickTexts().size(); i++){
+                        if(addressSelected.equals(quickTextInstance.getAllQuickTexts().get(i))){
                             index = i;
                             break;
                         }
                     }
 
                     final int indexOfMessage = index;
-                    final String currentMessage = existingQuickText.get(indexOfMessage);
+                    final String currentMessage = quickTextInstance.getAllQuickTexts().get(indexOfMessage);
 
                     final EditText text = (EditText) fragmentView.findViewById(R.id.quickText);
 
@@ -221,13 +232,13 @@ public class QuickText extends ActionBarActivity {
                                 public void onClick(DialogInterface dialog, int id) {
                                     EditText messageText = (EditText) fragmentView.findViewById(R.id.quickText);
 
-                                    existingQuickText.set(indexOfMessage, messageText.getText().toString());
+                                    quickTextInstance.getAllQuickTexts().set(indexOfMessage, messageText.getText().toString());
                                     updateCurrentQuickText();
                                 }
                             })
                             .setNegativeButton(R.string.delete, new DialogInterface.OnClickListener() {
                                 public void onClick(DialogInterface dialog, int id) {
-                                    existingQuickText.remove(indexOfMessage);
+                                    quickTextInstance.removeFromAllQuickTexts(indexOfMessage);
                                     updateCurrentQuickText();
                                 }
                             });

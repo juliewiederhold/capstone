@@ -12,6 +12,7 @@ import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ListAdapter;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 
@@ -29,6 +30,11 @@ public class AppNumberBlocking extends ActionBarActivity {
         allowContactRetrieval = false;
         contactsInstance = SingletonContacts.getInstance();
         appInstance = SingletonAppBlocking.getInstance();
+
+        if(contactsInstance.getBlockedContacts()!= null && contactsInstance.getBlockedContacts().size() > 0){
+            TextView description = (TextView) findViewById(R.id.blockedContactDescription);
+            description.setText("");
+        }
 
         displayListView();
 

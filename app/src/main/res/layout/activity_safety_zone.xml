@@ -97,7 +97,16 @@
         android:layout_height="430dp"
         android:layout_gravity="right|top"
         android:id="@+id/current_safety_zones"
-        android:layout_marginTop="60dp"></FrameLayout>
+        android:layout_marginTop="60dp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:text="@string/no_safety_zone_description"
+            android:id="@+id/safetyZoneDescription"
+            android:layout_gravity="center" />
+    </FrameLayout>
 
     <Button
         android:layout_width="wrap_content"
