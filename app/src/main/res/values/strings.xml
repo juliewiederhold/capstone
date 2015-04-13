@@ -39,6 +39,7 @@
 
     <!-- App/Number Blocking Information -->
     <string name="appNumberBlock">When in a Night Out, you will not be able to open any of the selected apps or call or text the selected phone numbers.</string>
+    <string name="no_blocked_contacts_description">You currently have no blocked contacts.</string>
 
     <!-- Contact / Friends Information -->
     <string name="contact_group_description">Create a group with friends you commonly go out with to make adding inviting friends to a Night Out faster! </string>

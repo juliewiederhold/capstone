@@ -19,6 +19,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.SimpleAdapter;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.parse.ParseObject;
@@ -36,6 +37,11 @@ public class SafetyZonePage extends ActionBarActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_safety_zone);
+
+        if(existingSafetyZones.size() > 0){
+            TextView description = (TextView) findViewById(R.id.safetyZoneDescription);
+            description.setText("");
+        }
 
         if (savedInstanceState == null) {
             getSupportFragmentManager().beginTransaction()
