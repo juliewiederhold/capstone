@@ -31,6 +31,7 @@
     <string name="safety_zone_name">Name of Location</string>
     <string name="update_safety_zone">Update Safety Zone</string>
     <string name="no_safety_zone_description">You currently do not have any Safety Zones. Add locations you will end your night. Once you arrive, your friends in your Going Out group will be notified you have arrived!</string>
+    <string name="edit_contact">Edit Contact</string>
 
     <!-- Quick Text Information -->
     <string name="quickTextMessage">Enter Message</string>
