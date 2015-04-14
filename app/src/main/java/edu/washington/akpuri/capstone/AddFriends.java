@@ -39,11 +39,14 @@ public class AddFriends extends ActionBarActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_friends);
 
+        SingletonContacts instance = SingletonContacts.getInstance();
         ArrayList<Contact> allContacts = new ArrayList<Contact>();
         pendingContacts = new ArrayList<Contact>();
         pContacts = new ArrayList<String>();
+        // Add current contacts
+//        pContacts = instance.getCurrentContacts();
         pendingParseContacts = new ArrayList<ParseObject>();
-        SingletonContacts instance = SingletonContacts.getInstance();
+
 
         //ContentResolver is used to query the contacts database to return a cursor
         ContentResolver contentResolver = getContentResolver();
@@ -99,7 +102,7 @@ public class AddFriends extends ActionBarActivity {
             public void onClick(View v) {
                 //Need to do something here with selected friends
                 //Intent backToFriends = new Intent(AddFriends.this, Contacts.class);
-                //startActivity(backToFriends);
+                //startActivity(backToFriends);nr
                 final String user = ParseUser.getCurrentUser().getString("email");
                 ParseQuery<ParseObject> query = ParseQuery.getQuery("ContactsObject");
                 query.whereEqualTo("user", user); // query.whereEqualTo("parent", user);
@@ -134,15 +137,16 @@ public class AddFriends extends ActionBarActivity {
                                                     if (e != null) {
                                                         Log.e(TAG, "Error saving contactsId: " + e);
                                                     } else {
+//                                                        pContacts.add(contact.getObjectId());
                                                         pContacts.add(contact.getObjectId());
-                                                        Log.e(TAG, pContacts.toString());
+                                                        Log.e(TAG, "Current contacts[]: " + pContacts.toString());
                                                         pendingParseContacts.add(contact);
 
                                                         // WIP: parseObject (ContactsObject) not saving correctly
                                                         // save in ParseUser for now
-                                                        ParseUser.getCurrentUser().put("contacts", pContacts);  // need to check if overwrites
+//                                                        ParseUser.getCurrentUser().put("contacts", pContacts);  // need to check if overwrites
                                                         // might have to retrieve current copy, then overwrite
-                                                        ParseUser.getCurrentUser().addAllUnique("contacts", pContacts);
+//                                                        ParseUser.getCurrentUser().addAllUnique("contacts", pContacts);
                                                         ParseUser.getCurrentUser().saveInBackground();
 
                                                     }
@@ -153,10 +157,12 @@ public class AddFriends extends ActionBarActivity {
                                 });
 
                             }
+                            ///// NICOLE
+                            // use singleton instead!!
                             Log.e("Contacts", "Should've saved contacts.");
                             Log.e(TAG, pendingParseContacts.toString());
 //                                parseObject.addAllUnique("contacts", pContacts);
-                            parseObject.put("contacts", pContacts);
+                            parseObject.addAllUnique("contacts", pContacts);
                             parseObject.saveInBackground(new SaveCallback() {
                                 @Override
                                 public void done(ParseException e) {
