@@ -16,6 +16,7 @@ import android.view.MenuItem;
 import android.content.Intent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.ImageButton;
@@ -160,9 +161,9 @@ public class Contacts extends ActionBarActivity {
 
         pendingContacts.addAll(instance.getPendingFriends());
 
-        Log.i(TAG + " Pending Friends", instance.getPendingFriends().toString());
-        Log.e(TAG + " adding", instance.getPendingFriends().size() + "");
-        Log.i(TAG + "onCreate Pending Contacts", pendingContacts.toString());
+        Log.i(TAG, " Pending Friends " + instance.getPendingFriends().toString());
+        Log.e(TAG, " adding " + instance.getPendingFriends().size() + "");
+        Log.i(TAG, " onCreate Pending Contacts " + pendingContacts.toString());
     }
 
 
@@ -217,58 +218,30 @@ public class Contacts extends ActionBarActivity {
         @Override
         public void onCreate(Bundle savedInstanceState) {
             super.onCreate(savedInstanceState);
-//            pendingContacts = instance.getPendingContacts();
-//            Log.i(TAG + " FriendsFragment Pending", instance.getPendingContacts.toString());
         }
 
         @Override
         public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
             Log.i("ContactsFragment", "onCreateView Fired for FriendsFragment");
             final View rootView = inflater.inflate(R.layout.fragment_friends, container, false);
-            //pendngParseContacs = Array of Contact Object id's as strings?
-            //Need to iterate through this array of Parse objects and look up each of the contacts through their id
-            //Then we need to create a contact and add it to an arraylist to pass to the array adapter
 
-//            if (ParseUser.getCurrentUser().get("contacts") != null) {
+            Log.e(TAG, " Frag Pending Contacts " + pendingContacts.toString());
+            ListView contactListView = (ListView) rootView.findViewById(R.id.friendListView);
+
+            // Populate with current friends
+            final ListAdapter adapter = new FriendAdapter(getActivity(), R.id.contactListItem, pendingContacts);
+            contactListView.setAdapter(adapter);
+
+//            contactListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+//                public void onItemClick(AdapterView<?> a, View v, int position, long id) {
+//                    Log.e(TAG, " clicked " + position);
 //
-//                JSONArray contacts = ParseUser.getCurrentUser().getJSONArray("contacts");
-//                Log.e(TAG + " Friends", contacts.toString());
-////                pendingContacts = null;
-//                for (int i = 0; i < contacts.length(); i++) {
-//                    String id = null;
-//                    try {
-//                        id = contacts.get(i).toString();
-//                    } catch (JSONException e) {
-//                        e.printStackTrace();
-//                    }
-//                    Log.e(TAG, id);
-//                    if (id != null) {
-//                        ParseQuery<ParseObject> query = ParseQuery.getQuery("contact");
-//                        query.whereEqualTo("objectId", id); // query.whereEqualTo("parent", user);
-//                        query.getFirstInBackground(new GetCallback<ParseObject>() {
-//                            @Override
-//                            public void done(final ParseObject parseObject, ParseException e) {
-//                                String name = parseObject.getString("name");
-//                                String phone = parseObject.getString("phone");
-//                                Log.e(TAG, name + " " + phone);
-//                                Contact currentFriend = new Contact(name, phone, 0);
-//                                pendingContacts.add(currentFriend);
-//                                }
-//                            });
-//                        }
-//                   }
-//                Log.i(TAG + " Pending Friends", pendingContacts.toString());
+//                }
+//            });
 
-            Log.i(TAG + "Frag Pending Contacts", pendingContacts.toString());
-                ListView contactListView = (ListView) rootView.findViewById(R.id.friendListView);
-                ListAdapter adapter = new FriendAdapter(getActivity(), R.id.contactListItem, pendingContacts);
-                contactListView.setAdapter(adapter);
+            TextView noFriends = (TextView) rootView.findViewById(R.id.noFriends);
+            noFriends.setVisibility(View.GONE);
 
-                TextView noFriends = (TextView) rootView.findViewById(R.id.noFriends);
-                noFriends.setVisibility(View.GONE);
-
-//            }
-            //Hide noFriends if there are friends
             return rootView;
         }
     }

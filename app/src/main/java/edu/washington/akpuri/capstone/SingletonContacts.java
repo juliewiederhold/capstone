@@ -17,6 +17,7 @@ public class SingletonContacts {
     private static ArrayList<Contact> pendingContacts;
     private static ArrayList<Contact> blockedContacts;
     private static ArrayList<Contact> pendingFriends;
+    private static ArrayList<String> currentContacts;       // List of objectIds of user's contacts
     //Empty Constructor, it's a singleton
     protected SingletonContacts() {
     }
@@ -26,6 +27,7 @@ public class SingletonContacts {
             instance = new SingletonContacts();
             allContacts = new ArrayList<Contact>();
             pendingContacts = new ArrayList<Contact>();
+            currentContacts = new ArrayList<>();
         }
         return instance;
     }
@@ -60,5 +62,11 @@ public class SingletonContacts {
     public ArrayList<Contact> getPendingContacts() {
         return pendingContacts;
     }
+
+    public ArrayList<String> getCurrentContacts() {
+        return currentContacts;
+    }
+
+
 
 }

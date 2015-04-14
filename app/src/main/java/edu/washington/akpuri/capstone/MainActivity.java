@@ -81,6 +81,7 @@ public class MainActivity extends ActionBarActivity {
                 if (id != null) {
                     ParseQuery<ParseObject> query = ParseQuery.getQuery("contact");
                     query.whereEqualTo("objectId", id); // query.whereEqualTo("parent", user);
+                    instance.getCurrentContacts().add(id);
                     query.getFirstInBackground(new GetCallback<ParseObject>() {
                         @Override
                         public void done(final ParseObject parseObject, ParseException e) {
