@@ -143,6 +143,10 @@
             </intent-filter>
         </receiver>
 
+        <activity
+            android:name=".EditDefaultSettings"
+            android:label="@string/title_activity_edit_default_settings" >
+        </activity>
     </application>
 
 </manifest>

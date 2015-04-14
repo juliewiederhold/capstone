@@ -7,6 +7,8 @@ import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.Button;
 import android.widget.TextView;
 
 import com.parse.GetCallback;
@@ -51,9 +53,19 @@ public class MainActivity extends ActionBarActivity {
             //
         }
 
+        Button editDefaultSettings = (Button) findViewById(R.id.edit_default_settings);
+
+        editDefaultSettings.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent next = new Intent(MainActivity.this, EditDefaultSettings.class);
+                startActivity(next);
+            }
+        });
+
         /////
         instance = SingletonContacts.getInstance();
-        pendingContacts = new ArrayList<Contact>();
+        pendingContacts = new ArrayList<>();
 
         if (ParseUser.getCurrentUser().get("contacts") != null) {
             JSONArray contacts = ParseUser.getCurrentUser().getJSONArray("contacts");
