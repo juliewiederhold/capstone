@@ -122,43 +122,6 @@ public class Contacts extends ActionBarActivity {
             }
         });
 
-
-        //// Get So-So Friends (current and pending)
-
-        // Not currently loading when you first load "Contacts/Friends" page for some reason....
-        // Should probably download Friends from parse every time app is loaded to get most current list
-        // since users have to accept requests (i.e. changes may occur while user isn't on the app)
-
-//        if (ParseUser.getCurrentUser().get("contacts") != null) {
-//            JSONArray contacts = ParseUser.getCurrentUser().getJSONArray("contacts");
-//            Log.e(TAG + " Friends", contacts.toString());
-//            for (int i = 0; i < contacts.length(); i++) {
-//                String id = null;
-//                try {
-//                    id = contacts.get(i).toString();
-//                } catch (JSONException e) {
-//                    e.printStackTrace();
-//                }
-//                Log.e(TAG, id);
-//                if (id != null) {
-//                    ParseQuery<ParseObject> query = ParseQuery.getQuery("contact");
-//                    query.whereEqualTo("objectId", id); // query.whereEqualTo("parent", user);
-//                    query.getFirstInBackground(new GetCallback<ParseObject>() {
-//                        @Override
-//                        public void done(final ParseObject parseObject, ParseException e) {
-//                            String name = parseObject.getString("name");
-//                            String phone = parseObject.getString("phone");
-//                            Log.e(TAG, name + " " + phone);
-//                            Contact currentFriend = new Contact(name, phone, 0);
-//                            pendingContacts.add(currentFriend);
-//                        }
-//                    });
-//                }
-//            }
-//            instance.setPendingFriends(pendingContacts);
-//        }
-
-
         pendingContacts.addAll(instance.getPendingFriends());
 
         Log.i(TAG, " Pending Friends " + instance.getPendingFriends().toString());
@@ -229,15 +192,9 @@ public class Contacts extends ActionBarActivity {
             ListView contactListView = (ListView) rootView.findViewById(R.id.friendListView);
 
             // Populate with current friends
+            // NICOLE: should replace pendingContacts with instance.getPendingFriends()
             final ListAdapter adapter = new FriendAdapter(getActivity(), R.id.contactListItem, pendingContacts);
             contactListView.setAdapter(adapter);
-
-//            contactListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-//                public void onItemClick(AdapterView<?> a, View v, int position, long id) {
-//                    Log.e(TAG, " clicked " + position);
-//
-//                }
-//            });
 
             TextView noFriends = (TextView) rootView.findViewById(R.id.noFriends);
             noFriends.setVisibility(View.GONE);

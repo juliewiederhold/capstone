@@ -14,10 +14,11 @@ import java.util.ArrayList;
 public class SingletonContacts {
     private static SingletonContacts instance = null;
     private static ArrayList<Contact> allContacts;
-    private static ArrayList<Contact> pendingContacts;
+    private static ArrayList<Contact> pendingContacts;      // Temporarily hold phone contacts to add to Parse.com
+    private static ArrayList<Contact> pendingFriends;       // Friends/contacts currently on Parse.com
     private static ArrayList<Contact> blockedContacts;
-    private static ArrayList<Contact> pendingFriends;
-    private static ArrayList<String> currentContacts;       // List of objectIds of user's contacts
+    private static ArrayList<String> currentContacts;       // List of objectIds of user's contacts both on Parse.com and pending
+
     //Empty Constructor, it's a singleton
     protected SingletonContacts() {
     }
@@ -44,9 +45,13 @@ public class SingletonContacts {
         this.allContacts = contacts;
     }
 
-    public void setBlockedContacts(ArrayList<Contact> contacts) {this.blockedContacts = contacts;}
+    public void setBlockedContacts(ArrayList<Contact> contacts) {
+        this.blockedContacts = contacts;
+    }
 
-    public ArrayList<Contact> getBlockedContacts() {return blockedContacts;}
+    public ArrayList<Contact> getBlockedContacts() {
+        return blockedContacts;
+    }
 
     public void setPendingContacts(ArrayList<Contact> pendingContacts) {
         this.pendingContacts = pendingContacts;
@@ -67,6 +72,15 @@ public class SingletonContacts {
         return currentContacts;
     }
 
+    // Adds contact with objectId to user's current contacts
+    // Current contacts are contacts listed on user's Parse contacts[]
+    public void setCurrentcontacts(String objectId) {
+        currentContacts.add(objectId);
+    }
+
+    public void addPendingFriend(Contact object) {
+        pendingFriends.add(object);
+    }
 
 
 }

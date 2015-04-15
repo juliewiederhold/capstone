@@ -15,12 +15,13 @@ import java.util.ArrayList;
 
 /**
  * Created by Akash on 3/9/2015.
+ * Used by Addfriends.java to import phone contacts into So-So
  */
 public class ContactAdapter extends ArrayAdapter<Contact> {
 
     private final ArrayList<Contact> list;
     private final Context context;
-    private final ArrayList<Contact> pendingList;
+    private final ArrayList<Contact> pendingList;   // temporarily store pending So-So friends
     private final SingletonContacts instance;
 
     public ContactAdapter(Context context, int resource, ArrayList<Contact> contacts, ArrayList<Contact> pendingList) {
@@ -56,8 +57,7 @@ public class ContactAdapter extends ArrayAdapter<Contact> {
                         @Override
                         public void onCheckedChanged(CompoundButton buttonView,
                                                      boolean isChecked) {
-                            Contact person = (Contact) viewHolder.checkbox
-                                    .getTag();
+                            Contact person = (Contact) viewHolder.checkbox.getTag();
                             person.setSelected(buttonView.isChecked());
                             if (person.isSelected()) {
                                 // Add to pending list
@@ -67,6 +67,7 @@ public class ContactAdapter extends ArrayAdapter<Contact> {
                                 pendingList.remove(person);
 
                             }
+                            // Save pending friends into singleton
                             instance.setPendingContacts(pendingList);
 
                         }

@@ -19,6 +19,7 @@ import com.parse.ParseUser;
 
 import org.json.JSONArray;
 import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 
@@ -63,13 +64,13 @@ public class MainActivity extends ActionBarActivity {
             }
         });
 
-        /////
+        // Set-up user's information
         instance = SingletonContacts.getInstance();
         pendingContacts = new ArrayList<>();
 
         if (ParseUser.getCurrentUser().get("contacts") != null) {
             JSONArray contacts = ParseUser.getCurrentUser().getJSONArray("contacts");
-            Log.e(TAG + " Friends", contacts.toString());
+            Log.e(TAG, " contacts[] 1: " + contacts.toString());
             for (int i = 0; i < contacts.length(); i++) {
                 String id = null;
                 try {
@@ -77,17 +78,21 @@ public class MainActivity extends ActionBarActivity {
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
-                Log.e(TAG, id);
+//                Log.e(TAG, id);
                 if (id != null) {
                     ParseQuery<ParseObject> query = ParseQuery.getQuery("contact");
-                    query.whereEqualTo("objectId", id); // query.whereEqualTo("parent", user);
-                    instance.getCurrentContacts().add(id);
+                    query.whereEqualTo("objectId", id);
+                    // Save current contact object ids
+                    if (!instance.getCurrentContacts().contains(id)) {
+                        instance.getCurrentContacts().add(id);
+                    }
+
                     query.getFirstInBackground(new GetCallback<ParseObject>() {
                         @Override
                         public void done(final ParseObject parseObject, ParseException e) {
                             String name = parseObject.getString("name");
                             String phone = parseObject.getString("phone");
-                            Log.e(TAG, name + " " + phone);
+                            Log.e(TAG, "Adding " + name + " " + phone + " to pendingFriends");
                             Contact currentFriend = new Contact(name, phone, 0);
                             pendingContacts.add(currentFriend);
                         }
@@ -95,6 +100,10 @@ public class MainActivity extends ActionBarActivity {
                 }
             }
             instance.setPendingFriends(pendingContacts);
+            // Should be same as contacts[] 1
+            Log.e(TAG, " contacts[] 2: " + instance.getCurrentContacts().toString());
+            // Probably will be empty here
+            Log.e(TAG, " pending friends: " + instance.getPendingFriends().toString());
         }
 
     }
