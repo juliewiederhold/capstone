@@ -43,11 +43,7 @@ public class AddFriends extends ActionBarActivity {
         ArrayList<Contact> allContacts = new ArrayList<Contact>();
         pendingContacts = new ArrayList<Contact>();
         pContacts = new ArrayList<String>();
-        // Add current contacts
-//        pContacts = instance.getCurrentContacts();
         pendingParseContacts = new ArrayList<>();
-
-
 
         //ContentResolver is used to query the contacts database to return a cursor
         ContentResolver contentResolver = getContentResolver();
@@ -143,8 +139,6 @@ public class AddFriends extends ActionBarActivity {
                                                         pContacts.add(contact.getObjectId());
                                                         instance.setCurrentcontacts(contact.getObjectId());
                                                         pendingParseContacts.add(contact);
-                                                        // WIP: parseObject (ContactsObject) not saving correctly
-                                                        // save in ParseUser for now
 //                                                        ParseUser.getCurrentUser().put("contacts", pContacts);  // need to check if overwrites
                                                         // might have to retrieve current copy, then overwrite
 //                                                        ParseUser.getCurrentUser().addAllUnique("contacts", pContacts);
@@ -156,18 +150,15 @@ public class AddFriends extends ActionBarActivity {
                                         }
                                     }
                                 });
-                                // Adding here coz above block is not instant
+                                // Nicole: Not adding to Current Friend's list right away.....
                                 instance.addPendingFriend(aContact);
                                 Log.e(TAG, " pending friends: " + instance.getPendingFriends().toString());
 
                             }
-                            ///// NICOLE
-                            // use singleton instead!!
-                            Log.e("Contacts", "Should've saved contacts.");
                             ParseUser.getCurrentUser().put("contacts", instance.getCurrentContacts());
                             Log.e(TAG, "Current contacts[]: " + ParseUser.getCurrentUser().get("contacts").toString());
 //                            instance.setPendingFriends(pendingParseContacts);
-                            Log.e(TAG, pendingParseContacts.toString());
+                            Log.e(TAG, "Pending parse contacts: " + pendingParseContacts.toString());
                             parseObject.put("contacts", instance.getCurrentContacts());
                             // addAllUnique doesn't work for some reason
 //                            parseObject.addAllUnique("contacts", instance.getCurrentContacts());
