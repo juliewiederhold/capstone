@@ -120,6 +120,7 @@ public class MainActivity extends ActionBarActivity {
         switch (item.getItemId()) {
             case R.id.action_settings:
                 Intent intent = new Intent(this, SettingsActivity.class);
+                intent.putExtra("activitySent","MainActivity");
                 this.startActivity(intent);
                 break;
             case R.id.action_logout:
@@ -127,10 +128,12 @@ public class MainActivity extends ActionBarActivity {
                 break;
             case R.id.action_safetyzones:
                 Intent intent2 = new Intent(this, SafetyZonePage.class);
+                intent2.putExtra("activitySent","MainActivity");
                 this.startActivity(intent2);
                 break;
             case R.id.action_contacts:
                 Intent intent3 = new Intent(this, Contacts.class);
+                intent3.putExtra("activitySent","MainActivity");
                 this.startActivity(intent3);
                 break;
             default:

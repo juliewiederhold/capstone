@@ -84,7 +84,7 @@ public class Contacts extends ActionBarActivity {
                         this, "Groups", GroupsFragment.class));
         actionBar.addTab(second);
 
-        if(previousActivity != null && previousActivity.equals("EditDefaultSettings")){
+        if(previousActivity.equals("EditDefaultSettings")){
             Button saveButton = (Button) findViewById(R.id.contactsNext);
             saveButton.setText("Save All Changes");
             saveButton.setOnClickListener(new View.OnClickListener() {
@@ -101,6 +101,7 @@ public class Contacts extends ActionBarActivity {
                 public void onClick(View v) {
                     Log.e(TAG, "contactsNext button pressed");
                     Intent safeZones = new Intent(Contacts.this, SafetyZonePage.class);
+                    safeZones.putExtra("activitySent","Contacts");
                     startActivity(safeZones);
                 }
             });

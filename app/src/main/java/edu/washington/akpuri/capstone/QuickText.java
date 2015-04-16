@@ -83,6 +83,7 @@ public class QuickText extends ActionBarActivity {
                 @Override
                 public void onClick(View v) {
                     Intent next = new Intent(QuickText.this, MainActivity.class);
+                    next.putExtra("activitySent","QuickText");
                     startActivity(next);
                 }
             });

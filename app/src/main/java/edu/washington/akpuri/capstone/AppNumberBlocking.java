@@ -95,6 +95,7 @@ public class AppNumberBlocking extends ActionBarActivity {
                 @Override
                 public void onClick(View v) {
                     Intent next = new Intent(AppNumberBlocking.this, QuickText.class);
+                    next.putExtra("activitySent","AppNumberBlocking");
                     startActivity(next);
                 }
             });

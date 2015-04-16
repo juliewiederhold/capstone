@@ -68,6 +68,7 @@ public class SafetyZonePage extends ActionBarActivity {
                 @Override
                 public void onClick(View v) {
                     Intent next = new Intent(SafetyZonePage.this, AppNumberBlocking.class);
+                    next.putExtra("activitySent","SafetyZonePage");
                     startActivity(next);
                 }
             });

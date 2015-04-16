@@ -22,6 +22,7 @@ public class Welcome extends ActionBarActivity {
             @Override
             public void onClick(View v) {
                 Intent create_account = new Intent(Welcome.this, Contacts.class);
+                create_account.putExtra("activitySent","Welcome Page");
                 startActivity(create_account);
             }
         });
