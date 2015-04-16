@@ -69,8 +69,6 @@ public class ContactAdapter extends ArrayAdapter<Contact> {
                             }
                             // Save pending friends into singleton
                             instance.setPendingContacts(pendingList);
-                            // Trying to get Current Friends to load instantly; DOESN'T WORK :(
-//                            instance.setPendingFriends(pendingList);
 
                         }
                     });

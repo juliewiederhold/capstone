@@ -32,7 +32,7 @@ public class AddFriends extends ActionBarActivity {
 
     private static ArrayList<Contact> pendingContacts; // should be pending from singleton
     private static ArrayList<ParseObject> pendingParseContacts;
-    private static ArrayList<String> pContacts;
+    private static ArrayList<String> contactObjectIds;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,8 +41,9 @@ public class AddFriends extends ActionBarActivity {
 
         final SingletonContacts instance = SingletonContacts.getInstance();
         ArrayList<Contact> allContacts = new ArrayList<Contact>();
-        pendingContacts = new ArrayList<Contact>();
-        pContacts = new ArrayList<String>();
+//        pendingContacts = new ArrayList<Contact>();
+        pendingContacts = instance.getPendingContacts();
+        contactObjectIds = new ArrayList<String>();
         pendingParseContacts = new ArrayList<>();
 
         //ContentResolver is used to query the contacts database to return a cursor
@@ -100,6 +101,7 @@ public class AddFriends extends ActionBarActivity {
                 final String user = ParseUser.getCurrentUser().getString("email");
                 // Get ContactsObject for current user
                 // ContactsObject has contacts[] array containing objectId of user's current and pending friends
+
                 ParseQuery<ParseObject> query = ParseQuery.getQuery("ContactsObject");
                 query.whereEqualTo("user", user);
                 query.getFirstInBackground(new GetCallback<ParseObject>() {
@@ -136,12 +138,13 @@ public class AddFriends extends ActionBarActivity {
                                                     if (e != null) {
                                                         Log.e(TAG, "Error saving contactsId: " + e);
                                                     } else {
-                                                        pContacts.add(contact.getObjectId());
+                                                        contactObjectIds.add(contact.getObjectId());
                                                         instance.setCurrentcontacts(contact.getObjectId());
                                                         pendingParseContacts.add(contact);
-//                                                        ParseUser.getCurrentUser().put("contacts", pContacts);  // need to check if overwrites
+                                                        //////
+//                                                        ParseUser.getCurrentUser().put("contacts", instance.getCurrentContacts());  // need to check if overwrites
                                                         // might have to retrieve current copy, then overwrite
-//                                                        ParseUser.getCurrentUser().addAllUnique("contacts", pContacts);
+//                                                        ParseUser.getCurrentUser().addAllUnique("contacts", contactObjectIds);
                                                         ParseUser.getCurrentUser().saveInBackground();
 
                                                     }
@@ -160,6 +163,13 @@ public class AddFriends extends ActionBarActivity {
 //                            instance.setPendingFriends(pendingParseContacts);
                             Log.e(TAG, "Pending parse contacts: " + pendingParseContacts.toString());
                             parseObject.put("contacts", instance.getCurrentContacts());
+                            /// code below saves immediately but instance.getCurrentcontacts() doesn't have updated list
+                            /// so getCurrentContacts might be the problem
+                            parseObject.add("contacts", instance.getCurrentContacts());
+
+
+
+
                             // addAllUnique doesn't work for some reason
 //                            parseObject.addAllUnique("contacts", instance.getCurrentContacts());
                             parseObject.saveInBackground(new SaveCallback() {
