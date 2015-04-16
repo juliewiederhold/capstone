@@ -53,6 +53,9 @@ public class Contacts extends ActionBarActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        Intent intent = getIntent();
+        String previousActivity = intent.getStringExtra("activitySent");
+
         setContentView(R.layout.activity_contacts);
         allowContactRetrieval = false;
         pendingParseContacts = null;
@@ -81,15 +84,28 @@ public class Contacts extends ActionBarActivity {
                         this, "Groups", GroupsFragment.class));
         actionBar.addTab(second);
 
-        Button next = (Button) findViewById(R.id.contactsNext);
-        next.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Log.e(TAG, "contactsNext button pressed");
-                Intent safeZones = new Intent(Contacts.this, SafetyZonePage.class);
-                startActivity(safeZones);
-            }
-        });
+        if(previousActivity.equals("EditDefaultSettings")){
+            Button saveButton = (Button) findViewById(R.id.contactsNext);
+            saveButton.setText("Save All Changes");
+            saveButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent next = new Intent(Contacts.this, EditDefaultSettings.class);
+                    startActivity(next);
+                }
+            });
+        } else {
+            Button next = (Button) findViewById(R.id.contactsNext);
+            next.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Log.e(TAG, "contactsNext button pressed");
+                    Intent safeZones = new Intent(Contacts.this, SafetyZonePage.class);
+                    startActivity(safeZones);
+                }
+            });
+        }
+
 
         Button addContacts = (Button) findViewById(R.id.addFriends);
         addContacts.setOnClickListener(new View.OnClickListener() {

@@ -38,6 +38,9 @@ public class SafetyZonePage extends ActionBarActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_safety_zone);
 
+        Intent intent = getIntent();
+        String previousActivity = intent.getStringExtra("activitySent");
+
         if(existingSafetyZones.size() > 0){
             TextView description = (TextView) findViewById(R.id.safetyZoneDescription);
             description.setText("");
@@ -49,14 +52,28 @@ public class SafetyZonePage extends ActionBarActivity {
                     .commit();
         }
 
-        Button nextButton = (Button) findViewById(R.id.next);
-        nextButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent next = new Intent(SafetyZonePage.this, AppNumberBlocking.class);
-                startActivity(next);
-            }
-        });
+        if(previousActivity.equals("EditDefaultSettings")){
+            Button saveButton = (Button) findViewById(R.id.next);
+            saveButton.setText("Save All Changes");
+            saveButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent next = new Intent(SafetyZonePage.this, EditDefaultSettings.class);
+                    startActivity(next);
+                }
+            });
+        } else {
+            Button nextButton = (Button) findViewById(R.id.next);
+            nextButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent next = new Intent(SafetyZonePage.this, AppNumberBlocking.class);
+                    startActivity(next);
+                }
+            });
+        }
+
+
 
         Button add_safety_zone_location = (Button) findViewById(R.id.add_safety_zone_location);
 

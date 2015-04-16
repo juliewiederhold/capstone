@@ -41,6 +41,9 @@ public class SettingsActivity extends ActionBarActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_settings);
 
+        Intent intent = getIntent();
+        String previousActivity = intent.getStringExtra("activitySent");
+
         Log.e(TAG, "SettingsActivity fired");
 
         ParseUser currentUser = ParseUser.getCurrentUser();

@@ -30,7 +30,7 @@ public class AddFriends extends ActionBarActivity {
 
     private final static String TAG = "AddFriends";
 
-    private static ArrayList<Contact> pendingContacts;
+    private static ArrayList<Contact> pendingContacts; // should be pending from singleton
     private static ArrayList<ParseObject> pendingParseContacts;
     private static ArrayList<String> pContacts;
 

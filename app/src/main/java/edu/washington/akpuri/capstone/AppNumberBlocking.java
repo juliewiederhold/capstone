@@ -35,6 +35,8 @@ public class AppNumberBlocking extends ActionBarActivity {
             TextView description = (TextView) findViewById(R.id.blockedContactDescription);
             description.setText("");
         }
+        Intent intent = getIntent();
+        String previousActivity = intent.getStringExtra("activitySent");
 
         displayListView();
 
@@ -77,14 +79,26 @@ public class AppNumberBlocking extends ActionBarActivity {
             blockedNumberListView.setAdapter(simpleAdpt);
         }
 
-        Button nextButton = (Button) findViewById(R.id.next);
-        nextButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent next = new Intent(AppNumberBlocking.this, QuickText.class);
-                startActivity(next);
-            }
-        });
+        if(previousActivity.equals("EditDefaultSettings")){
+            Button saveButton = (Button) findViewById(R.id.next);
+            saveButton.setText("Save All Changes");
+            saveButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent next = new Intent(AppNumberBlocking.this, EditDefaultSettings.class);
+                    startActivity(next);
+                }
+            });
+        } else {
+            Button nextButton = (Button) findViewById(R.id.next);
+            nextButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent next = new Intent(AppNumberBlocking.this, QuickText.class);
+                    startActivity(next);
+                }
+            });
+        }
     }
 
     private void displayListView(){

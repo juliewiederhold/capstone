@@ -26,6 +26,7 @@ public class EditDefaultSettings extends ActionBarActivity {
             @Override
             public void onClick(View v) {
                 Intent next = new Intent(EditDefaultSettings.this, SettingsActivity.class);
+                next.putExtra("activitySent","EditDefaultSettings");
                 startActivity(next);
             }
         });
@@ -34,6 +35,7 @@ public class EditDefaultSettings extends ActionBarActivity {
             @Override
             public void onClick(View v) {
                 Intent next = new Intent(EditDefaultSettings.this, Contacts.class);
+                next.putExtra("activitySent","EditDefaultSettings");
                 startActivity(next);
             }
         });
@@ -42,6 +44,7 @@ public class EditDefaultSettings extends ActionBarActivity {
             @Override
             public void onClick(View v) {
                 Intent next = new Intent(EditDefaultSettings.this, SafetyZonePage.class);
+                next.putExtra("activitySent","EditDefaultSettings");
                 startActivity(next);
             }
         });
@@ -50,6 +53,7 @@ public class EditDefaultSettings extends ActionBarActivity {
             @Override
             public void onClick(View v) {
                 Intent next = new Intent(EditDefaultSettings.this, AppNumberBlocking.class);
+                next.putExtra("activitySent","EditDefaultSettings");
                 startActivity(next);
             }
         });
@@ -58,6 +62,7 @@ public class EditDefaultSettings extends ActionBarActivity {
             @Override
             public void onClick(View v) {
                 Intent next = new Intent(EditDefaultSettings.this, QuickText.class);
+                next.putExtra("activitySent","EditDefaultSettings");
                 startActivity(next);
             }
         });

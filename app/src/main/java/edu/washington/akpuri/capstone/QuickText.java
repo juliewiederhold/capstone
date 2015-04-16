@@ -38,6 +38,9 @@ public class QuickText extends ActionBarActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_quick_text);
 
+        Intent intent = getIntent();
+        String previousActivity = intent.getStringExtra("activitySent");
+
         quickTextInstance = SingletonQuickText.getInstance();
 
         if(quickTextInstance.getIsFirstViewOfQuickTexts()){
@@ -64,17 +67,26 @@ public class QuickText extends ActionBarActivity {
                     .commit();
         }
 
-
-
-        Button nextButton = (Button) findViewById(R.id.next);
-        nextButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent next = new Intent(QuickText.this, MainActivity.class);
-                startActivity(next);
-            }
-        });
-
+        if(previousActivity.equals("EditDefaultSettings")){
+            Button saveButton = (Button) findViewById(R.id.next);
+            saveButton.setText("Save All Changes");
+            saveButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent next = new Intent(QuickText.this, EditDefaultSettings.class);
+                    startActivity(next);
+                }
+            });
+        } else {
+            Button nextButton = (Button) findViewById(R.id.next);
+            nextButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent next = new Intent(QuickText.this, MainActivity.class);
+                    startActivity(next);
+                }
+            });
+        }
 
         Button add_new_quick_text = (Button) findViewById(R.id.addNewQuickText);
 
