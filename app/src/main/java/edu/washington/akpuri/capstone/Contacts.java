@@ -84,7 +84,7 @@ public class Contacts extends ActionBarActivity {
                         this, "Groups", GroupsFragment.class));
         actionBar.addTab(second);
 
-        if(previousActivity.equals("EditDefaultSettings")){
+        if(previousActivity != null && previousActivity.equals("EditDefaultSettings")){
             Button saveButton = (Button) findViewById(R.id.contactsNext);
             saveButton.setText("Save All Changes");
             saveButton.setOnClickListener(new View.OnClickListener() {

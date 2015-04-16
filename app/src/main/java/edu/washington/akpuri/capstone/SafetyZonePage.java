@@ -52,7 +52,7 @@ public class SafetyZonePage extends ActionBarActivity {
                     .commit();
         }
 
-        if(previousActivity.equals("EditDefaultSettings")){
+        if(previousActivity != null && previousActivity.equals("EditDefaultSettings")){
             Button saveButton = (Button) findViewById(R.id.next);
             saveButton.setText("Save All Changes");
             saveButton.setOnClickListener(new View.OnClickListener() {

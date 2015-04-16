@@ -79,7 +79,7 @@ public class AppNumberBlocking extends ActionBarActivity {
             blockedNumberListView.setAdapter(simpleAdpt);
         }
 
-        if(previousActivity.equals("EditDefaultSettings")){
+        if(previousActivity != null && previousActivity.equals("EditDefaultSettings")){
             Button saveButton = (Button) findViewById(R.id.next);
             saveButton.setText("Save All Changes");
             saveButton.setOnClickListener(new View.OnClickListener() {
