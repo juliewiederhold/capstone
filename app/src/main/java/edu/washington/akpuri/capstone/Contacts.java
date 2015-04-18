@@ -86,7 +86,7 @@ public class Contacts extends ActionBarActivity {
 
         if(previousActivity.equals("EditDefaultSettings")){
             Button saveButton = (Button) findViewById(R.id.contactsNext);
-            saveButton.setText("Save All Changes");
+            saveButton.setText("Done");
             saveButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {

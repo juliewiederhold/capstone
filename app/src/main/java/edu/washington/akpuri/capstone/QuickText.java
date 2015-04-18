@@ -69,7 +69,7 @@ public class QuickText extends ActionBarActivity {
 
         if(previousActivity != null && previousActivity.equals("EditDefaultSettings")){
             Button saveButton = (Button) findViewById(R.id.next);
-            saveButton.setText("Save All Changes");
+            saveButton.setText("Done");
             saveButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
