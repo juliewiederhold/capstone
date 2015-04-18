@@ -109,6 +109,10 @@ public class SafetyZonePage extends ActionBarActivity {
                                     SafetyZone newZone = new SafetyZone(name, address, city, Integer.parseInt(zip), state);
                                     existingSafetyZones.add(newZone);
 
+                                    Intent intent = getIntent();
+                                    finish();
+                                    startActivity(intent);
+
                                     updateCurrentSafetyZone();
 
                                     nameText.setText("");
@@ -290,6 +294,11 @@ public class SafetyZonePage extends ActionBarActivity {
                             .setNegativeButton(R.string.delete, new DialogInterface.OnClickListener() {
                                 public void onClick(DialogInterface dialog, int id) {
                                     existingSafetyZones.remove(indexOfZone);
+
+                                    Intent intent = getActivity().getIntent();
+                                    getActivity().finish();
+                                    startActivity(intent);
+
                                     updateCurrentSafetyZone();
                                 }
                             });

@@ -128,7 +128,9 @@ public class QuickText extends ActionBarActivity {
                         })
                         .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int id) {
-
+                                Intent intent = getIntent();
+                                finish();
+                                startActivity(intent);
                             }
                         });
 
