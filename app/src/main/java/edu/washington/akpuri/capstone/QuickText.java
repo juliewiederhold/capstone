@@ -114,6 +114,10 @@ public class QuickText extends ActionBarActivity {
                                 if (!name.equals("")) {
                                     quickTextInstance.addToAllQuickTexts(name);
 
+                                    Intent intent = getIntent();
+                                    finish();
+                                    startActivity(intent);
+
                                     updateCurrentQuickText();
                                     message.setText("");
                                 } else {
@@ -254,6 +258,11 @@ public class QuickText extends ActionBarActivity {
                             .setNegativeButton(R.string.delete, new DialogInterface.OnClickListener() {
                                 public void onClick(DialogInterface dialog, int id) {
                                     quickTextInstance.removeFromAllQuickTexts(indexOfMessage);
+
+                                    Intent intent = getActivity().getIntent();
+                                    getActivity().finish();
+                                    startActivity(intent);
+
                                     updateCurrentQuickText();
                                 }
                             });
