@@ -42,6 +42,11 @@ public class AppBlockingAdapter extends ArrayAdapter<App> {
             final ViewHolder viewHolder = new ViewHolder();
             viewHolder.appName = (TextView) view.findViewById(R.id.appName);
             viewHolder.appIcon = (ImageView) view.findViewById(R.id.appIcon);
+
+            String name = viewHolder.appName.toString();
+
+
+
             viewHolder.checkbox = (CheckBox) view.findViewById(R.id.appBlock);
             viewHolder.checkbox
                     .setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
@@ -77,6 +82,15 @@ public class AppBlockingAdapter extends ArrayAdapter<App> {
         }
         ViewHolder holder = (ViewHolder) view.getTag();
         holder.appName.setText(allApps.get(position).getName());
+        //holder.appIcon.setImageDrawable();
+
+        if(allApps.get(position).getName().equals("Facebook")){
+            holder.appIcon.setImageResource(R.drawable.social_facebook_box_blue_icon);
+        } else if (allApps.get(position).getName().equals("Twitter")){
+            holder.appIcon.setImageResource(R.drawable.twitter_icon);
+        } else {
+            holder.appIcon.setImageResource(R.drawable.snapchat_icon);
+        }
 
         holder.checkbox.setChecked(allApps.get(position).isBlocked());
 
