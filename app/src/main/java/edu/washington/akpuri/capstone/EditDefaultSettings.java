@@ -22,6 +22,12 @@ public class EditDefaultSettings extends ActionBarActivity {
         ImageButton edit_app_num_blocking = (ImageButton) findViewById(R.id.edit_app_number_blocking);
         ImageButton edit_quick_texts = (ImageButton) findViewById(R.id.edit_quick_texts_button);
 
+        edit_profile.setImageResource(R.drawable.ic_person_black_48dp);
+        edit_friends.setImageResource(R.drawable.ic_people_black_48dp);
+        edit_safety_zones.setImageResource(R.drawable.ic_home_black_48dp);
+        edit_app_num_blocking.setImageResource(R.drawable.ic_dnd_forwardslash_black_48dp);
+        edit_quick_texts.setImageResource(R.drawable.ic_messenger_black_48dp);
+
         edit_profile.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
