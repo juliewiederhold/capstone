@@ -147,6 +147,10 @@
             android:name=".EditDefaultSettings"
             android:label="@string/title_activity_edit_default_settings" >
         </activity>
+        <activity
+            android:name=".EditBlockedContactsList"
+            android:label="@string/title_activity_edit_blocked_contacts_list" >
+        </activity>
     </application>
 
 </manifest>

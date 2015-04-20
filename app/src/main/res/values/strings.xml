@@ -70,5 +70,6 @@
 
 
     <string name="hello_world">Hello world!</string>
+    <string name="title_activity_edit_blocked_contacts_list">EditBlockedContactsList</string>
 
 </resources>

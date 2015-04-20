@@ -85,7 +85,6 @@ public class BlockContacts extends ActionBarActivity {
             contactListView.setAdapter(adapter);
         }
 
-
         Button sendRequest = (Button) findViewById(R.id.sendFriendRequest);
 
         sendRequest.setText("Add to Block Contacts");

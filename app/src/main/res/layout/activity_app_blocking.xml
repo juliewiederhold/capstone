@@ -50,19 +50,20 @@
 
     <ListView
         android:layout_width="wrap_content"
-        android:layout_height="100dp"
+        android:layout_height="120dp"
         android:id="@+id/appContainer"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
         android:layout_below="@+id/textView5" />
 
     <Button
-        android:layout_width="wrap_content"
+        android:layout_width="100dp"
         android:layout_height="wrap_content"
         android:text="Add From Contacts"
         android:id="@+id/addFromContacts"
-        android:layout_below="@+id/blockedContacts"
-        android:layout_centerHorizontal="true" />
+        android:layout_alignTop="@+id/editBlockedContacts"
+        android:layout_toRightOf="@+id/next"
+        android:layout_toEndOf="@+id/next" />
 
     <ListView
         android:layout_width="wrap_content"
@@ -81,5 +82,14 @@
         android:layout_alignTop="@+id/blockedContacts"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="30dp" />
+
+    <Button
+        android:layout_width="100dp"
+        android:layout_height="wrap_content"
+        android:text="Edit Blocked Contacts"
+        android:id="@+id/editBlockedContacts"
+        android:layout_above="@+id/next"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true" />
 
 </RelativeLayout>

@@ -71,9 +71,20 @@ public class AppNumberBlocking extends ActionBarActivity {
             }
         });
 
+        Button editBlockedContacts = (Button) findViewById(R.id.editBlockedContacts);
+        editBlockedContacts.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(contactsInstance.getBlockedContacts() != null && contactsInstance.getBlockedContacts().size() > 0){
+                    Intent editBlockedFriends = new Intent(AppNumberBlocking.this, EditBlockedContactsList.class);
+                    startActivity(editBlockedFriends);
+                }
+            }
+        });
+
         if(contactsInstance.getBlockedContacts() != null){
             ListView blockedNumberListView = (ListView) findViewById(R.id.blockedContacts);
-            ListAdapter simpleAdpt = new BlockContactAdapter(this, R.layout.friend_list_item, contactsInstance.getBlockedContacts(), contactsInstance.getBlockedContacts());
+            ListAdapter simpleAdpt = new BlockContactAdapter(this, R.layout.blocked_contact_list, contactsInstance.getBlockedContacts(), contactsInstance.getBlockedContacts());
 
            // ListAdapter adapter = new ContactAdapter(this, R.id.contactListItem, allContacts, pendingContacts);
             blockedNumberListView.setAdapter(simpleAdpt);
