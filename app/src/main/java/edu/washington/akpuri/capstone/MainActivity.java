@@ -36,11 +36,15 @@ public class MainActivity extends ActionBarActivity {
 
     private SingletonContacts instance;
     private static ArrayList<Contact> pendingContacts;
+    private SingletonUser userInstance;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+       /* userInstance = SingletonUser.getInstance();
+
+        userInstance.setHasGoneThroughInitialSetUp(true);*/
 
         Log.e(TAG, "MainActivity fired");
 

@@ -48,18 +48,17 @@ public class Contacts extends ActionBarActivity {
     private static boolean allowContactRetrieval;
     private android.support.v7.app.ActionBar actionBar;
     private SingletonContacts instance;
+    private SingletonUser userInstance;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        Intent intent = getIntent();
-        String previousActivity = intent.getStringExtra("activitySent");
-
         setContentView(R.layout.activity_contacts);
         allowContactRetrieval = false;
         pendingParseContacts = null;
         instance = SingletonContacts.getInstance();
+        userInstance = SingletonUser.getInstance();
         pendingContacts = new ArrayList<Contact>();
         pContacts = new ArrayList<String>();
 
@@ -84,7 +83,7 @@ public class Contacts extends ActionBarActivity {
                         this, "Groups", GroupsFragment.class));
         actionBar.addTab(second);
 
-        if(previousActivity.equals("EditDefaultSettings")){
+        if(userInstance.getHasGoneThroughInitialSetUp()){
             Button saveButton = (Button) findViewById(R.id.contactsNext);
             saveButton.setText("Done");
             saveButton.setOnClickListener(new View.OnClickListener() {

@@ -20,6 +20,7 @@ public class AppNumberBlocking extends ActionBarActivity {
     AppBlockingAdapter adapter = null;
     private SingletonAppBlocking appInstance;
     private SingletonContacts contactsInstance;
+    private SingletonUser userInstance;
     private static boolean allowContactRetrieval;
 
     @Override
@@ -30,13 +31,12 @@ public class AppNumberBlocking extends ActionBarActivity {
         allowContactRetrieval = false;
         contactsInstance = SingletonContacts.getInstance();
         appInstance = SingletonAppBlocking.getInstance();
+        userInstance = SingletonUser.getInstance();
 
         if(contactsInstance.getBlockedContacts()!= null && contactsInstance.getBlockedContacts().size() > 0){
             TextView description = (TextView) findViewById(R.id.blockedContactDescription);
             description.setText("");
         }
-        Intent intent = getIntent();
-        String previousActivity = intent.getStringExtra("activitySent");
 
         displayListView();
 
@@ -44,13 +44,13 @@ public class AppNumberBlocking extends ActionBarActivity {
         addFromContacts.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (!allowContactRetrieval) {
+                if (!userInstance.getAllowContactRetrieval()) {
                     AlertDialog.Builder builder = new AlertDialog.Builder(v.getContext());
                     builder.setMessage("Allow So-So to use your Contacts? It's awfully Risky you know")
                             .setTitle("Import Contacts");
                     builder.setPositiveButton("Allow", new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int id) {
-                            allowContactRetrieval = true;
+                            userInstance.setAllowContactRetrieval(true);
                             Intent addFriends = new Intent(AppNumberBlocking.this, BlockContacts.class);
                             startActivity(addFriends);
                         }
@@ -64,7 +64,7 @@ public class AppNumberBlocking extends ActionBarActivity {
                     AlertDialog dialog = builder.create();
                     dialog.show();
                 }
-                if (allowContactRetrieval) {
+                if (userInstance.getAllowContactRetrieval()) {
                     Intent addFriends = new Intent(AppNumberBlocking.this, BlockContacts.class);
                     startActivity(addFriends);
                 }
@@ -90,7 +90,7 @@ public class AppNumberBlocking extends ActionBarActivity {
             blockedNumberListView.setAdapter(simpleAdpt);
         }
 
-        if(previousActivity != null && previousActivity.equals("EditDefaultSettings")){
+        if(userInstance.getHasGoneThroughInitialSetUp()){
             Button saveButton = (Button) findViewById(R.id.next);
             saveButton.setText("Done");
             saveButton.setOnClickListener(new View.OnClickListener() {

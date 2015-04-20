@@ -32,14 +32,14 @@ import java.util.HashMap;
 public class SafetyZonePage extends ActionBarActivity {
     private static ArrayList<SafetyZone> existingSafetyZones = new ArrayList<>();
     private static ArrayList<HashMap<String, String>> safetyZoneInformation = new ArrayList<>();
+    private static SingletonUser userInstance;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_safety_zone);
 
-        Intent intent = getIntent();
-        String previousActivity = intent.getStringExtra("activitySent");
+        userInstance = SingletonUser.getInstance();
 
         if(existingSafetyZones.size() > 0){
             TextView description = (TextView) findViewById(R.id.safetyZoneDescription);
@@ -52,7 +52,7 @@ public class SafetyZonePage extends ActionBarActivity {
                     .commit();
         }
 
-        if(previousActivity != null && previousActivity.equals("EditDefaultSettings")){
+        if(userInstance.getHasGoneThroughInitialSetUp()){
             Button saveButton = (Button) findViewById(R.id.next);
             saveButton.setText("Done");
             saveButton.setOnClickListener(new View.OnClickListener() {

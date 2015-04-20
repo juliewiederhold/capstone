@@ -32,14 +32,14 @@ public class QuickText extends ActionBarActivity {
 
     private static ArrayList<HashMap<String, String>> quickTextInformation = new ArrayList<>();
     private static SingletonQuickText quickTextInstance;
+    private static SingletonUser userInstance;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_quick_text);
 
-        Intent intent = getIntent();
-        String previousActivity = intent.getStringExtra("activitySent");
+        userInstance = SingletonUser.getInstance();
 
         quickTextInstance = SingletonQuickText.getInstance();
 
@@ -67,7 +67,7 @@ public class QuickText extends ActionBarActivity {
                     .commit();
         }
 
-        if(previousActivity != null && previousActivity.equals("EditDefaultSettings")){
+        if(userInstance.getHasGoneThroughInitialSetUp()){
             Button saveButton = (Button) findViewById(R.id.next);
             saveButton.setText("Done");
             saveButton.setOnClickListener(new View.OnClickListener() {
@@ -82,8 +82,8 @@ public class QuickText extends ActionBarActivity {
             nextButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+                    userInstance.setHasGoneThroughInitialSetUp(true);
                     Intent next = new Intent(QuickText.this, MainActivity.class);
-                    next.putExtra("activitySent","QuickText");
                     startActivity(next);
                 }
             });
