@@ -47,6 +47,7 @@ public class EditBlockedContactListAdapter extends ArrayAdapter<Contact> {
             viewHolder.contactNumber = (TextView) view.findViewById(R.id.contactNumber);
             viewHolder.contactIcon = (ImageView) view.findViewById(R.id.appIcon);
             viewHolder.checkbox = (CheckBox) view.findViewById(R.id.appBlock);
+            viewHolder.checkbox.setChecked(false);
             viewHolder.checkbox
                     .setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
 
@@ -57,16 +58,14 @@ public class EditBlockedContactListAdapter extends ArrayAdapter<Contact> {
                                     .getTag();
                             person.setSelected(buttonView.isChecked());
                             if (person.isSelected()) {
-                                // Add to pending contactList
+                                // Remove from Blocked Contacts
+                                if(blockedContacts.contains(person))
+                                    blockedContacts.remove(person);
+                            } else {
+                                // Make sure they are still in Blocked Contacts.
+                                // Re add if user checks then unchecks
                                 if(!blockedContacts.contains(person))
                                     blockedContacts.add(person);
-                            } else {
-                                // Remove from pending contactList
-                                Toast.makeText(context,
-                                        "Removed: " + person.getName(),
-                                        Toast.LENGTH_SHORT).show();
-                                blockedContacts.remove(person);
-
                             }
                             instance.setBlockedContacts(blockedContacts);
 
@@ -82,7 +81,8 @@ public class EditBlockedContactListAdapter extends ArrayAdapter<Contact> {
         holder.contactName.setText(blockedContacts.get(position).getName());
         holder.contactNumber.setText(blockedContacts.get(position).getPhone());
         // ImageView?
-        holder.checkbox.setChecked(blockedContacts.get(position).isSelected());
+
+        //holder.checkbox.setChecked(blockedContacts.get(position).isSelected());
         return view;
     }
 }

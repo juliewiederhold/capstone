@@ -40,7 +40,8 @@ public class BlockContactAdapter extends ArrayAdapter<Contact> {
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         View view = null;
-        if (convertView == null) {
+
+       if (convertView == null) {
             LayoutInflater inflater = LayoutInflater.from(getContext());
             view = inflater.inflate(R.layout.friend_list_item, parent, false);
 

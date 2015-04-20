@@ -84,7 +84,7 @@ public class AppNumberBlocking extends ActionBarActivity {
 
         if(contactsInstance.getBlockedContacts() != null){
             ListView blockedNumberListView = (ListView) findViewById(R.id.blockedContacts);
-            ListAdapter simpleAdpt = new BlockContactAdapter(this, R.layout.blocked_contact_list, contactsInstance.getBlockedContacts(), contactsInstance.getBlockedContacts());
+            ListAdapter simpleAdpt = new BlockedContactListViewAdapter(this, R.layout.blocked_contact_list, contactsInstance.getBlockedContacts());
 
            // ListAdapter adapter = new ContactAdapter(this, R.id.contactListItem, allContacts, pendingContacts);
             blockedNumberListView.setAdapter(simpleAdpt);
