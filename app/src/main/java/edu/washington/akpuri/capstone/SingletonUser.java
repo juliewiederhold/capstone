@@ -9,6 +9,7 @@ public class SingletonUser {
     private static boolean allowContactRetrieval;
     private static SingletonUser instance = null;
     private static boolean hasGoneThroughInitialSetUp;
+    private static ArrayList<String> allDefaultSettings;
 
     //Empty Constructor, it's a singleton
     protected SingletonUser(){
@@ -20,6 +21,13 @@ public class SingletonUser {
             instance = new SingletonUser();
             allowContactRetrieval = false;
             hasGoneThroughInitialSetUp = false;
+            allDefaultSettings = new ArrayList<>();
+
+            allDefaultSettings.add("Profile");
+            allDefaultSettings.add("Friends");
+            allDefaultSettings.add("SafetyZone");
+            allDefaultSettings.add("AppNumberBlock");
+            allDefaultSettings.add("QuickText");
         }
         return instance;
     }

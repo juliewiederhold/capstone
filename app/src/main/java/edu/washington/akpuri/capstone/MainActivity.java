@@ -68,6 +68,15 @@ public class MainActivity extends ActionBarActivity {
             }
         });
 
+        Button startNightOut = (Button) findViewById(R.id.start_night_out);
+        startNightOut.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent next = new Intent(MainActivity.this, StartNightOut.class);
+                startActivity(next);
+            }
+        });
+
         // Set-up user's information
         instance = SingletonContacts.getInstance();
         pendingContacts = new ArrayList<>();

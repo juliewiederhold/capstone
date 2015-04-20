@@ -151,6 +151,10 @@
             android:name=".EditBlockedContactsList"
             android:label="@string/title_activity_edit_blocked_contacts_list" >
         </activity>
+        <activity
+            android:name=".StartNightOut"
+            android:label="@string/title_activity_start_night_out" >
+        </activity>
     </application>
 
 </manifest>

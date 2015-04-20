@@ -23,6 +23,8 @@
     <string name="title_activity_quick_text">Quick Text</string>
     <string name="title_activity_block_contacts">Block Contacts</string>
     <string name="title_activity_edit_default_settings">Edit Default Settings</string>
+    <string name="title_activity_edit_blocked_contacts_list">Edit Blocked Contacts List</string>
+    <string name="title_activity_start_night_out">Start Night Out</string>
 
     <!-- Safety Zone Information -->
     <string name="address">Address</string>
@@ -59,6 +61,9 @@
     <string name="welcome">Welcome</string>
     <string name="welcome_message">To get started, lets setup your Default Settings! </string>
 
+    <!-- Start Night Out -->
+    <string name="confirm_default_settings">Confirm Night Out Settings</string>
+
     <!-- Misc -->
     <string name="logout_full">Log out of So-So</string>
     <string name="post">Post</string>
@@ -67,9 +72,5 @@
     <string name="reset_password">Reset Password</string>
     <string name="app_name">So-So</string>
     <string name="logo_desc">So-So Logo</string>
-
-
-    <string name="hello_world">Hello world!</string>
-    <string name="title_activity_edit_blocked_contacts_list">EditBlockedContactsList</string>
 
 </resources>
