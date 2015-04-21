@@ -7,10 +7,10 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.Button;
 import android.widget.ListView;
 import android.widget.SimpleAdapter;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import java.util.HashMap;
 import java.util.List;
@@ -19,7 +19,7 @@ import java.util.ArrayList;
 import android.widget.AdapterView.OnItemClickListener;
 
 
-public class StartNightOut extends ActionBarActivity {
+public class StartNightOutSettingConfirmation extends ActionBarActivity {
     private SingletonUser userInstance;
     private List<Map<String, String>> topicsList = new ArrayList<>();
 
@@ -36,12 +36,9 @@ public class StartNightOut extends ActionBarActivity {
 
         SimpleAdapter adapter = new SimpleAdapter(this, topicsList, android.R.layout.simple_list_item_1,
                 new String[] {"topics", "description"}, new int[] {android.R.id.text1});
-        //ListView view = (ListView) findViewById(R.id.default_settings_list);
 
         lv.setAdapter(adapter);
-
         lv.setTextFilterEnabled(true);
-
         lv.setOnItemClickListener(new OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -50,13 +47,13 @@ public class StartNightOut extends ActionBarActivity {
                 String topic = setting.getText().toString();
 
                 if(topic.equals("Safety Zones")) {
-                    Intent intent = new Intent(StartNightOut.this, SafetyZonePage.class);
+                    Intent intent = new Intent(StartNightOutSettingConfirmation.this, NightOutSafetyZones.class);
                     startActivity(intent);
                 } else if(topic.equals("Blocked Apps and Contacts")) {
-                    Intent intent = new Intent(StartNightOut.this, AppNumberBlocking.class);
+                    Intent intent = new Intent(StartNightOutSettingConfirmation.this, AppNumberBlocking.class);
                     startActivity(intent);
                 } else {
-                    Intent intent = new Intent(StartNightOut.this, QuickText.class);
+                    Intent intent = new Intent(StartNightOutSettingConfirmation.this, QuickText.class);
                     startActivity(intent);
                 }
 
@@ -64,16 +61,14 @@ public class StartNightOut extends ActionBarActivity {
             }
         });
 
-      /*  view.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            public void onItemClick(AdapterView<?> parent, View view,
-                                    int position, long id) {
-                // When clicked, show a toast with the TextView text
-                String item = (String) parent.getItemAtPosition(position);
-                Toast.makeText(getApplicationContext(),
-                        "Clicked on Row: " + item,
-                        Toast.LENGTH_LONG).show();
+        Button confirm = (Button) findViewById(R.id.confirm_default_settings);
+        confirm.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(StartNightOutSettingConfirmation.this, MainActivity.class);
+                startActivity(intent);
             }
-        });*/
+        });
     }
 
     private void initList(){

@@ -10,6 +10,7 @@ public class SingletonUser {
     private static SingletonUser instance = null;
     private static boolean hasGoneThroughInitialSetUp;
     private static ArrayList<String> allDefaultSettings;
+    private static ArrayList<SafetyZone> existingSafetyZones;
 
     //Empty Constructor, it's a singleton
     protected SingletonUser(){
@@ -20,8 +21,9 @@ public class SingletonUser {
         if (instance == null) {
             instance = new SingletonUser();
             allowContactRetrieval = false;
-            hasGoneThroughInitialSetUp = false;
+            hasGoneThroughInitialSetUp = true;
             allDefaultSettings = new ArrayList<>();
+            existingSafetyZones = new ArrayList<>();
 
             allDefaultSettings.add("Safety Zones");
             allDefaultSettings.add("Blocked Apps and Contacts");
@@ -39,4 +41,8 @@ public class SingletonUser {
     public boolean getHasGoneThroughInitialSetUp(){return this.hasGoneThroughInitialSetUp;}
 
     public ArrayList<String> getAllDefaultSettings(){return this.allDefaultSettings;}
+
+    public ArrayList<SafetyZone> getExistingSafetyZones(){return this.existingSafetyZones;}
+
+    public void setExistingSafetyZones(ArrayList<SafetyZone> existingSafetyZones) {this.existingSafetyZones = existingSafetyZones;}
 }

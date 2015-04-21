@@ -112,6 +112,18 @@
             android:name=".QuickText"
             android:label="@string/title_activity_quick_text" >
         </activity>
+        <activity
+            android:name=".EditDefaultSettings"
+            android:label="@string/title_activity_edit_default_settings" >
+        </activity>
+        <activity
+            android:name=".EditBlockedContactsList"
+            android:label="@string/title_activity_edit_blocked_contacts_list" >
+        </activity>
+        <activity
+            android:name=".StartNightOutSettingConfirmation"
+            android:label="@string/title_activity_start_night_out" >
+        </activity>
 
         <!-- For push notifications -->
         <service android:name="com.parse.PushService" />
@@ -144,16 +156,8 @@
         </receiver>
 
         <activity
-            android:name=".EditDefaultSettings"
-            android:label="@string/title_activity_edit_default_settings" >
-        </activity>
-        <activity
-            android:name=".EditBlockedContactsList"
-            android:label="@string/title_activity_edit_blocked_contacts_list" >
-        </activity>
-        <activity
-            android:name=".StartNightOut"
-            android:label="@string/title_activity_start_night_out" >
+            android:name=".NightOutSafetyZones"
+            android:label="@string/title_activity_night_out_safety_zones" >
         </activity>
     </application>
 

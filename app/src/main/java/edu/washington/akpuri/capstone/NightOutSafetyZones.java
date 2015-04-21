@@ -1,11 +1,11 @@
 package edu.washington.akpuri.capstone;
 
 import android.app.AlertDialog;
-import android.content.DialogInterface;
-import android.support.v4.app.FragmentManager;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
@@ -22,25 +22,26 @@ import android.widget.SimpleAdapter;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.parse.ParseObject;
 import com.parse.ParseUser;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 
 
-public class SafetyZonePage extends ActionBarActivity {
+public class NightOutSafetyZones extends ActionBarActivity {
     private static ArrayList<HashMap<String, String>> safetyZoneInformation = new ArrayList<>();
-    private static SingletonUser userInstance;
+    private static SingletonUser instance;
+    private static SingletonNightOutSettings nightOutInstance;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_safety_zone);
 
-        userInstance = SingletonUser.getInstance();
+        instance = SingletonUser.getInstance();
+        nightOutInstance = SingletonNightOutSettings.getInstance();
 
-        if(userInstance.getExistingSafetyZones().size() > 0){
+        if(nightOutInstance.getNightOutSafetyZones().size() > 0){
             TextView description = (TextView) findViewById(R.id.safetyZoneDescription);
             description.setText("");
         }
@@ -51,27 +52,16 @@ public class SafetyZonePage extends ActionBarActivity {
                     .commit();
         }
 
-        if(userInstance.getHasGoneThroughInitialSetUp()){
-            Button saveButton = (Button) findViewById(R.id.next);
-            saveButton.setText("Done");
-            saveButton.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    Intent next = new Intent(SafetyZonePage.this, EditDefaultSettings.class);
-                    startActivity(next);
-                }
-            });
-        } else {
-            Button nextButton = (Button) findViewById(R.id.next);
-            nextButton.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    Intent next = new Intent(SafetyZonePage.this, AppNumberBlocking.class);
-                    startActivity(next);
-                }
-            });
-        }
 
+        Button saveButton = (Button) findViewById(R.id.next);
+        saveButton.setText("Done");
+        saveButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent next = new Intent(NightOutSafetyZones.this, StartNightOutSettingConfirmation.class);
+                startActivity(next);
+            }
+        });
 
 
         Button add_safety_zone_location = (Button) findViewById(R.id.add_safety_zone_location);
@@ -105,7 +95,7 @@ public class SafetyZonePage extends ActionBarActivity {
 
                                 if(!name.equals("") && !address.equals("") && !city.equals("")&& !zip.equals("") && !stateText.equals("")){
                                     SafetyZone newZone = new SafetyZone(name, address, city, Integer.parseInt(zip), state);
-                                    userInstance.getExistingSafetyZones().add(newZone);
+                                    nightOutInstance.getNightOutSafetyZones().add(newZone);
 
                                     Intent intent = getIntent();
                                     finish();
@@ -153,8 +143,8 @@ public class SafetyZonePage extends ActionBarActivity {
 
     private static void initList(){
         safetyZoneInformation = new ArrayList<>();
-        for(int i = 0; i < userInstance.getExistingSafetyZones().size(); i++){
-            SafetyZone zone = userInstance.getExistingSafetyZones().get(i);
+        for(int i = 0; i < nightOutInstance.getNightOutSafetyZones().size(); i++){
+            SafetyZone zone = nightOutInstance.getNightOutSafetyZones().get(i);
             safetyZoneInformation.add(createTopic(zone.getName(), zone.getAddress(), zone.getCity(), zone.getState(), Integer.toString(zone.getZip())));
         }
     }
@@ -239,15 +229,15 @@ public class SafetyZonePage extends ActionBarActivity {
 
                     int index = 0;
 
-                    for(int i = 0; i < userInstance.getExistingSafetyZones().size(); i++){
-                        if(addressSelected.equals(userInstance.getExistingSafetyZones().get(i).getAddress())){
+                    for(int i = 0; i < nightOutInstance.getNightOutSafetyZones().size(); i++){
+                        if(addressSelected.equals(nightOutInstance.getNightOutSafetyZones().get(i).getAddress())){
                             index = i;
                             break;
                         }
                     }
 
                     final int indexOfZone = index;
-                    final SafetyZone currentZone = userInstance.getExistingSafetyZones().get(indexOfZone);
+                    final SafetyZone currentZone = nightOutInstance.getNightOutSafetyZones().get(indexOfZone);
 
                     String citySelected = currentZone.getCity();
                     String stateSelected = currentZone.getState();
@@ -285,13 +275,13 @@ public class SafetyZonePage extends ActionBarActivity {
                                     currentZone.setZip(Integer.parseInt(zipText.getText().toString()));
                                     currentZone.setState(stateText.getText().toString());
 
-                                    userInstance.getExistingSafetyZones().set(indexOfZone, currentZone);
+                                    nightOutInstance.getNightOutSafetyZones().set(indexOfZone, currentZone);
                                     updateCurrentSafetyZone();
                                 }
                             })
                             .setNegativeButton(R.string.delete, new DialogInterface.OnClickListener() {
                                 public void onClick(DialogInterface dialog, int id) {
-                                    userInstance.getExistingSafetyZones().remove(indexOfZone);
+                                    nightOutInstance.getNightOutSafetyZones().remove(indexOfZone);
 
                                     Intent intent = getActivity().getIntent();
                                     getActivity().finish();
