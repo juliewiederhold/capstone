@@ -23,11 +23,9 @@ public class SingletonUser {
             hasGoneThroughInitialSetUp = false;
             allDefaultSettings = new ArrayList<>();
 
-            allDefaultSettings.add("Profile");
-            allDefaultSettings.add("Friends");
-            allDefaultSettings.add("SafetyZone");
-            allDefaultSettings.add("AppNumberBlock");
-            allDefaultSettings.add("QuickText");
+            allDefaultSettings.add("Safety Zones");
+            allDefaultSettings.add("Blocked Apps and Contacts");
+            allDefaultSettings.add("Quick Texts");
         }
         return instance;
     }
@@ -39,4 +37,6 @@ public class SingletonUser {
     public void setHasGoneThroughInitialSetUp(boolean hasGoneThroughInitialSetUp){this.hasGoneThroughInitialSetUp = hasGoneThroughInitialSetUp;}
 
     public boolean getHasGoneThroughInitialSetUp(){return this.hasGoneThroughInitialSetUp;}
+
+    public ArrayList<String> getAllDefaultSettings(){return this.allDefaultSettings;}
 }
