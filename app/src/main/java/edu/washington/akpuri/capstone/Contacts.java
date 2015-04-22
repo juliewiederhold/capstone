@@ -107,9 +107,10 @@ public class Contacts extends ActionBarActivity {
             }
         });
 
-        if (!instance.getPendingFriends().isEmpty()) {
-            pendingContacts.addAll(instance.getPendingFriends());
-        }
+        // Removing this fixed the bug where friends disappear when going through Edit Default Settings
+//        if (!instance.getPendingFriends().isEmpty()) {
+//            pendingContacts.addAll(instance.getPendingFriends());
+//        }
 
 //        Log.i(TAG, " Pending Friends " + instance.getPendingFriends().toString());
 //        Log.e(TAG, " adding " + instance.getPendingFriends().size() + "");
@@ -119,6 +120,7 @@ public class Contacts extends ActionBarActivity {
     @Override
     public void onResume() {
         super.onResume();
+        pendingContacts.addAll(instance.getPendingFriends());
     }
 
 
