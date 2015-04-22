@@ -21,6 +21,7 @@ import android.widget.AdapterView.OnItemClickListener;
 
 public class StartNightOutSettingConfirmation extends ActionBarActivity {
     private SingletonUser userInstance;
+    private SingletonNightOutSettings instance;
     private List<Map<String, String>> topicsList = new ArrayList<>();
 
     @Override
@@ -65,6 +66,9 @@ public class StartNightOutSettingConfirmation extends ActionBarActivity {
         confirm.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                instance = SingletonNightOutSettings.getInstance();
+                instance.restartInstance();
+
                 Intent intent = new Intent(StartNightOutSettingConfirmation.this, MainActivity.class);
                 startActivity(intent);
             }

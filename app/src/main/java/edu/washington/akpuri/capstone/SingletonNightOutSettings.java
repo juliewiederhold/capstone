@@ -32,12 +32,20 @@ public class SingletonNightOutSettings {
             contactsInstance = SingletonContacts.getInstance();
 
             nightOutQuickTexts = quickTextInstance.getAllQuickTexts();
-            nightOutSafetyZones = userInstance.getExistingSafetyZones();
+            nightOutSafetyZones = new ArrayList<>();
             nightOutBlockedApps = appBlockingInstance.getBlockedApps();
             nightOutBlockedContacts = contactsInstance.getBlockedContacts();
         }
+
+        ArrayList<SafetyZone> temp = userInstance.getExistingSafetyZones();
+        for(int i = 0; i < temp.size(); i++){
+            if(!nightOutSafetyZones.contains(temp.get(i)))
+                nightOutSafetyZones.add(temp.get(i));
+        }
         return instance;
     }
+
+    public SingletonNightOutSettings restartInstance(){ return null;}
 
     public ArrayList<SafetyZone> getNightOutSafetyZones(){return this.nightOutSafetyZones;}
 

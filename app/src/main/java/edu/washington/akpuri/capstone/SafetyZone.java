@@ -9,6 +9,7 @@ public class SafetyZone {
     public String city;
     public int zip;
     public String state;
+    private boolean isNightOutOnlyZone;
 
     public SafetyZone(String name, String address, String city, int zip, String state){
         this.name = name;
@@ -57,4 +58,5 @@ public class SafetyZone {
     public void setState(String state) {
         this.state = state;
     }
+
 }
