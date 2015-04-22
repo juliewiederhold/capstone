@@ -33,8 +33,8 @@ public class SingletonNightOutSettings {
 
             nightOutQuickTexts = new ArrayList<>();
             nightOutSafetyZones = new ArrayList<>();
-            nightOutBlockedApps = appBlockingInstance.getBlockedApps();
-            nightOutBlockedContacts = contactsInstance.getBlockedContacts();
+            nightOutBlockedApps = new ArrayList<>();
+            nightOutBlockedContacts = new ArrayList<>();
         }
 
         ArrayList<SafetyZone> tempSafetyZones = userInstance.getExistingSafetyZones();
@@ -48,12 +48,26 @@ public class SingletonNightOutSettings {
             if(!nightOutQuickTexts.contains(tempQuickTexts.get(n)))
                 nightOutQuickTexts.add(tempQuickTexts.get(n));
         }
+
+        ArrayList<App> tempApp = appBlockingInstance.getBlockedApps();
+        for(int a = 0; a < tempApp.size(); a++){
+            if(!nightOutBlockedApps.contains(tempApp.get(a)))
+                nightOutBlockedApps.add(tempApp.get(a));
+        }
+
+        ArrayList<Contact> tempContact = contactsInstance.getBlockedContacts();
+        for(int x = 0; x < tempContact.size(); x++){
+            if(!nightOutBlockedContacts.contains(tempContact.get(x)))
+                nightOutBlockedContacts.add(tempContact.get(x));
+        }
         return instance;
     }
 
     public SingletonNightOutSettings restartInstance(){
         this.nightOutSafetyZones = new ArrayList<>();
         this.nightOutQuickTexts = new ArrayList<>();
+        this.nightOutBlockedApps = new ArrayList<>();
+        this.nightOutBlockedContacts = new ArrayList<>();
         return instance;
     }
 

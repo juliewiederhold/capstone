@@ -25,6 +25,8 @@
     <string name="title_activity_edit_default_settings">Edit Default Settings</string>
     <string name="title_activity_edit_blocked_contacts_list">Edit Blocked Contacts List</string>
     <string name="title_activity_start_night_out">Start Night Out</string>
+    <string name="title_activity_night_out_safety_zones">Night Out Safety Zones</string>
+    <string name="title_activity_night_out_quick_texts">Night Out Quick Texts</string>
 
     <!-- Safety Zone Information -->
     <string name="address">Address</string>
@@ -72,9 +74,8 @@
     <string name="reset_password">Reset Password</string>
     <string name="app_name">So-So</string>
     <string name="logo_desc">So-So Logo</string>
-    <string name="title_activity_night_out_safety_zones">NightOutSafetyZones</string>
+    <string name="title_activity_night_out_app_number_blocking">NightOutAppNumberBlocking</string>
 
     <string name="hello_world">Hello world!</string>
-    <string name="title_activity_night_out_quick_texts">NightOutQuickTexts</string>
 
 </resources>
