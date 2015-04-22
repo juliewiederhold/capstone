@@ -31,21 +31,45 @@ public class SingletonNightOutSettings {
             appBlockingInstance = SingletonAppBlocking.getInstance();
             contactsInstance = SingletonContacts.getInstance();
 
-            nightOutQuickTexts = quickTextInstance.getAllQuickTexts();
+            nightOutQuickTexts = new ArrayList<>();
             nightOutSafetyZones = new ArrayList<>();
-            nightOutBlockedApps = appBlockingInstance.getBlockedApps();
-            nightOutBlockedContacts = contactsInstance.getBlockedContacts();
+            nightOutBlockedApps = new ArrayList<>();
+            nightOutBlockedContacts = new ArrayList<>();
         }
 
-        ArrayList<SafetyZone> temp = userInstance.getExistingSafetyZones();
-        for(int i = 0; i < temp.size(); i++){
-            if(!nightOutSafetyZones.contains(temp.get(i)))
-                nightOutSafetyZones.add(temp.get(i));
+        ArrayList<SafetyZone> tempSafetyZones = userInstance.getExistingSafetyZones();
+        for(int i = 0; i < tempSafetyZones.size(); i++){
+            if(!nightOutSafetyZones.contains(tempSafetyZones.get(i)))
+                nightOutSafetyZones.add(tempSafetyZones.get(i));
+        }
+
+        ArrayList<String> tempQuickTexts = quickTextInstance.getAllQuickTexts();
+        for(int n = 0; n < tempQuickTexts.size(); n++){
+            if(!nightOutQuickTexts.contains(tempQuickTexts.get(n)))
+                nightOutQuickTexts.add(tempQuickTexts.get(n));
+        }
+
+        ArrayList<App> tempApp = appBlockingInstance.getBlockedApps();
+        for(int a = 0; a < tempApp.size(); a++){
+            if(!nightOutBlockedApps.contains(tempApp.get(a)))
+                nightOutBlockedApps.add(tempApp.get(a));
+        }
+
+        ArrayList<Contact> tempContact = contactsInstance.getBlockedContacts();
+        for(int x = 0; x < tempContact.size(); x++){
+            if(!nightOutBlockedContacts.contains(tempContact.get(x)))
+                nightOutBlockedContacts.add(tempContact.get(x));
         }
         return instance;
     }
 
-    public SingletonNightOutSettings restartInstance(){ return null;}
+    public SingletonNightOutSettings restartInstance(){
+        this.nightOutSafetyZones = new ArrayList<>();
+        this.nightOutQuickTexts = new ArrayList<>();
+        this.nightOutBlockedApps = new ArrayList<>();
+        this.nightOutBlockedContacts = new ArrayList<>();
+        return instance;
+    }
 
     public ArrayList<SafetyZone> getNightOutSafetyZones(){return this.nightOutSafetyZones;}
 

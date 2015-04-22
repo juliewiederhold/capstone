@@ -51,10 +51,10 @@ public class StartNightOutSettingConfirmation extends ActionBarActivity {
                     Intent intent = new Intent(StartNightOutSettingConfirmation.this, NightOutSafetyZones.class);
                     startActivity(intent);
                 } else if(topic.equals("Blocked Apps and Contacts")) {
-                    Intent intent = new Intent(StartNightOutSettingConfirmation.this, AppNumberBlocking.class);
+                    Intent intent = new Intent(StartNightOutSettingConfirmation.this, NightOutAppNumberBlocking.class);
                     startActivity(intent);
                 } else {
-                    Intent intent = new Intent(StartNightOutSettingConfirmation.this, QuickText.class);
+                    Intent intent = new Intent(StartNightOutSettingConfirmation.this, NightOutQuickTexts.class);
                     startActivity(intent);
                 }
 

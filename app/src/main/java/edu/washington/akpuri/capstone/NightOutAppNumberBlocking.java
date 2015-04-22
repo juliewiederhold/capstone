@@ -16,22 +16,22 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 
-public class AppNumberBlocking extends ActionBarActivity {
-    AppBlockingAdapter adapter = null;
-    private SingletonAppBlocking appInstance;
-    private SingletonContacts contactsInstance;
+public class NightOutAppNumberBlocking extends ActionBarActivity {
+    private AppBlockingAdapter adapter = null;
     private SingletonUser userInstance;
+    private SingletonAppBlocking appInstance;
+    private SingletonNightOutSettings nightOutBlockedAppsNumInstance;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_app_blocking);
 
-        contactsInstance = SingletonContacts.getInstance();
         appInstance = SingletonAppBlocking.getInstance();
         userInstance = SingletonUser.getInstance();
+        nightOutBlockedAppsNumInstance = SingletonNightOutSettings.getInstance();
 
-        if(contactsInstance.getBlockedContacts()!= null && contactsInstance.getBlockedContacts().size() > 0){
+        if(nightOutBlockedAppsNumInstance.getNightOutBlockedContacts()!= null && nightOutBlockedAppsNumInstance.getNightOutBlockedContacts().size() > 0){
             TextView description = (TextView) findViewById(R.id.blockedContactDescription);
             description.setText("");
         }
@@ -49,7 +49,7 @@ public class AppNumberBlocking extends ActionBarActivity {
                     builder.setPositiveButton("Allow", new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int id) {
                             userInstance.setAllowContactRetrieval(true);
-                            Intent addFriends = new Intent(AppNumberBlocking.this, BlockContacts.class);
+                            Intent addFriends = new Intent(NightOutAppNumberBlocking.this, BlockContacts.class);
                             startActivity(addFriends);
                         }
                     });
@@ -63,7 +63,7 @@ public class AppNumberBlocking extends ActionBarActivity {
                     dialog.show();
                 }
                 if (userInstance.getAllowContactRetrieval()) {
-                    Intent addFriends = new Intent(AppNumberBlocking.this, BlockContacts.class);
+                    Intent addFriends = new Intent(NightOutAppNumberBlocking.this, BlockContacts.class);
                     startActivity(addFriends);
                 }
             }
@@ -73,42 +73,29 @@ public class AppNumberBlocking extends ActionBarActivity {
         editBlockedContacts.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(contactsInstance.getBlockedContacts() != null && contactsInstance.getBlockedContacts().size() > 0){
-                    Intent editBlockedFriends = new Intent(AppNumberBlocking.this, EditBlockedContactsList.class);
+                if(nightOutBlockedAppsNumInstance.getNightOutBlockedContacts() != null && nightOutBlockedAppsNumInstance.getNightOutBlockedContacts().size() > 0){
+                    Intent editBlockedFriends = new Intent(NightOutAppNumberBlocking.this, EditBlockedContactsList.class);
                     startActivity(editBlockedFriends);
                 }
             }
         });
 
-        if(contactsInstance.getBlockedContacts() != null){
+        if(nightOutBlockedAppsNumInstance.getNightOutBlockedContacts() != null){
             ListView blockedNumberListView = (ListView) findViewById(R.id.blockedContacts);
-            ListAdapter simpleAdpt = new BlockedContactListViewAdapter(this, R.layout.blocked_contact_list, contactsInstance.getBlockedContacts());
-
-           // ListAdapter adapter = new ContactAdapter(this, R.id.contactListItem, allContacts, pendingContacts);
+            ListAdapter simpleAdpt = new BlockedContactListViewAdapter(this, R.layout.blocked_contact_list, nightOutBlockedAppsNumInstance.getNightOutBlockedContacts());
             blockedNumberListView.setAdapter(simpleAdpt);
         }
 
-        if(userInstance.getHasGoneThroughInitialSetUp()){
-            Button saveButton = (Button) findViewById(R.id.next);
-            saveButton.setText("Done");
-            saveButton.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    Intent next = new Intent(AppNumberBlocking.this, EditDefaultSettings.class);
-                    startActivity(next);
-                }
-            });
-        } else {
-            Button nextButton = (Button) findViewById(R.id.next);
-            nextButton.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    Intent next = new Intent(AppNumberBlocking.this, QuickText.class);
-                    next.putExtra("activitySent","AppNumberBlocking");
-                    startActivity(next);
-                }
-            });
-        }
+        Button saveButton = (Button) findViewById(R.id.next);
+        saveButton.setText("Done");
+        saveButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent next = new Intent(NightOutAppNumberBlocking.this, StartNightOutSettingConfirmation.class);
+                startActivity(next);
+            }
+        });
+
     }
 
     private void displayListView(){
@@ -118,7 +105,7 @@ public class AppNumberBlocking extends ActionBarActivity {
             appInstance.addAppToAllApps(new App("Twitter"));
         }
 
-        adapter = new AppBlockingAdapter(this, R.layout.app_block_item, appInstance.getAllApps(), appInstance.getBlockedApps());
+        adapter = new AppBlockingAdapter(this, R.layout.app_block_item, appInstance.getAllApps(), nightOutBlockedAppsNumInstance.getNightOutBlockedApps());
         ListView view = (ListView) findViewById(R.id.appContainer);
         view.setAdapter(adapter);
 

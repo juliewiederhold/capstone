@@ -30,7 +30,6 @@ import java.util.HashMap;
 
 public class NightOutSafetyZones extends ActionBarActivity {
     private static ArrayList<HashMap<String, String>> safetyZoneInformation = new ArrayList<>();
-    private static SingletonUser instance;
     private static SingletonNightOutSettings nightOutInstance;
 
     @Override
@@ -38,7 +37,6 @@ public class NightOutSafetyZones extends ActionBarActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_safety_zone);
 
-        instance = SingletonUser.getInstance();
         nightOutInstance = SingletonNightOutSettings.getInstance();
 
         if(nightOutInstance.getNightOutSafetyZones().size() > 0){
