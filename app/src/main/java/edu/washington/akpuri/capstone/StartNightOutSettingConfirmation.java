@@ -54,7 +54,7 @@ public class StartNightOutSettingConfirmation extends ActionBarActivity {
                     Intent intent = new Intent(StartNightOutSettingConfirmation.this, AppNumberBlocking.class);
                     startActivity(intent);
                 } else {
-                    Intent intent = new Intent(StartNightOutSettingConfirmation.this, QuickText.class);
+                    Intent intent = new Intent(StartNightOutSettingConfirmation.this, NightOutQuickTexts.class);
                     startActivity(intent);
                 }
 
