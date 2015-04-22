@@ -38,6 +38,7 @@ public class FriendAdapter extends ArrayAdapter<Contact> {
     private final Context context;
     private final SingletonContacts instance;
     private LayoutInflater mInflater;
+    private ArrayList<String> newCurrentContacts = new ArrayList<String>();
 
     public FriendAdapter(Context context, int resource, ArrayList<Contact> contacts) {
         super(context, resource, contacts);
@@ -56,13 +57,13 @@ public class FriendAdapter extends ArrayAdapter<Contact> {
 
     @Override
     public View getView(final int position, final View convertView, ViewGroup parent) {
-        Log.d(TAG, "position=" + position);
+//        Log.d(TAG, "position=" + position);
         final Contact data = list.get(position);
         View view = null;
         if (convertView == null) {
 //            LayoutInflater inflater = LayoutInflater.from(getContext());
             view = mInflater.inflate(R.layout.contact_friend_list_item, parent, false);
-            Log.e("FriendAdapter", instance.getPendingFriends().toString());
+//            Log.e("FriendAdapter", instance.getPendingFriends().toString());
             final ViewHolder viewHolder = new ViewHolder();
             viewHolder.contactName = (TextView) view.findViewById(R.id.appName);
             viewHolder.contactNumber = (TextView) view.findViewById(R.id.contactNumber);
@@ -70,7 +71,7 @@ public class FriendAdapter extends ArrayAdapter<Contact> {
             view.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Log.e(TAG, list.get(position).getName() + " clicked");
+                    Log.e(TAG, data.getName() + " " + data.getId() + " clicked");
 
                     AlertDialog.Builder alert = new AlertDialog.Builder(context);
                     alert.setMessage("Do you want to delete " + data.getName() + "?");
@@ -86,10 +87,13 @@ public class FriendAdapter extends ArrayAdapter<Contact> {
                                 @Override
                                 public void onClick(DialogInterface dialog, int which) {
                                     // Remove Contact from list & update list
-                                    instance.getPendingFriends().remove(position);
+                                    instance.getPendingFriends().remove(data);
+                                    instance.getAllContacts().add(data);
+
                                     Log.e("FriendAdapter", instance.getPendingFriends().toString());
                                     remove(getItem(position));
                                     notifyDataSetChanged();
+
 
                                     // Remove from Parse
                                     final String user = ParseUser.getCurrentUser().getString("email");
@@ -108,6 +112,19 @@ public class FriendAdapter extends ArrayAdapter<Contact> {
                                                         if (parseObject != null) {
                                                             Log.e(TAG, "Contact exists. Delete!");
 
+                                                            String objectId = parseObject.getObjectId();
+
+
+                                                            for(int i=0; i < instance.getCurrentContacts().size(); i++) {
+                                                                String currentId = instance.getCurrentContacts().get(i);
+                                                                if (!currentId.equals(objectId)) {
+                                                                    newCurrentContacts.add(currentId);
+                                                                }
+                                                            }
+                                                            instance.getCurrentContacts().clear();
+                                                            instance.setCurrentContacts(newCurrentContacts);
+                                                            newCurrentContacts = null;
+
                                                             // Delete from user's contact list
 
                                                             Log.e(TAG, ParseUser.getCurrentUser().get("contacts").getClass().toString());
@@ -117,8 +134,9 @@ public class FriendAdapter extends ArrayAdapter<Contact> {
                                                             // Need updated list of contact objectIds as an ArrayList<String>
 //                                                            ParseUser.getCurrentUser().put("contacts", instance.getPendingFriends().toString());
                                                             Log.e(TAG, ParseUser.getCurrentUser().get("contacts").toString());
+                                                            ParseUser.getCurrentUser().put("contacts", instance.getCurrentContacts());
 
-                                                            // Delete contact
+                                                            // Delete contact object
                                                             parseObject.deleteInBackground();
 
 //                                                            List<String> list = new ArrayList<String>(Arrays.asList(array));
@@ -137,6 +155,15 @@ public class FriendAdapter extends ArrayAdapter<Contact> {
                                                             Log.e(TAG, "Contact DNE yet. Can't delete");
 
                                                         }
+                                                        // Update ContactsObject[]
+                                                        parseObject.put("contacts", instance.getCurrentContacts());
+                                                        parseObject.saveInBackground(new SaveCallback() {
+                                                            @Override
+                                                            public void done(ParseException e) {
+                                                                Log.e(TAG, "ContactsObject: " + parseObject.get("contacts").toString());
+                                                                instance.getPendingContacts().clear();
+                                                            }
+                                                        });
                                                     }
                                                 });
                                             } else {
@@ -150,7 +177,6 @@ public class FriendAdapter extends ArrayAdapter<Contact> {
                                 }
                             });
                     alert.create().show();
-
 
                 }
             });

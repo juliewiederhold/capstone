@@ -5,7 +5,10 @@ import android.content.SharedPreferences;
 import android.util.Log;
 
 import com.parse.Parse;
+import com.parse.ParseException;
 import com.parse.ParseObject;
+import com.parse.ParsePush;
+import com.parse.SaveCallback;
 
 /**
  * Created by NR on 3/4/15.
@@ -43,6 +46,24 @@ public class Application extends android.app.Application {
 
         configHelper = new ConfigHelper();
         configHelper.fetchConfigIfNeeded();
+
+        ParsePush.subscribeInBackground("", new SaveCallback() {
+            @Override
+            public void done(ParseException e) {
+                if (e == null) {
+                    Log.d("com.parse.push", "successfully subscribed to the broadcast channel.");
+                } else {
+                    Log.e("com.parse.push", "failed to subscribe for push", e);
+                }
+            }
+        });
+
+        // Testing push notifications
+        push();
+    }
+
+    private void push() {
+        // Do something
     }
 
     public static ConfigHelper getConfigHelper() {

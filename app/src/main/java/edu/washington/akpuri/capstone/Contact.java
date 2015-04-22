@@ -34,7 +34,7 @@ public class Contact {
     public String getPhone() {
         if (phone.equals("") || phone.equals(null)) {
             Log.i("Contact", "No phone number existed or was entered for contact: " + name);
-        return "NO PHONE NUMBER PRESENT";
+            return "NO PHONE NUMBER PRESENT";
         } else {
             return phone;
         }

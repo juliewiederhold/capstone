@@ -2,12 +2,11 @@ package edu.washington.akpuri.capstone;
 
 import android.app.ActionBar;
 import android.app.AlertDialog;
-import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.content.DialogInterface;
-import android.nfc.Tag;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
+import android.support.v4.app.FragmentManager;
 import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -16,39 +15,24 @@ import android.view.MenuItem;
 import android.content.Intent;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
 import android.widget.Button;
-import android.widget.FrameLayout;
-import android.widget.ImageButton;
 import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
-
-import com.parse.GetCallback;
-import com.parse.ParseException;
-import com.parse.ParseFacebookUtils;
 import com.parse.ParseObject;
-import com.parse.ParseQuery;
 import com.parse.ParseUser;
-import com.parse.SaveCallback;
-
-import org.json.JSONArray;
-import org.json.JSONException;
 
 import java.util.ArrayList;
-import java.util.Arrays;
+
 
 public class Contacts extends ActionBarActivity {
 
     private final static String TAG = "Contacts.java";
 
     private static ArrayList<Contact> pendingContacts;
-    private static ParseObject pendingParseContacts;
-    private static ArrayList<String> pContacts;
     private static boolean allowContactRetrieval;
     private android.support.v7.app.ActionBar actionBar;
-    private SingletonContacts instance;
-    private SingletonUser userInstance;
+    private static SingletonContacts instance;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,11 +40,8 @@ public class Contacts extends ActionBarActivity {
 
         setContentView(R.layout.activity_contacts);
         allowContactRetrieval = false;
-        pendingParseContacts = null;
         instance = SingletonContacts.getInstance();
-        userInstance = SingletonUser.getInstance();
         pendingContacts = new ArrayList<Contact>();
-        pContacts = new ArrayList<String>();
 
         //Get the actionbar
         // setup action bar for tabs
@@ -83,29 +64,15 @@ public class Contacts extends ActionBarActivity {
                         this, "Groups", GroupsFragment.class));
         actionBar.addTab(second);
 
-        if(userInstance.getHasGoneThroughInitialSetUp()){
-            Button saveButton = (Button) findViewById(R.id.contactsNext);
-            saveButton.setText("Done");
-            saveButton.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    Intent next = new Intent(Contacts.this, EditDefaultSettings.class);
-                    startActivity(next);
-                }
-            });
-        } else {
-            Button next = (Button) findViewById(R.id.contactsNext);
-            next.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    Log.e(TAG, "contactsNext button pressed");
-                    Intent safeZones = new Intent(Contacts.this, SafetyZonePage.class);
-                    safeZones.putExtra("activitySent","Contacts");
-                    startActivity(safeZones);
-                }
-            });
-        }
-
+        Button next = (Button) findViewById(R.id.contactsNext);
+        next.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Log.e(TAG, "contactsNext button pressed");
+                Intent safeZones = new Intent(Contacts.this, SafetyZonePage.class);
+                startActivity(safeZones);
+            }
+        });
 
         Button addContacts = (Button) findViewById(R.id.addFriends);
         addContacts.setOnClickListener(new View.OnClickListener() {
@@ -119,6 +86,7 @@ public class Contacts extends ActionBarActivity {
                         public void onClick(DialogInterface dialog, int id) {
                             allowContactRetrieval = true;
                             Intent addFriends = new Intent(Contacts.this, AddFriends.class);
+                            addFriends.putExtra("caller", "Contacts");
                             startActivity(addFriends);
                         }
                     });
@@ -133,16 +101,26 @@ public class Contacts extends ActionBarActivity {
                 }
                 if (allowContactRetrieval) {
                     Intent addFriends = new Intent(Contacts.this, AddFriends.class);
+                    addFriends.putExtra("caller", "Contacts");
                     startActivity(addFriends);
                 }
             }
         });
 
-        pendingContacts.addAll(instance.getPendingFriends());
+        // Removing this fixed the bug where friends disappear when going through Edit Default Settings
+//        if (!instance.getPendingFriends().isEmpty()) {
+//            pendingContacts.addAll(instance.getPendingFriends());
+//        }
 
-        Log.i(TAG, " Pending Friends " + instance.getPendingFriends().toString());
-        Log.e(TAG, " adding " + instance.getPendingFriends().size() + "");
-        Log.i(TAG, " onCreate Pending Contacts " + pendingContacts.toString());
+//        Log.i(TAG, " Pending Friends " + instance.getPendingFriends().toString());
+//        Log.e(TAG, " adding " + instance.getPendingFriends().size() + "");
+//        Log.i(TAG, " onCreate Pending Contacts " + pendingContacts.toString());
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        pendingContacts.addAll(instance.getPendingFriends());
     }
 
 
@@ -201,21 +179,42 @@ public class Contacts extends ActionBarActivity {
 
         @Override
         public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+
             Log.i("ContactsFragment", "onCreateView Fired for FriendsFragment");
             final View rootView = inflater.inflate(R.layout.fragment_friends, container, false);
 
             Log.e(TAG, " Frag Pending Contacts " + pendingContacts.toString());
             ListView contactListView = (ListView) rootView.findViewById(R.id.friendListView);
 
+            if (!pendingContacts.isEmpty()) {
+                TextView noFriends = (TextView) rootView.findViewById(R.id.noFriends);
+                noFriends.setVisibility(View.GONE);
+            }
+
             // Populate with current friends
             // NICOLE: should replace pendingContacts with instance.getPendingFriends()
             final ListAdapter adapter = new FriendAdapter(getActivity(), R.id.contactListItem, pendingContacts);
             contactListView.setAdapter(adapter);
 
-            TextView noFriends = (TextView) rootView.findViewById(R.id.noFriends);
-            noFriends.setVisibility(View.GONE);
 
             return rootView;
+        }
+
+        @Override
+        public void onResume() {
+            super.onResume();
+            pendingContacts.addAll(instance.getPendingContacts());
+            Log.e(TAG, instance.getPendingContacts().toString());
+            ListView contactListView = (ListView) getView().findViewById(R.id.friendListView);
+
+            if (!pendingContacts.isEmpty()) {
+                TextView noFriends = (TextView) getView().findViewById(R.id.noFriends);
+                noFriends.setVisibility(View.GONE);
+            }
+
+            // Need to nullify existing adapter?
+            final ListAdapter adapter = new FriendAdapter(getActivity(), R.id.contactListItem, pendingContacts);
+            contactListView.setAdapter(adapter);
         }
     }
 
