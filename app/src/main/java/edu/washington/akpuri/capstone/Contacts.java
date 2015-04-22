@@ -120,7 +120,14 @@ public class Contacts extends ActionBarActivity {
     @Override
     public void onResume() {
         super.onResume();
-        pendingContacts.addAll(instance.getPendingFriends());
+        pendingContacts.clear();
+        if (!instance.getPendingContacts().isEmpty()) {
+            instance.addPendingFriends(instance.getPendingContacts());
+            instance.getPendingContacts().clear();
+        }
+        if (!instance.getPendingFriends().isEmpty()) {
+            pendingContacts.addAll(instance.getPendingFriends());
+        }
     }
 
 
@@ -203,7 +210,9 @@ public class Contacts extends ActionBarActivity {
         @Override
         public void onResume() {
             super.onResume();
-            pendingContacts.addAll(instance.getPendingContacts());
+            if (!instance.getPendingContacts().isEmpty()) {
+                pendingContacts.addAll(instance.getPendingContacts());
+            }
             Log.e(TAG, instance.getPendingContacts().toString());
             ListView contactListView = (ListView) getView().findViewById(R.id.friendListView);
 

@@ -24,6 +24,9 @@ import java.util.ArrayList;
 /**
  * Created by Akash on 3/9/2015.
  * Used by Addfriends.java to import phone contacts into So-So
+ *
+ * BUGS:
+ *  - If on contacts list, if you check, uncheck and then quickly hit send request button, it’ll still add that person you unchecked!
  */
 public class ContactAdapter extends ArrayAdapter<Contact> {
 
@@ -32,6 +35,7 @@ public class ContactAdapter extends ArrayAdapter<Contact> {
     private final ArrayList<Contact> pendingList;   // temporarily store pending So-So friends
     private final SingletonContacts instance;
     private final static String TAG = "ContactAdapter";
+    private Boolean DNE = false;
 
     public ContactAdapter(Context context, int resource, ArrayList<Contact> contacts, ArrayList<Contact> pendingList) {
         super(context, resource, contacts);
@@ -50,6 +54,7 @@ public class ContactAdapter extends ArrayAdapter<Contact> {
 
     @Override
     public View getView(final int position, View convertView, ViewGroup parent) {
+
         View view = null;
         if (convertView == null) {
             LayoutInflater inflater = LayoutInflater.from(getContext());
@@ -66,7 +71,6 @@ public class ContactAdapter extends ArrayAdapter<Contact> {
                         @Override
                         public void onCheckedChanged(CompoundButton buttonView,
                                                      boolean isChecked) {
-
                             final Contact person = (Contact) viewHolder.checkbox.getTag();
                             Log.e(TAG, getPosition(person) + "");
                             person.setSelected(buttonView.isChecked());
@@ -88,52 +92,33 @@ public class ContactAdapter extends ArrayAdapter<Contact> {
                                             //
                                         } else {
                                             Log.e(TAG, "Contact DNE yet");
-                                            pendingList.add(person);
+                                            DNE = true;
 
+                                            pendingList.add(person);
                                             instance.removeContact(person);
 
-                                            ////// Create contact ParseObject here
-                                            final ParseObject contact = new ParseObject("contact");
-                                            contact.put("name", person.getName());
-                                            contact.put("phone", person.getPhone());
-                                            contact.put("user", ParseUser.getCurrentUser().getString("email")); // could probably save this in singleton
-                                            contact.put("id", person.getId());
-                                            contact.put("pending", true);   // pending So-So friend; should be false once accepted
-                                            contact.saveInBackground(new SaveCallback() {
-                                                @Override
-                                                public void done(ParseException e) {
-                                                    if (e != null) {
-                                                        Log.e(TAG, "Error saving contactsId: " + e);
-                                                    } else {
-                                                        instance.addCurrentContact(contact.getObjectId());
-                                                        instance.addPendingParse(contact);
-                                                        ParseUser.getCurrentUser().add("contacts", contact.getObjectId());
-                                                        ParseUser.getCurrentUser().saveInBackground();
-                                                    }
-                                                }
-                                            });
-                                            ////// End create ParseObject
-//                                            notifyDataSetChanged();
-//                                            instance.setCurrentcontacts(contact.getObjectId());
+                                            // CREATES CONTACT OBJECT RIGHT AWAY
+                                            // SHOULD WAIT TILL USER HITS SEND FRIEND REQUEST
+                                            // HOW: save each person into an arraylist
+                                            // Then pass that arraylist and foreach through it
+
+
                                         }
                                     }
                                 });
-
                             } else {
                                 // Remove from pending list
                                 pendingList.remove(person);
 
                             }
+
                             // Save pending friends into singleton
 //                            instance.setPendingContacts(pendingList);
                             if (!pendingList.isEmpty()) {
-
                                 Log.e(TAG, instance.getAllContacts().toString());
-//                                instance.addPendingContact(person);
-//                                notifyDataSetChanged();
                                 instance.setPendingContacts(pendingList);
+//                                createParseObjects(pendingList);
                             }
-//                            notifyDataSetChanged();
                             Log.e(TAG, "instance pending contacts: " + instance.getPendingContacts().toString());
                         }
                     });
@@ -150,5 +135,36 @@ public class ContactAdapter extends ArrayAdapter<Contact> {
         holder.checkbox.setChecked(list.get(position).isSelected());
         return view;
     }
+
+//    private void createParseObjects(ArrayList<Contact> pending){
+//
+//        for(int i=0; i < pending.size(); i++) {
+//            final Contact person = pending.get(i);
+//            ////// Create contact ParseObject here
+//            final ParseObject contact = new ParseObject("contact");
+//            contact.put("name", person.getName());
+//            contact.put("phone", person.getPhone());
+//            contact.put("user", ParseUser.getCurrentUser().getString("email")); // could probably save this in singleton
+//            contact.put("id", person.getId());
+//            Log.e(TAG, "contact id: " + person.getId());
+//            contact.put("pending", true);   // pending So-So friend; should be false once accepted
+//            contact.saveInBackground(new SaveCallback() {
+//                @Override
+//                public void done(ParseException e) {
+//                    if (e != null) {
+//                        Log.e(TAG, "Error saving contactsId: " + e);
+//                    } else {
+//                        instance.addCurrentContact(contact.getObjectId());
+//                        instance.addPendingParse(contact);
+//                        person.setObjectId(contact.getObjectId());
+//                        Log.e(TAG, person.getObjectId());
+//                        ParseUser.getCurrentUser().add("contacts", contact.getObjectId());
+//                        ParseUser.getCurrentUser().saveInBackground();
+//                    }
+//                }
+//            });
+//            ////// End create ParseObject
+//        }
+//    }
 
 }

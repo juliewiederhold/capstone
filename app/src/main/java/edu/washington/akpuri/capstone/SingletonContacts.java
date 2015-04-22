@@ -120,6 +120,10 @@ public class SingletonContacts {
         pendingFriends.add(object);
     }
 
+    public void addPendingFriends(ArrayList<Contact> objects) {
+        pendingFriends.addAll(objects);
+    }
+
     public void addPendingParse(ParseObject parseObject) {
         pendingParse.add(parseObject);
     }

@@ -112,50 +112,12 @@ public class AddFriends extends ActionBarActivity {
         sendRequest.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                final String user = ParseUser.getCurrentUser().getString("email");
-                // Get ContactsObject for current user
-                // ContactsObject has contacts[] array containing objectId of user's current and pending friends
-                ParseQuery<ParseObject> query = ParseQuery.getQuery("ContactsObject");
-                query.whereEqualTo("user", user);
-                query.getFirstInBackground(new GetCallback<ParseObject>() {
-                    @Override
-                    public void done(final ParseObject parseObject, ParseException e) {
-                        if (parseObject != null) {
-                            // User exists and has a ContactsObject
-//                            for (int i = 0; i < instance.getPendingContacts().size(); i++) {
-//                                final Contact aContact= instance.getPendingContacts().get(i);
-//                                final String name = aContact.getName();
-//                                final String phone = aContact.getPhone();
-//                                final int id = aContact.getId();
-//                                aContact.setHasBeenAdded(true);
-//
-//                                /**
-//                                    Moved code to create contacts to ContactAdapter.java
-//                                **/
-//                                instance.addPendingFriend(aContact);
-//                                Log.e(TAG, " pending friends: " + instance.getPendingFriends().toString());
-//
-//                            }
 
-                            Log.e(TAG, "Current contacts[]: " + ParseUser.getCurrentUser().get("contacts").toString());
-                            parseObject.addAllUnique("contacts", instance.getCurrentContacts());
-                            parseObject.saveInBackground(new SaveCallback() {
-                                @Override
-                                public void done(ParseException e) {
 
-                                    // TO-DO: Remove contacts who have been added from the Contacts List
-                                    // Set pendingContacts and pendingParseContacts to empty
-                                    Log.e(TAG, "ContactsObject: " + parseObject.get("contacts").toString());
-                                    instance.getPendingContacts().clear();
-                                    pendingParseContacts.clear();
-                                }
-                            });
-                        } else {
-                            // Something went wrong
-                            Log.e("Contacts", "Failed to retrieve contactsObject: " + e);
-                        }
-                    }
-                });
+                createParseObjects(instance.getPendingContacts());
+
+
+
                 Toast mes = Toast.makeText(getApplicationContext(), "Friend Requests Sent", Toast.LENGTH_LONG);
                 mes.show();
                 finish();
@@ -163,6 +125,73 @@ public class AddFriends extends ActionBarActivity {
         });
     }
 
+    private void createParseObjects(ArrayList<Contact> pending){
+
+        final String user = ParseUser.getCurrentUser().getString("email");
+
+        for(int i=0; i < pending.size(); i++) {
+            final Contact person = pending.get(i);
+            ////// Create contact ParseObject here
+            final ParseObject contact = new ParseObject("contact");
+            contact.put("name", person.getName());
+            contact.put("phone", person.getPhone());
+            contact.put("user", user); // could probably save this in singleton
+            contact.put("id", person.getId());
+            Log.e(TAG, "contact id: " + person.getId());
+            contact.put("pending", true);   // pending So-So friend; should be false once accepted
+            contact.saveInBackground(new SaveCallback() {
+                @Override
+                public void done(ParseException e) {
+                    if (e != null) {
+                        Log.e(TAG, "Error saving contactsId: " + e);
+                    } else {
+                        instance.addCurrentContact(contact.getObjectId());
+                        instance.addPendingParse(contact);
+                        person.setObjectId(contact.getObjectId());
+                        Log.e(TAG, person.getObjectId());
+                        ParseUser.getCurrentUser().add("contacts", contact.getObjectId());
+                        ParseUser.getCurrentUser().saveInBackground();
+                    }
+                }
+            });
+            ////// End create ParseObject
+
+        }
+
+        /// WORKING
+        // ideas, maybe I can save each time a person is created??? but is that a good idea??
+
+        // Get ContactsObject for current user
+        // ContactsObject has contacts[] array containing objectId of user's current and pending friends
+
+        ParseQuery<ParseObject> query = ParseQuery.getQuery("ContactsObject");
+        query.whereEqualTo("user", user);
+        query.getFirstInBackground(new GetCallback<ParseObject>() {
+            @Override
+            public void done(final ParseObject parseObject, ParseException e) {
+                if (parseObject != null) {
+                    // User exists and has a ContactsObject
+
+                    Log.e(TAG, "Current contacts[]: " + ParseUser.getCurrentUser().get("contacts").toString());
+                    parseObject.addAllUnique("contacts", instance.getCurrentContacts());
+                    parseObject.saveInBackground(new SaveCallback() {
+                        @Override
+                        public void done(ParseException e) {
+
+                            // TO-DO: Remove contacts who have been added from the Contacts List
+                            // Set pendingContacts and pendingParseContacts to empty
+                            Log.e(TAG, "ContactsObject: " + parseObject.get("contacts").toString());
+                            instance.getPendingContacts().clear();
+                            pendingParseContacts.clear();
+                        }
+                    });
+                } else {
+                    // Something went wrong
+                    Log.e("Contacts", "Failed to retrieve contactsObject: " + e);
+                }
+            }
+        });
+    }
 
     @Override
     public void onResume(){
