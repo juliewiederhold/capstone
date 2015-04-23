@@ -107,9 +107,10 @@ public class Contacts extends ActionBarActivity {
             }
         });
 
-        if (!instance.getPendingFriends().isEmpty()) {
-            pendingContacts.addAll(instance.getPendingFriends());
-        }
+        // Removing this fixed the bug where friends disappear when going through Edit Default Settings
+//        if (!instance.getPendingFriends().isEmpty()) {
+//            pendingContacts.addAll(instance.getPendingFriends());
+//        }
 
 //        Log.i(TAG, " Pending Friends " + instance.getPendingFriends().toString());
 //        Log.e(TAG, " adding " + instance.getPendingFriends().size() + "");
@@ -119,6 +120,15 @@ public class Contacts extends ActionBarActivity {
     @Override
     public void onResume() {
         super.onResume();
+        Log.e(TAG, "on resume");
+        pendingContacts.clear();
+        if (!instance.getPendingContacts().isEmpty()) {
+            instance.addPendingFriends(instance.getPendingContacts());
+            instance.getPendingContacts().clear();
+        }
+        if (!instance.getPendingFriends().isEmpty()) {
+            pendingContacts.addAll(instance.getPendingFriends());
+        }
     }
 
 
@@ -184,9 +194,11 @@ public class Contacts extends ActionBarActivity {
             Log.e(TAG, " Frag Pending Contacts " + pendingContacts.toString());
             ListView contactListView = (ListView) rootView.findViewById(R.id.friendListView);
 
+            TextView noFriends = (TextView) rootView.findViewById(R.id.noFriends);
             if (!pendingContacts.isEmpty()) {
-                TextView noFriends = (TextView) rootView.findViewById(R.id.noFriends);
                 noFriends.setVisibility(View.GONE);
+            } else {
+                noFriends.setVisibility(View.VISIBLE);
             }
 
             // Populate with current friends
@@ -201,19 +213,25 @@ public class Contacts extends ActionBarActivity {
         @Override
         public void onResume() {
             super.onResume();
-            pendingContacts.addAll(instance.getPendingContacts());
-            Log.e(TAG, instance.getPendingContacts().toString());
+            if (!instance.getPendingContacts().isEmpty()) {
+                pendingContacts.addAll(instance.getPendingContacts());
+            }
+            Log.e(TAG, "onResume: " + instance.getPendingContacts().toString());
             ListView contactListView = (ListView) getView().findViewById(R.id.friendListView);
 
+            TextView noFriends = (TextView) getView().findViewById(R.id.noFriends);
             if (!pendingContacts.isEmpty()) {
-                TextView noFriends = (TextView) getView().findViewById(R.id.noFriends);
                 noFriends.setVisibility(View.GONE);
+            } else {
+                noFriends.setVisibility(View.VISIBLE);
             }
 
             // Need to nullify existing adapter?
             final ListAdapter adapter = new FriendAdapter(getActivity(), R.id.contactListItem, pendingContacts);
             contactListView.setAdapter(adapter);
         }
+
+//        http://cyrilmottier.com/2011/06/20/listview-tips-tricks-1-handle-emptiness/
     }
 
     //

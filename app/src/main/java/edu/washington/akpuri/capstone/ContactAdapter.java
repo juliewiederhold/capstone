@@ -24,6 +24,9 @@ import java.util.ArrayList;
 /**
  * Created by Akash on 3/9/2015.
  * Used by Addfriends.java to import phone contacts into So-So
+ *
+ * BUGS:
+ *  - If on contacts list, if you check, uncheck and then quickly hit send request button, it’ll still add that person you unchecked!
  */
 public class ContactAdapter extends ArrayAdapter<Contact> {
 
@@ -32,6 +35,7 @@ public class ContactAdapter extends ArrayAdapter<Contact> {
     private final ArrayList<Contact> pendingList;   // temporarily store pending So-So friends
     private final SingletonContacts instance;
     private final static String TAG = "ContactAdapter";
+    private Boolean DNE = false;
 
     public ContactAdapter(Context context, int resource, ArrayList<Contact> contacts, ArrayList<Contact> pendingList) {
         super(context, resource, contacts);
@@ -48,8 +52,10 @@ public class ContactAdapter extends ArrayAdapter<Contact> {
         protected CheckBox checkbox;
     }
 
+    //http://stackoverflow.com/questions/14509552/uncheck-all-checbox-in-listview-in-android
     @Override
     public View getView(final int position, View convertView, ViewGroup parent) {
+
         View view = null;
         if (convertView == null) {
             LayoutInflater inflater = LayoutInflater.from(getContext());
@@ -60,6 +66,7 @@ public class ContactAdapter extends ArrayAdapter<Contact> {
             viewHolder.contactNumber = (TextView) view.findViewById(R.id.contactNumber);
             viewHolder.contactIcon = (ImageView) view.findViewById(R.id.appIcon);
             viewHolder.checkbox = (CheckBox) view.findViewById(R.id.appBlock);
+            // NEED TO UNCHECKKKKK HOW?
             viewHolder.checkbox
                     .setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
 
@@ -67,73 +74,60 @@ public class ContactAdapter extends ArrayAdapter<Contact> {
                         public void onCheckedChanged(CompoundButton buttonView,
                                                      boolean isChecked) {
 
+                            Log.e(TAG, isChecked + "");
                             final Contact person = (Contact) viewHolder.checkbox.getTag();
-                            Log.e(TAG, getPosition(person) + "");
-                            person.setSelected(buttonView.isChecked());
-                            if (person.isSelected()) {
-                                // Add to pending list
-//                                pendingList.add(person);
+                            if (isChecked) {
+                                Log.e(TAG, getPosition(person) + "");
+                                person.setSelected(buttonView.isChecked());
+                                if (person.isSelected()) {
+                                    // Add to pending list
+    //                                pendingList.add(person);
 
-                                ParseQuery<ParseObject> query = ParseQuery.getQuery("contact");
-                                query.whereEqualTo("user", ParseUser.getCurrentUser().getString("email"));
-                                query.whereEqualTo("phone", person.getPhone());
-                                query.getFirstInBackground(new GetCallback<ParseObject>() {
-                                    @Override
-                                    public void done(final ParseObject parseObject, ParseException e) {
-                                        if (parseObject != null) {
-                                            Log.e(TAG, "Contact exists");
-                                            // Shouldn't need 2 lines below if have a clean install
-                                            instance.getAllContacts().remove(person);
-                                            notifyDataSetChanged();
-                                            //
-                                        } else {
-                                            Log.e(TAG, "Contact DNE yet");
-                                            pendingList.add(person);
+                                    ParseQuery<ParseObject> query = ParseQuery.getQuery("contact");
+                                    query.whereEqualTo("user", ParseUser.getCurrentUser().getString("email"));
+                                    query.whereEqualTo("phone", person.getPhone());
+                                    query.getFirstInBackground(new GetCallback<ParseObject>() {
+                                        @Override
+                                        public void done(final ParseObject parseObject, ParseException e) {
+                                            if (parseObject != null) {
+                                                Log.e(TAG, "Contact exists");
+                                                // Shouldn't need 2 lines below if have a clean install
+                                                instance.getAllContacts().remove(person);
+                                                notifyDataSetChanged();
+                                                //
+                                            } else {
+                                                Log.e(TAG, "Contact DNE yet");
+                                                DNE = true;
 
-                                            instance.removeContact(person);
+                                                pendingList.add(person);
+                                                instance.removeContact(person);
 
-                                            ////// Create contact ParseObject here
-                                            final ParseObject contact = new ParseObject("contact");
-                                            contact.put("name", person.getName());
-                                            contact.put("phone", person.getPhone());
-                                            contact.put("user", ParseUser.getCurrentUser().getString("email")); // could probably save this in singleton
-                                            contact.put("id", person.getId());
-                                            contact.put("pending", true);   // pending So-So friend; should be false once accepted
-                                            contact.saveInBackground(new SaveCallback() {
-                                                @Override
-                                                public void done(ParseException e) {
-                                                    if (e != null) {
-                                                        Log.e(TAG, "Error saving contactsId: " + e);
-                                                    } else {
-                                                        instance.addCurrentContact(contact.getObjectId());
-                                                        instance.addPendingParse(contact);
-                                                        ParseUser.getCurrentUser().add("contacts", contact.getObjectId());
-                                                        ParseUser.getCurrentUser().saveInBackground();
-                                                    }
-                                                }
-                                            });
-                                            ////// End create ParseObject
-//                                            notifyDataSetChanged();
-//                                            instance.setCurrentcontacts(contact.getObjectId());
+                                                // CREATES CONTACT OBJECT RIGHT AWAY
+                                                // SHOULD WAIT TILL USER HITS SEND FRIEND REQUEST
+                                                // HOW: save each person into an arraylist
+                                                // Then pass that arraylist and foreach through it
+
+
+                                            }
                                         }
-                                    }
-                                });
+                                    });
+                                } else {
+                                    // Remove from pending list
+                                    Log.e(TAG, "remove " + person.getName());
+                                    pendingList.remove(person);
 
+                                }
                             } else {
-                                // Remove from pending list
+                                Log.e(TAG, "remove " + person.getName());
                                 pendingList.remove(person);
-
                             }
                             // Save pending friends into singleton
-//                            instance.setPendingContacts(pendingList);
+                            //                            instance.setPendingContacts(pendingList);
                             if (!pendingList.isEmpty()) {
-
                                 Log.e(TAG, instance.getAllContacts().toString());
-//                                instance.addPendingContact(person);
-//                                notifyDataSetChanged();
                                 instance.setPendingContacts(pendingList);
+                                //                                createParseObjects(pendingList);
                             }
-//                            notifyDataSetChanged();
                             Log.e(TAG, "instance pending contacts: " + instance.getPendingContacts().toString());
                         }
                     });
@@ -147,8 +141,41 @@ public class ContactAdapter extends ArrayAdapter<Contact> {
         holder.contactName.setText(list.get(position).getName());
         holder.contactNumber.setText(list.get(position).getPhone());
         // ImageView?
-        holder.checkbox.setChecked(list.get(position).isSelected());
+//        holder.checkbox.setChecked(list.get(position).isSelected());
+        holder.checkbox.setChecked(false);
+
         return view;
     }
+
+//    private void createParseObjects(ArrayList<Contact> pending){
+//
+//        for(int i=0; i < pending.size(); i++) {
+//            final Contact person = pending.get(i);
+//            ////// Create contact ParseObject here
+//            final ParseObject contact = new ParseObject("contact");
+//            contact.put("name", person.getName());
+//            contact.put("phone", person.getPhone());
+//            contact.put("user", ParseUser.getCurrentUser().getString("email")); // could probably save this in singleton
+//            contact.put("id", person.getId());
+//            Log.e(TAG, "contact id: " + person.getId());
+//            contact.put("pending", true);   // pending So-So friend; should be false once accepted
+//            contact.saveInBackground(new SaveCallback() {
+//                @Override
+//                public void done(ParseException e) {
+//                    if (e != null) {
+//                        Log.e(TAG, "Error saving contactsId: " + e);
+//                    } else {
+//                        instance.addCurrentContact(contact.getObjectId());
+//                        instance.addPendingParse(contact);
+//                        person.setObjectId(contact.getObjectId());
+//                        Log.e(TAG, person.getObjectId());
+//                        ParseUser.getCurrentUser().add("contacts", contact.getObjectId());
+//                        ParseUser.getCurrentUser().saveInBackground();
+//                    }
+//                }
+//            });
+//            ////// End create ParseObject
+//        }
+//    }
 
 }

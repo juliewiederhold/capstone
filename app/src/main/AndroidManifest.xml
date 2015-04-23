@@ -159,6 +159,14 @@
             android:name=".NightOutSafetyZones"
             android:label="@string/title_activity_night_out_safety_zones" >
         </activity>
+        <activity
+            android:name=".NightOutQuickTexts"
+            android:label="@string/title_activity_night_out_quick_texts" >
+        </activity>
+        <activity
+            android:name=".NightOutAppNumberBlocking"
+            android:label="@string/title_activity_night_out_app_number_blocking" >
+        </activity>
     </application>
 
 </manifest>

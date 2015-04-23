@@ -45,8 +45,6 @@ public class AppBlockingAdapter extends ArrayAdapter<App> {
 
             String name = viewHolder.appName.toString();
 
-
-
             viewHolder.checkbox = (CheckBox) view.findViewById(R.id.appBlock);
             viewHolder.checkbox
                     .setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {

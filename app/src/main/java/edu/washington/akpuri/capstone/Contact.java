@@ -15,12 +15,14 @@ public class Contact {
     private boolean isPending;
     private boolean selected;
     private boolean hasBeenAdded;
+    private String objectId;
 
 
     public Contact(String name, String phone, int id) {
         this.name = name;
         this.phone = phone;
         this.id = id;
+        this.objectId = "";  // for now; updated after adding to parse?
         this.hasSoSo = false;
         this.selected = false;
         this.hasBeenAdded = false;
@@ -66,6 +68,14 @@ public class Contact {
 
     public boolean isPending(){
         return isPending;
+    }
+
+    public String getObjectId() {
+        return objectId;
+    }
+
+    public void setObjectId(String objectId) {
+        this.objectId = objectId;
     }
 
 }
