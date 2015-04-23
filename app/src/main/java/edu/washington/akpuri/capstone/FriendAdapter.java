@@ -55,6 +55,7 @@ public class FriendAdapter extends ArrayAdapter<Contact> {
         protected ImageView contactIcon;
     }
 
+
     @Override
     public View getView(final int position, final View convertView, ViewGroup parent) {
 //        Log.d(TAG, "position=" + position);
@@ -87,13 +88,14 @@ public class FriendAdapter extends ArrayAdapter<Contact> {
                                 @Override
                                 public void onClick(DialogInterface dialog, int which) {
                                     // Remove Contact from list & update list
+                                    Log.e(TAG, " BEFORE Pending Friends " + instance.getPendingFriends().toString());
                                     instance.getPendingFriends().remove(data);
+                                    // Add deleted So-So friend back to Contacts list
                                     instance.getAllContacts().add(data);
+                                    Log.e(TAG, " AFTER Pending Friends " + instance.getPendingFriends().toString());
 
-                                    Log.e("FriendAdapter", instance.getPendingFriends().toString());
-                                    remove(getItem(position));
+                                    remove(getItem(position));  // Remove from list
                                     notifyDataSetChanged();
-
 
                                     // Remove from Parse
                                     final String user = ParseUser.getCurrentUser().getString("email");
@@ -101,8 +103,9 @@ public class FriendAdapter extends ArrayAdapter<Contact> {
                                     query.whereEqualTo("user", user);
                                     query.getFirstInBackground(new GetCallback<ParseObject>() {
                                         @Override
-                                        public void done(final ParseObject parseObject, ParseException e) {
-                                            if (parseObject != null) {
+                                        public void done(final ParseObject parseObject1, ParseException e) {
+                                            if (parseObject1 != null) {
+                                                // get contact object
                                                 ParseQuery<ParseObject> query = ParseQuery.getQuery("contact");
                                                 query.whereEqualTo("user", user);
                                                 query.whereEqualTo("phone", data.getPhone());
@@ -113,7 +116,8 @@ public class FriendAdapter extends ArrayAdapter<Contact> {
                                                             Log.e(TAG, "Contact exists. Delete!");
 
                                                             String objectId = parseObject.getObjectId();
-
+                                                            Log.e(TAG, "from parse: " + objectId);
+                                                            Log.e(TAG, "from data obj: " + data.getObjectId());
 
                                                             for(int i=0; i < instance.getCurrentContacts().size(); i++) {
                                                                 String currentId = instance.getCurrentContacts().get(i);
@@ -125,53 +129,45 @@ public class FriendAdapter extends ArrayAdapter<Contact> {
                                                             instance.setCurrentContacts(newCurrentContacts);
                                                             newCurrentContacts = null;
 
+                                                            Log.e(TAG, "current contacts" + instance.getCurrentContacts());
                                                             // Delete from user's contact list
-
-                                                            Log.e(TAG, ParseUser.getCurrentUser().get("contacts").getClass().toString());
-
-                                                            /// CONTINUE: NEED TO DELETE FROM PARSE!!!
-//                                                            ParseUser.getCurrentUser().remove("contacts");
-                                                            // Need updated list of contact objectIds as an ArrayList<String>
-//                                                            ParseUser.getCurrentUser().put("contacts", instance.getPendingFriends().toString());
-                                                            Log.e(TAG, ParseUser.getCurrentUser().get("contacts").toString());
+                                                            // Part 1: Delete from current user's contacts[]
                                                             ParseUser.getCurrentUser().put("contacts", instance.getCurrentContacts());
-
-                                                            // Delete contact object
-                                                            parseObject.deleteInBackground();
-
-//                                                            List<String> list = new ArrayList<String>(Arrays.asList(array));
-//                                                            list.removeAll(Arrays.asList(data.getId()));
-//                                                            String[] contacts = new String[list.size()];
-//                                                            list.toArray(contacts);
-//                                                                ParseUser.getCurrentUser().get("contacts")[position]
-//                                                            ParseUser.getCurrentUser().put("contacts", array);
                                                             ParseUser.getCurrentUser().saveInBackground(new SaveCallback() {
                                                                 @Override
                                                                 public void done(ParseException e) {
                                                                     Log.e(TAG, "Saved contacts[]");
                                                                 }
                                                             });
+                                                            // Part 2: Delete from current user's ContactsObject[]
+                                                            parseObject1.put("contacts", instance.getCurrentContacts());
+                                                            parseObject1.saveInBackground(new SaveCallback() {
+                                                                @Override
+                                                                public void done(ParseException e) {
+                                                                    Log.e(TAG, "Saved ContactsObject[]");
+                                                                }
+                                                            });
+
+                                                            // Delete contact object
+                                                            parseObject.deleteInBackground();
+
+                                                            notifyDataSetChanged();
                                                         } else {
                                                             Log.e(TAG, "Contact DNE yet. Can't delete");
 
                                                         }
-                                                        // Update ContactsObject[]
-                                                        parseObject.put("contacts", instance.getCurrentContacts());
-                                                        parseObject.saveInBackground(new SaveCallback() {
-                                                            @Override
-                                                            public void done(ParseException e) {
-                                                                Log.e(TAG, "ContactsObject: " + parseObject.get("contacts").toString());
-                                                                instance.getPendingContacts().clear();
-                                                            }
-                                                        });
+                                                        // Where Part II used to be
                                                     }
                                                 });
+                                                // end get contact object
+
                                             } else {
                                                 // Something went wrong
                                                 Log.e("Contacts", "Failed to retrieve contactsObject: " + e);
                                             }
                                         }
                                     });
+                                    // End remove from Parse
                                     Toast mes = Toast.makeText(context, "Friend Requests Sent", Toast.LENGTH_LONG);
                                     mes.show();
                                 }
@@ -191,6 +187,7 @@ public class FriendAdapter extends ArrayAdapter<Contact> {
             holder.contactName.setText(holder.contactName.getText() + " Pending");
         }
         holder.contactNumber.setText(data.getPhone());
+        Log.e("height", getCount()+ "");
         return view;
     }
 }
