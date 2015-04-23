@@ -53,6 +53,8 @@ public class AddFriends extends ActionBarActivity {
 
         if (!instance.hasImported()) {
 
+            Log.e(TAG, "hasImported: " + instance.hasImported() + "");
+
             //ContentResolver is used to query the contacts database to return a cursor
             ContentResolver contentResolver = getContentResolver();
             //The cursor is like an iterator, it contains the entirety of the contacts when we pass it null paramaters

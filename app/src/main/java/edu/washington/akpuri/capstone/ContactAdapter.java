@@ -67,7 +67,6 @@ public class ContactAdapter extends ArrayAdapter<Contact> {
             viewHolder.contactIcon = (ImageView) view.findViewById(R.id.appIcon);
             viewHolder.checkbox = (CheckBox) view.findViewById(R.id.appBlock);
             // NEED TO UNCHECKKKKK HOW?
-            viewHolder.checkbox.setChecked(false);
             viewHolder.checkbox
                     .setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
 
@@ -75,8 +74,9 @@ public class ContactAdapter extends ArrayAdapter<Contact> {
                         public void onCheckedChanged(CompoundButton buttonView,
                                                      boolean isChecked) {
 
+                            Log.e(TAG, isChecked + "");
+                            final Contact person = (Contact) viewHolder.checkbox.getTag();
                             if (isChecked) {
-                                final Contact person = (Contact) viewHolder.checkbox.getTag();
                                 Log.e(TAG, getPosition(person) + "");
                                 person.setSelected(buttonView.isChecked());
                                 if (person.isSelected()) {
@@ -113,19 +113,22 @@ public class ContactAdapter extends ArrayAdapter<Contact> {
                                     });
                                 } else {
                                     // Remove from pending list
+                                    Log.e(TAG, "remove " + person.getName());
                                     pendingList.remove(person);
 
                                 }
-
-                                // Save pending friends into singleton
-    //                            instance.setPendingContacts(pendingList);
-                                if (!pendingList.isEmpty()) {
-                                    Log.e(TAG, instance.getAllContacts().toString());
-                                    instance.setPendingContacts(pendingList);
-    //                                createParseObjects(pendingList);
-                                }
-                                Log.e(TAG, "instance pending contacts: " + instance.getPendingContacts().toString());
+                            } else {
+                                Log.e(TAG, "remove " + person.getName());
+                                pendingList.remove(person);
                             }
+                            // Save pending friends into singleton
+                            //                            instance.setPendingContacts(pendingList);
+                            if (!pendingList.isEmpty()) {
+                                Log.e(TAG, instance.getAllContacts().toString());
+                                instance.setPendingContacts(pendingList);
+                                //                                createParseObjects(pendingList);
+                            }
+                            Log.e(TAG, "instance pending contacts: " + instance.getPendingContacts().toString());
                         }
                     });
             view.setTag(viewHolder);
@@ -138,7 +141,9 @@ public class ContactAdapter extends ArrayAdapter<Contact> {
         holder.contactName.setText(list.get(position).getName());
         holder.contactNumber.setText(list.get(position).getPhone());
         // ImageView?
-        holder.checkbox.setChecked(list.get(position).isSelected());
+//        holder.checkbox.setChecked(list.get(position).isSelected());
+        holder.checkbox.setChecked(false);
+
         return view;
     }
 

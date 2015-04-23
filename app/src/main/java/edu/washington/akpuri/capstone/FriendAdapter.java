@@ -55,6 +55,7 @@ public class FriendAdapter extends ArrayAdapter<Contact> {
         protected ImageView contactIcon;
     }
 
+
     @Override
     public View getView(final int position, final View convertView, ViewGroup parent) {
 //        Log.d(TAG, "position=" + position);
@@ -186,6 +187,7 @@ public class FriendAdapter extends ArrayAdapter<Contact> {
             holder.contactName.setText(holder.contactName.getText() + " Pending");
         }
         holder.contactNumber.setText(data.getPhone());
+        Log.e("height", getCount()+ "");
         return view;
     }
 }
