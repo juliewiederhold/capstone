@@ -63,7 +63,7 @@ public class NightOutAppNumberBlocking extends ActionBarActivity {
                     dialog.show();
                 }
                 if (userInstance.getAllowContactRetrieval()) {
-                    Intent addFriends = new Intent(NightOutAppNumberBlocking.this, BlockContacts.class);
+                    Intent addFriends = new Intent(NightOutAppNumberBlocking.this, NightOutBlockContacts.class);
                     startActivity(addFriends);
                 }
             }
@@ -74,7 +74,7 @@ public class NightOutAppNumberBlocking extends ActionBarActivity {
             @Override
             public void onClick(View v) {
                 if(nightOutBlockedAppsNumInstance.getNightOutBlockedContacts() != null && nightOutBlockedAppsNumInstance.getNightOutBlockedContacts().size() > 0){
-                    Intent editBlockedFriends = new Intent(NightOutAppNumberBlocking.this, EditBlockedContactsList.class);
+                    Intent editBlockedFriends = new Intent(NightOutAppNumberBlocking.this, NightOutEditBlockedContactsList.class);
                     startActivity(editBlockedFriends);
                 }
             }
@@ -105,7 +105,7 @@ public class NightOutAppNumberBlocking extends ActionBarActivity {
             appInstance.addAppToAllApps(new App("Twitter"));
         }
 
-        adapter = new AppBlockingAdapter(this, R.layout.app_block_item, appInstance.getAllApps(), nightOutBlockedAppsNumInstance.getNightOutBlockedApps());
+        adapter = new AppBlockingAdapter(this, R.layout.app_block_item, nightOutBlockedAppsNumInstance.getNightOutBlockedApps(), "NightOut");
         ListView view = (ListView) findViewById(R.id.appContainer);
         view.setAdapter(adapter);
 

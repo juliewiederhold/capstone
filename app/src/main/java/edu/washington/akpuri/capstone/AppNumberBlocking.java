@@ -118,7 +118,7 @@ public class AppNumberBlocking extends ActionBarActivity {
             appInstance.addAppToAllApps(new App("Twitter"));
         }
 
-        adapter = new AppBlockingAdapter(this, R.layout.app_block_item, appInstance.getAllApps(), appInstance.getBlockedApps());
+        adapter = new AppBlockingAdapter(this, R.layout.app_block_item, appInstance.getAllApps(), "EditDefault");
         ListView view = (ListView) findViewById(R.id.appContainer);
         view.setAdapter(adapter);
 

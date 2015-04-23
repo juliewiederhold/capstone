@@ -124,6 +124,18 @@
             android:name=".StartNightOutSettingConfirmation"
             android:label="@string/title_activity_start_night_out" >
         </activity>
+        <activity
+            android:name=".NightOutSafetyZones"
+            android:label="@string/title_activity_night_out_safety_zones" >
+        </activity>
+        <activity
+            android:name=".NightOutQuickTexts"
+            android:label="@string/title_activity_night_out_quick_texts" >
+        </activity>
+        <activity
+            android:name=".NightOutAppNumberBlocking"
+            android:label="@string/title_activity_night_out_app_number_blocking" >
+        </activity>
 
         <!-- For push notifications -->
         <service android:name="com.parse.PushService" />
@@ -156,16 +168,12 @@
         </receiver>
 
         <activity
-            android:name=".NightOutSafetyZones"
-            android:label="@string/title_activity_night_out_safety_zones" >
+            android:name=".NightOutEditBlockedContactsList"
+            android:label="@string/title_activity_night_out_edit_blocked_contacts_list" >
         </activity>
         <activity
-            android:name=".NightOutQuickTexts"
-            android:label="@string/title_activity_night_out_quick_texts" >
-        </activity>
-        <activity
-            android:name=".NightOutAppNumberBlocking"
-            android:label="@string/title_activity_night_out_app_number_blocking" >
+            android:name=".NightOutBlockContacts"
+            android:label="@string/title_activity_night_out_block_contacts" >
         </activity>
     </application>
 
