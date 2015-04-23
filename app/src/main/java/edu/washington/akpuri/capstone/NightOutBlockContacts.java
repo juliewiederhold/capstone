@@ -32,7 +32,7 @@ public class NightOutBlockContacts extends ActionBarActivity {
         header.setText("NIGHT OUT");
 
         ArrayList<Contact> allContacts = new ArrayList<Contact>();
-        pContacts = new ArrayList<String>();
+        pContacts = new ArrayList<>();
         SingletonNightOutSettings instance = SingletonNightOutSettings.getInstance();
 
         //ContentResolver is used to query the contacts database to return a cursor
@@ -80,7 +80,7 @@ public class NightOutBlockContacts extends ActionBarActivity {
             if(instance.getNightOutBlockedContacts() == null)
                 instance.setNightOutBlockedContacts(new ArrayList<Contact>());
             ListView contactListView = (ListView) findViewById(R.id.addFriendsList);
-            ListAdapter adapter = new BlockContactAdapter(this, R.id.contactListItem, allContacts, instance.getNightOutBlockedContacts());
+            ListAdapter adapter = new NightOutBlockContactAdapter(this, R.id.contactListItem, allContacts, instance.getNightOutBlockedContacts());
             contactListView.setAdapter(adapter);
         }
 

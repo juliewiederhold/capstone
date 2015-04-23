@@ -30,7 +30,7 @@ public class NightOutEditBlockedContactsList extends ActionBarActivity {
         if (instance.getNightOutBlockedContacts() == null)
             instance.setNightOutBlockedContacts(new ArrayList<Contact>());
         ListView contactListView = (ListView) findViewById(R.id.addFriendsList);
-        ListAdapter adapter = new EditBlockedContactListAdapter(this, R.id.contactListItem, instance.getNightOutBlockedContacts());
+        ListAdapter adapter = new NightOutEditBlockedContactListAdapter(this, R.id.contactListItem, instance.getNightOutBlockedContacts());
         contactListView.setAdapter(adapter);
 
         Button sendRequest = (Button) findViewById(R.id.sendFriendRequest);

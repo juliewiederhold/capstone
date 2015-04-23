@@ -49,7 +49,7 @@ public class NightOutAppNumberBlocking extends ActionBarActivity {
                     builder.setPositiveButton("Allow", new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int id) {
                             userInstance.setAllowContactRetrieval(true);
-                            Intent addFriends = new Intent(NightOutAppNumberBlocking.this, BlockContacts.class);
+                            Intent addFriends = new Intent(NightOutAppNumberBlocking.this, NightOutBlockContacts.class);
                             startActivity(addFriends);
                         }
                     });
