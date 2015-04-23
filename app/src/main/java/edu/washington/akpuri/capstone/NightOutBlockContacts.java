@@ -29,7 +29,7 @@ public class NightOutBlockContacts extends ActionBarActivity {
         setContentView(R.layout.activity_add_friends);
 
         TextView header = (TextView) findViewById(R.id.contactListHeader);
-        header.setText("Block Contacts");
+        header.setText("NIGHT OUT");
 
         ArrayList<Contact> allContacts = new ArrayList<Contact>();
         pContacts = new ArrayList<String>();
@@ -90,7 +90,7 @@ public class NightOutBlockContacts extends ActionBarActivity {
         sendRequest.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent backToBlocking = new Intent(NightOutBlockContacts.this, AppNumberBlocking.class);
+                Intent backToBlocking = new Intent(NightOutBlockContacts.this, NightOutAppNumberBlocking.class);
                 startActivity(backToBlocking);
             }
         });
