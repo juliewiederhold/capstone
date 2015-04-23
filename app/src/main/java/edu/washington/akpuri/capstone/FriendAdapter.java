@@ -89,6 +89,7 @@ public class FriendAdapter extends ArrayAdapter<Contact> {
                                     // Remove Contact from list & update list
                                     Log.e(TAG, " BEFORE Pending Friends " + instance.getPendingFriends().toString());
                                     instance.getPendingFriends().remove(data);
+                                    // Add deleted So-So friend back to Contacts list
                                     instance.getAllContacts().add(data);
                                     Log.e(TAG, " AFTER Pending Friends " + instance.getPendingFriends().toString());
 
@@ -101,8 +102,8 @@ public class FriendAdapter extends ArrayAdapter<Contact> {
                                     query.whereEqualTo("user", user);
                                     query.getFirstInBackground(new GetCallback<ParseObject>() {
                                         @Override
-                                        public void done(final ParseObject parseObject, ParseException e) {
-                                            if (parseObject != null) {
+                                        public void done(final ParseObject parseObject1, ParseException e) {
+                                            if (parseObject1 != null) {
                                                 // get contact object
                                                 ParseQuery<ParseObject> query = ParseQuery.getQuery("contact");
                                                 query.whereEqualTo("user", user);
@@ -127,10 +128,29 @@ public class FriendAdapter extends ArrayAdapter<Contact> {
                                                             instance.setCurrentContacts(newCurrentContacts);
                                                             newCurrentContacts = null;
 
+                                                            Log.e(TAG, "current contacts" + instance.getCurrentContacts());
+                                                            // Delete from user's contact list
+                                                            // Part 1: Delete from current user's contacts[]
+                                                            ParseUser.getCurrentUser().put("contacts", instance.getCurrentContacts());
+                                                            ParseUser.getCurrentUser().saveInBackground(new SaveCallback() {
+                                                                @Override
+                                                                public void done(ParseException e) {
+                                                                    Log.e(TAG, "Saved contacts[]");
+                                                                }
+                                                            });
+                                                            // Part 2: Delete from current user's ContactsObject[]
+                                                            parseObject1.put("contacts", instance.getCurrentContacts());
+                                                            parseObject1.saveInBackground(new SaveCallback() {
+                                                                @Override
+                                                                public void done(ParseException e) {
+                                                                    Log.e(TAG, "Saved ContactsObject[]");
+                                                                }
+                                                            });
+
                                                             // Delete contact object
                                                             parseObject.deleteInBackground();
 
-                                                            // Where Part I used to be
+                                                            notifyDataSetChanged();
                                                         } else {
                                                             Log.e(TAG, "Contact DNE yet. Can't delete");
 
@@ -140,23 +160,6 @@ public class FriendAdapter extends ArrayAdapter<Contact> {
                                                 });
                                                 // end get contact object
 
-                                                // Delete from user's contact list
-                                                // Part 1: Delete from current user's contacts[]
-                                                ParseUser.getCurrentUser().put("contacts", instance.getCurrentContacts());
-                                                ParseUser.getCurrentUser().saveInBackground(new SaveCallback() {
-                                                    @Override
-                                                    public void done(ParseException e) {
-                                                        Log.e(TAG, "Saved contacts[]");
-                                                    }
-                                                });
-                                                // Part 2: Delete from current user's ContactsObject[]
-                                                parseObject.put("contacts", instance.getCurrentContacts());
-                                                parseObject.saveInBackground(new SaveCallback() {
-                                                    @Override
-                                                    public void done(ParseException e) {
-                                                        Log.e(TAG, "Saved ContactsObject[]");
-                                                    }
-                                                });
                                             } else {
                                                 // Something went wrong
                                                 Log.e("Contacts", "Failed to retrieve contactsObject: " + e);

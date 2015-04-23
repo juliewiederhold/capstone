@@ -151,46 +151,50 @@ public class AddFriends extends ActionBarActivity {
                         Log.e(TAG, person.getObjectId());
                         ParseUser.getCurrentUser().add("contacts", contact.getObjectId());
                         ParseUser.getCurrentUser().saveInBackground();
+
+                        /// WORKING
+                        // ideas, maybe I can save each time a person is created??? but is that a good idea??
+
+                        // Get ContactsObject for current user
+                        // ContactsObject has contacts[] array containing objectId of user's current and pending friends
+
+                        ParseQuery<ParseObject> query = ParseQuery.getQuery("ContactsObject");
+                        query.whereEqualTo("user", user);
+                        query.getFirstInBackground(new GetCallback<ParseObject>() {
+                            @Override
+                            public void done(final ParseObject parseObject, ParseException e) {
+                                if (parseObject != null) {
+                                    // User exists and has a ContactsObject
+
+                                    Log.e(TAG, "Current contacts[]: " + ParseUser.getCurrentUser().get("contacts").toString());
+//                                    parseObject.addAllUnique("contacts", instance.getCurrentContacts());
+                                    parseObject.add("contacts", contact.getObjectId());
+                                    parseObject.saveInBackground(new SaveCallback() {
+                                        @Override
+                                        public void done(ParseException e) {
+
+                                            // TO-DO: Remove contacts who have been added from the Contacts List
+                                            // Set pendingContacts and pendingParseContacts to empty
+                                            Log.e(TAG, "ContactsObject: " + parseObject.get("contacts").toString());
+//                                            instance.getPendingContacts().clear();
+//                                            pendingParseContacts.clear();
+                                        }
+                                    });
+                                } else {
+                                    // Something went wrong
+                                    Log.e("Contacts", "Failed to retrieve contactsObject: " + e);
+                                }
+                            }
+                        });
                     }
+                    instance.getPendingContacts().clear();
                 }
             });
             ////// End create ParseObject
 
         }
 
-        /// WORKING
-        // ideas, maybe I can save each time a person is created??? but is that a good idea??
 
-        // Get ContactsObject for current user
-        // ContactsObject has contacts[] array containing objectId of user's current and pending friends
-
-        ParseQuery<ParseObject> query = ParseQuery.getQuery("ContactsObject");
-        query.whereEqualTo("user", user);
-        query.getFirstInBackground(new GetCallback<ParseObject>() {
-            @Override
-            public void done(final ParseObject parseObject, ParseException e) {
-                if (parseObject != null) {
-                    // User exists and has a ContactsObject
-
-                    Log.e(TAG, "Current contacts[]: " + ParseUser.getCurrentUser().get("contacts").toString());
-                    parseObject.addAllUnique("contacts", instance.getCurrentContacts());
-                    parseObject.saveInBackground(new SaveCallback() {
-                        @Override
-                        public void done(ParseException e) {
-
-                            // TO-DO: Remove contacts who have been added from the Contacts List
-                            // Set pendingContacts and pendingParseContacts to empty
-                            Log.e(TAG, "ContactsObject: " + parseObject.get("contacts").toString());
-                            instance.getPendingContacts().clear();
-                            pendingParseContacts.clear();
-                        }
-                    });
-                } else {
-                    // Something went wrong
-                    Log.e("Contacts", "Failed to retrieve contactsObject: " + e);
-                }
-            }
-        });
     }
 
     @Override

@@ -52,6 +52,7 @@ public class ContactAdapter extends ArrayAdapter<Contact> {
         protected CheckBox checkbox;
     }
 
+    //http://stackoverflow.com/questions/14509552/uncheck-all-checbox-in-listview-in-android
     @Override
     public View getView(final int position, View convertView, ViewGroup parent) {
 
@@ -65,61 +66,66 @@ public class ContactAdapter extends ArrayAdapter<Contact> {
             viewHolder.contactNumber = (TextView) view.findViewById(R.id.contactNumber);
             viewHolder.contactIcon = (ImageView) view.findViewById(R.id.appIcon);
             viewHolder.checkbox = (CheckBox) view.findViewById(R.id.appBlock);
+            // NEED TO UNCHECKKKKK HOW?
+            viewHolder.checkbox.setChecked(false);
             viewHolder.checkbox
                     .setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
 
                         @Override
                         public void onCheckedChanged(CompoundButton buttonView,
                                                      boolean isChecked) {
-                            final Contact person = (Contact) viewHolder.checkbox.getTag();
-                            Log.e(TAG, getPosition(person) + "");
-                            person.setSelected(buttonView.isChecked());
-                            if (person.isSelected()) {
-                                // Add to pending list
-//                                pendingList.add(person);
 
-                                ParseQuery<ParseObject> query = ParseQuery.getQuery("contact");
-                                query.whereEqualTo("user", ParseUser.getCurrentUser().getString("email"));
-                                query.whereEqualTo("phone", person.getPhone());
-                                query.getFirstInBackground(new GetCallback<ParseObject>() {
-                                    @Override
-                                    public void done(final ParseObject parseObject, ParseException e) {
-                                        if (parseObject != null) {
-                                            Log.e(TAG, "Contact exists");
-                                            // Shouldn't need 2 lines below if have a clean install
-                                            instance.getAllContacts().remove(person);
-                                            notifyDataSetChanged();
-                                            //
-                                        } else {
-                                            Log.e(TAG, "Contact DNE yet");
-                                            DNE = true;
+                            if (isChecked) {
+                                final Contact person = (Contact) viewHolder.checkbox.getTag();
+                                Log.e(TAG, getPosition(person) + "");
+                                person.setSelected(buttonView.isChecked());
+                                if (person.isSelected()) {
+                                    // Add to pending list
+    //                                pendingList.add(person);
 
-                                            pendingList.add(person);
-                                            instance.removeContact(person);
+                                    ParseQuery<ParseObject> query = ParseQuery.getQuery("contact");
+                                    query.whereEqualTo("user", ParseUser.getCurrentUser().getString("email"));
+                                    query.whereEqualTo("phone", person.getPhone());
+                                    query.getFirstInBackground(new GetCallback<ParseObject>() {
+                                        @Override
+                                        public void done(final ParseObject parseObject, ParseException e) {
+                                            if (parseObject != null) {
+                                                Log.e(TAG, "Contact exists");
+                                                // Shouldn't need 2 lines below if have a clean install
+                                                instance.getAllContacts().remove(person);
+                                                notifyDataSetChanged();
+                                                //
+                                            } else {
+                                                Log.e(TAG, "Contact DNE yet");
+                                                DNE = true;
 
-                                            // CREATES CONTACT OBJECT RIGHT AWAY
-                                            // SHOULD WAIT TILL USER HITS SEND FRIEND REQUEST
-                                            // HOW: save each person into an arraylist
-                                            // Then pass that arraylist and foreach through it
+                                                pendingList.add(person);
+                                                instance.removeContact(person);
+
+                                                // CREATES CONTACT OBJECT RIGHT AWAY
+                                                // SHOULD WAIT TILL USER HITS SEND FRIEND REQUEST
+                                                // HOW: save each person into an arraylist
+                                                // Then pass that arraylist and foreach through it
 
 
+                                            }
                                         }
-                                    }
-                                });
-                            } else {
-                                // Remove from pending list
-                                pendingList.remove(person);
+                                    });
+                                } else {
+                                    // Remove from pending list
+                                    pendingList.remove(person);
 
-                            }
+                                }
 
-                            // Save pending friends into singleton
-//                            instance.setPendingContacts(pendingList);
-                            if (!pendingList.isEmpty()) {
-                                Log.e(TAG, instance.getAllContacts().toString());
-                                instance.setPendingContacts(pendingList);
-//                                createParseObjects(pendingList);
+                                // Save pending friends into singleton
+    //                            instance.setPendingContacts(pendingList);
+                                if (!pendingList.isEmpty()) {
+                                    Log.e(TAG, instance.getAllContacts().toString());
+                                    instance.setPendingContacts(pendingList);
+    //                                createParseObjects(pendingList);
+                                }
+                                Log.e(TAG, "instance pending contacts: " + instance.getPendingContacts().toString());
                             }
-                            Log.e(TAG, "instance pending contacts: " + instance.getPendingContacts().toString());
                         }
                     });
             view.setTag(viewHolder);
