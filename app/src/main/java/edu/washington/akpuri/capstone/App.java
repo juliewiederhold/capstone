@@ -14,6 +14,11 @@ public class App {
         this.isBlocked = false;
     }
 
+    public App(String name, boolean isBlocked){
+        this.name = name;
+        this.isBlocked = isBlocked;
+    }
+
     public String getName() {
         return name;
     }

@@ -35,6 +35,8 @@ public class SingletonNightOutSettings {
             nightOutSafetyZones = new ArrayList<>();
             nightOutBlockedApps = new ArrayList<>();
             nightOutBlockedContacts = new ArrayList<>();
+
+             initializeBlockedApps();
         }
 
         ArrayList<SafetyZone> tempSafetyZones = userInstance.getExistingSafetyZones();
@@ -49,11 +51,7 @@ public class SingletonNightOutSettings {
                 nightOutQuickTexts.add(tempQuickTexts.get(n));
         }
 
-        ArrayList<App> tempApp = appBlockingInstance.getBlockedApps();
-        for(int a = 0; a < tempApp.size(); a++){
-            if(!nightOutBlockedApps.contains(tempApp.get(a)))
-                nightOutBlockedApps.add(tempApp.get(a));
-        }
+        initializeBlockedApps();
 
         ArrayList<Contact> tempContact = contactsInstance.getBlockedContacts();
         for(int x = 0; x < tempContact.size(); x++){
@@ -63,23 +61,33 @@ public class SingletonNightOutSettings {
         return instance;
     }
 
+    private static void initializeBlockedApps(){
+        ArrayList<App> tempApp = appBlockingInstance.getAllApps();
+        for(int a = 0; a < tempApp.size(); a++){
+            if(!nightOutBlockedApps.contains(tempApp.get(a))){
+                App temp = tempApp.get(a);
+                App copy = new App(temp.getName(), temp.isBlocked());
+                nightOutBlockedApps.add(copy);
+            }
+        }
+    }
+
     public SingletonNightOutSettings restartInstance(){
         this.nightOutSafetyZones = new ArrayList<>();
         this.nightOutQuickTexts = new ArrayList<>();
-        this.nightOutBlockedApps = new ArrayList<>();
         this.nightOutBlockedContacts = new ArrayList<>();
         return instance;
     }
 
     public ArrayList<SafetyZone> getNightOutSafetyZones(){return this.nightOutSafetyZones;}
 
-    public void setNightOutSafetyZones(ArrayList<SafetyZone> safetyZones){this.nightOutSafetyZones = safetyZones;}
-
     public ArrayList<String> getNightOutQuickTexts(){return this.nightOutQuickTexts;}
 
     public ArrayList<App> getNightOutBlockedApps(){return this.nightOutBlockedApps;}
 
     public ArrayList<Contact> getNightOutBlockedContacts(){return  this.nightOutBlockedContacts;}
+
+    public void setNightOutBlockedContacts(ArrayList<Contact> list){ this.nightOutBlockedContacts = list;}
 
 
 }

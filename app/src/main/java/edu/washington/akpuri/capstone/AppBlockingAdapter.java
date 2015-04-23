@@ -16,15 +16,15 @@ import java.util.ArrayList;
  * Created by Julie on 4/2/15.
  */
 public class AppBlockingAdapter extends ArrayAdapter<App> {
-    private final Context context;
     private final SingletonAppBlocking appInstance;
-    ArrayList<App> allApps;
+    private ArrayList<App> allApps;
+    private String isNightOutInstance;
 
-    public AppBlockingAdapter(Context context, int resource, ArrayList<App> apps, ArrayList<App> blockedApps) {
+    public AppBlockingAdapter(Context context, int resource, ArrayList<App> apps, String isNightOutInstance) {
         super(context, resource, apps);
-        this.context = context;
         this.appInstance = SingletonAppBlocking.getInstance();
         this.allApps = apps;
+        this.isNightOutInstance = isNightOutInstance;
     }
 
     static class ViewHolder {
@@ -43,8 +43,6 @@ public class AppBlockingAdapter extends ArrayAdapter<App> {
             viewHolder.appName = (TextView) view.findViewById(R.id.appName);
             viewHolder.appIcon = (ImageView) view.findViewById(R.id.appIcon);
 
-            String name = viewHolder.appName.toString();
-
             viewHolder.checkbox = (CheckBox) view.findViewById(R.id.appBlock);
             viewHolder.checkbox
                     .setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
@@ -59,6 +57,10 @@ public class AppBlockingAdapter extends ArrayAdapter<App> {
                                 for(int i = 0; i < appInstance.getAllApps().size(); i++){
                                     if(app.getName().equals(appInstance.getAllApps().get(i).getName())){
                                         allApps.get(i).setIsBlocked(true);
+                                     /*   if(isNightOutInstance.equals("NightOut"))
+                                            allApps.get(i).setIsNightOutOnly(true);
+                                        else
+                                            allApps.get(i).setIsNightOutOnly(false);*/
                                     }
                                 }
                             } else {
@@ -66,6 +68,11 @@ public class AppBlockingAdapter extends ArrayAdapter<App> {
                                 for(int i = 0; i < appInstance.getAllApps().size(); i++){
                                     if(app.getName().equals(appInstance.getAllApps().get(i).getName())){
                                         allApps.get(i).setIsBlocked(false);
+
+                                   /*     if(isNightOutInstance.equals("NightOut"))
+                                            allApps.get(i).setIsNightOutOnly(true);
+                                        else
+                                            allApps.get(i).setIsNightOutOnly(false);*/
                                     }
                                 }
                             }
@@ -91,6 +98,16 @@ public class AppBlockingAdapter extends ArrayAdapter<App> {
         }
 
         holder.checkbox.setChecked(allApps.get(position).isBlocked());
+
+      /*  if(isNightOutInstance.equals("NightOut")){
+            holder.checkbox.setChecked(allApps.get(position).isBlocked()); // If it is a night out instance, set any checkbox since all are wanted to be shown
+        } else {
+            if(!allApps.get(position).getIsNightOutOnly()){         // If it is an edit default settings instance AND is NOT a Night out only setting, show as is
+                holder.checkbox.setChecked(allApps.get(position).isBlocked());
+            } else {                                            // If it is an edit default settings instance AND IS a night out only setting, show it as false
+                holder.checkbox.setChecked(false);
+            }
+        }*/
 
         // ImageView?
         //holder.checkbox.setChecked(appList.get(position).isSelected());

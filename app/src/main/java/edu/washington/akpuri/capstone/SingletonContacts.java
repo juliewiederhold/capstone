@@ -77,6 +77,8 @@ public class SingletonContacts {
     }
 
     public ArrayList<Contact> getBlockedContacts() {
+        if(this.blockedContacts == null)
+            this.blockedContacts = new ArrayList<>();
         return blockedContacts;
     }
 
