@@ -41,6 +41,7 @@ public class SettingsActivity2 extends ActionBarActivity {
     private TextView newPassword2TextView;
     private TextView emailTextView;
     private TextView phoneTextView;
+
     private boolean incorrectOldPassword;
 
     @Override
@@ -48,7 +49,7 @@ public class SettingsActivity2 extends ActionBarActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_settings2);
 
-        incorrectOldPassword = true;
+//        incorrectOldPassword = true;
 
         Intent intent = getIntent();
         String previousActivity = intent.getStringExtra("activitySent");
@@ -119,7 +120,6 @@ public class SettingsActivity2 extends ActionBarActivity {
         String newPassword1 = newPassword1EditText.getText().toString().trim();
         String newPassword2 = newPassword2EditText.getText().toString().trim();
         String email = emailEditText.getText().toString().trim();
-//        String emailAgain = emailAgainEditText.getText().toString().trim();
         String phone = phoneEditText.getText().toString().trim();
 
         // Validate the sign up data
@@ -140,26 +140,102 @@ public class SettingsActivity2 extends ActionBarActivity {
             validationError = true;
             validationErrorMessage.append(getString(R.string.error_blank_password));
         }
-        // Only throw error for new passwords if user enters value for them
-        Log.e(TAG, "LENGTH: 1 " + newPassword1.length() + " 2 " + newPassword2.length());
-        if ((newPassword1.length() > 0 && newPassword2.length() > 0) &&
-                (!oldPassword.equals(newPassword1) || !oldPassword.equals(newPassword2))) {
+
+        // Check if old password entered is correct
+        boolean isCorrect = checkOldPassword(oldPassword);
+
+        if (isCorrect) {
+            Log.e(TAG, "isCorrect: " + isCorrect);
+//            continueSavingChanges(isCorrect, newPassword1, newPassword2, oldPassword, validationError, validationErrorMessage, email, phone);
+            if (isCorrect) {
+
+            }
+            // Only throw error for new passwords if user enters value for them
+            Log.e(TAG, "LENGTH: 1 " + newPassword1.length() + " 2 " + newPassword2.length());
+            if ((newPassword1.length() > 0 && newPassword2.length() > 0) &&
+                    (!oldPassword.equals(newPassword1) || !oldPassword.equals(newPassword2))) {
+                if (validationError) {
+                    validationErrorMessage.append(getString(R.string.error_join));
+                }
+                Log.e(TAG, "eeee");
+                validationError = true;
+                validationErrorMessage.append(getString(R.string.error_mismatched_passwords));
+            }
+            if ((newPassword1.length() > 0 && newPassword2.length() > 0) && !newPassword1.equals(newPassword2)) {
+                if (validationError) {
+                    validationErrorMessage.append(getString(R.string.error_join));
+                }
+                Log.e(TAG, "ffff");
+                validationError = true;
+                // might have to edit error message
+                validationErrorMessage.append(getString(R.string.error_mismatched_passwords));
+            }
+
+            if (email.length() == 0) {
+                if (validationError) {
+                    validationErrorMessage.append(getString(R.string.error_join));
+                }
+                validationError = true;
+                validationErrorMessage.append(getString(R.string.error_blank_email));
+            }
+            if (phone.length() == 0) {
+                if (validationError) {
+                    validationErrorMessage.append(getString(R.string.error_join));
+                }
+                validationError = true;
+                validationErrorMessage.append(getString(R.string.error_blank_phone));
+            }
+            validationErrorMessage.append(getString(R.string.error_end));
+
+            // If there is a validation error, display the error
+            if (validationError) {
+                Toast.makeText(SettingsActivity2.this, validationErrorMessage.toString(), Toast.LENGTH_LONG)
+                        .show();
+                return;
+            }
+
+            // Set up a progress dialog
+            final ProgressDialog dialog = new ProgressDialog(SettingsActivity2.this);
+            dialog.setMessage(getString(R.string.progress_saving));
+            dialog.show();
+
+            // ******* NICOLE: Should probably check which data changed and then just save those
+
+            // Set up a new Parse user
+            ParseUser user = ParseUser.getCurrentUser();
+            user.setUsername(email);
+            if (newPassword2.length() > 0) {
+                user.setPassword(newPassword2);
+            }
+            user.setEmail(email);
+            // other fields
+            user.put("firstname", firstname);
+            user.put("lastname", lastname);
+            user.put("phone", phone);
+            user.saveInBackground();
+
+            new CountDownTimer(1000, 1000) {
+                @Override
+                public void onTick(long millisUntilFinished) {
+                }
+
+                @Override
+                public void onFinish() {
+                    dialog.dismiss();
+                }
+            }.start();
+        } else {
+            // Do nothing
+            Log.e(TAG, "isCorrect: " + isCorrect);
             if (validationError) {
                 validationErrorMessage.append(getString(R.string.error_join));
             }
-            Log.e(TAG, "eeee");
             validationError = true;
-            validationErrorMessage.append(getString(R.string.error_mismatched_passwords));
+            validationErrorMessage.append(getString(R.string.error_incorrect_passwords));
         }
-        if ((newPassword1.length() > 0 && newPassword2.length() > 0) && !newPassword1.equals(newPassword2)) {
-            if (validationError) {
-                validationErrorMessage.append(getString(R.string.error_join));
-            }
-            Log.e(TAG, "ffff");
-            validationError = true;
-            // might have to edit error message
-            validationErrorMessage.append(getString(R.string.error_mismatched_passwords));
-        }
+    }
+
+    private boolean checkOldPassword(String oldPassword){
         ParseUser.logInInBackground(ParseUser.getCurrentUser().getUsername(), oldPassword,
                 new LogInCallback() {
                     @Override
@@ -177,75 +253,13 @@ public class SettingsActivity2 extends ActionBarActivity {
                 });
         Log.e(TAG, incorrectOldPassword + oldPassword);
         // put code below in a method that will be called once done above
-//        if (incorrectOldPassword) {
-//            if (validationError) {
-//                validationErrorMessage.append(getString(R.string.error_join));
-//            }
-//            validationError = true;
-//            validationErrorMessage.append(getString(R.string.error_incorrect_passwords));
-//        }
-        if (email.length() == 0) {
-            if (validationError) {
-                validationErrorMessage.append(getString(R.string.error_join));
-            }
-            validationError = true;
-            validationErrorMessage.append(getString(R.string.error_blank_email));
-        }
-//        if (!email.equals(emailAgain)) {
-//            if (validationError) {
-//                validationErrorMessage.append(getString(R.string.error_join));
-//            }
-//            validationError = true;
-//            validationErrorMessage.append(getString(R.string.error_mismatched_emails));
-//        }
-        if (phone.length() == 0) {
-            if (validationError) {
-                validationErrorMessage.append(getString(R.string.error_join));
-            }
-            validationError = true;
-            validationErrorMessage.append(getString(R.string.error_blank_phone));
-        }
-        validationErrorMessage.append(getString(R.string.error_end));
-
-        // If there is a validation error, display the error
-        if (validationError) {
-            Toast.makeText(SettingsActivity2.this, validationErrorMessage.toString(), Toast.LENGTH_LONG)
-                    .show();
-            return;
-        }
-
-        // Set up a progress dialog
-        final ProgressDialog dialog = new ProgressDialog(SettingsActivity2.this);
-        dialog.setMessage(getString(R.string.progress_saving));
-        dialog.show();
-
-        // ******* NICOLE: Should probably check which data changed and then just save those
-
-        // Set up a new Parse user
-        ParseUser user = ParseUser.getCurrentUser();
-        user.setUsername(email);
-        if (newPassword2.length() > 0) {
-            user.setPassword(newPassword2);
-        }
-        user.setEmail(email);
-        // other fields
-        user.put("firstname", firstname);
-        user.put("lastname", lastname);
-        user.put("phone", phone);
-        user.saveInBackground();
-
-        new CountDownTimer(1000, 1000) {
-            @Override
-            public void onTick(long millisUntilFinished) {
-            }
-
-            @Override
-            public void onFinish() {
-                dialog.dismiss();
-            }
-        }.start();
+        return incorrectOldPassword;
     }
 
+//    private void continueSavingChanges(boolean isCorrect, String newPassword1, String newPassword2, String oldPassword,
+//                                       boolean validationError, StringBuilder validationErrorMessage, String email, String phone){
+//
+//    }
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
