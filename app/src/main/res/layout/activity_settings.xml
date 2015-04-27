@@ -58,21 +58,6 @@ tools:context="hello.jcw27.washington.edu.so_so.SettingsActivity" >
             android:maxLines="1"
             android:singleLine="true" />
 
-        <!-- Password -->
-        <TextView
-            android:id="@+id/password_textview"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/prompt_password"/>
-        <EditText
-            android:id="@+id/password_edit_text"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:inputType="textPassword"
-            android:password="true"
-            android:maxLines="1"
-            android:singleLine="true" />
-
         <!-- Phone number -->
         <TextView
             android:id="@+id/phone_textview"
@@ -89,10 +74,10 @@ tools:context="hello.jcw27.washington.edu.so_so.SettingsActivity" >
             />
 
         <Button
-            android:id="@+id/save_changes_button"
+            android:id="@+id/edit_settings_button"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/save_changes" />
+            android:text="@string/edit_default_settings" />
 
 
     </LinearLayout>

@@ -73,6 +73,9 @@
             android:name=".SettingsActivity"
             android:label="@string/app_name" />
         <activity
+            android:name=".SettingsActivity2"
+            android:label="@string/app_name" />
+        <activity
             android:name=".ResetActivity"
             android:label="@string/app_name" >
         </activity>
@@ -136,7 +139,14 @@
             android:name=".NightOutAppNumberBlocking"
             android:label="@string/title_activity_night_out_app_number_blocking" >
         </activity>
-
+        <activity
+            android:name=".NightOutEditBlockedContactsList"
+            android:label="@string/title_activity_night_out_edit_blocked_contacts_list" >
+        </activity>
+        <activity
+            android:name=".NightOutBlockContacts"
+            android:label="@string/title_activity_night_out_block_contacts" >
+        </activity>
         <!-- For push notifications -->
         <service android:name="com.parse.PushService" />
 
@@ -166,15 +176,6 @@
                 <category android:name="edu.washington.akpuri.capstone" />
             </intent-filter>
         </receiver>
-
-        <activity
-            android:name=".NightOutEditBlockedContactsList"
-            android:label="@string/title_activity_night_out_edit_blocked_contacts_list" >
-        </activity>
-        <activity
-            android:name=".NightOutBlockContacts"
-            android:label="@string/title_activity_night_out_block_contacts" >
-        </activity>
     </application>
 
 </manifest>
