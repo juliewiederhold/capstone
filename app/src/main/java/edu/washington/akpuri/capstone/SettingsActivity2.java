@@ -16,6 +16,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.parse.LogInCallback;
+import com.parse.Parse;
 import com.parse.ParseException;
 import com.parse.ParseUser;
 
@@ -42,7 +43,7 @@ public class SettingsActivity2 extends ActionBarActivity {
     private TextView emailTextView;
     private TextView phoneTextView;
 
-    private boolean incorrectOldPassword;
+    private boolean correctOldPassword;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -146,10 +147,7 @@ public class SettingsActivity2 extends ActionBarActivity {
 
         if (isCorrect) {
             Log.e(TAG, "isCorrect: " + isCorrect);
-//            continueSavingChanges(isCorrect, newPassword1, newPassword2, oldPassword, validationError, validationErrorMessage, email, phone);
-            if (isCorrect) {
 
-            }
             // Only throw error for new passwords if user enters value for them
             Log.e(TAG, "LENGTH: 1 " + newPassword1.length() + " 2 " + newPassword2.length());
             if ((newPassword1.length() > 0 && newPassword2.length() > 0) &&
@@ -186,14 +184,22 @@ public class SettingsActivity2 extends ActionBarActivity {
                 validationErrorMessage.append(getString(R.string.error_blank_phone));
             }
             validationErrorMessage.append(getString(R.string.error_end));
-
-            // If there is a validation error, display the error
+        } else {
+            // Do nothing
+            Log.e(TAG, "isCorrect: " + isCorrect);
             if (validationError) {
-                Toast.makeText(SettingsActivity2.this, validationErrorMessage.toString(), Toast.LENGTH_LONG)
-                        .show();
-                return;
+                validationErrorMessage.append(getString(R.string.error_join));
             }
+            validationError = true;
+            validationErrorMessage.append(getString(R.string.error_incorrect_passwords));
+        }
 
+        // If there is a validation error, display the error
+        if (validationError) {
+            Toast.makeText(SettingsActivity2.this, validationErrorMessage.toString(), Toast.LENGTH_LONG)
+                    .show();
+            return;
+        } else {
             // Set up a progress dialog
             final ProgressDialog dialog = new ProgressDialog(SettingsActivity2.this);
             dialog.setMessage(getString(R.string.progress_saving));
@@ -224,36 +230,38 @@ public class SettingsActivity2 extends ActionBarActivity {
                     dialog.dismiss();
                 }
             }.start();
-        } else {
-            // Do nothing
-            Log.e(TAG, "isCorrect: " + isCorrect);
-            if (validationError) {
-                validationErrorMessage.append(getString(R.string.error_join));
-            }
-            validationError = true;
-            validationErrorMessage.append(getString(R.string.error_incorrect_passwords));
+            Intent intent = new Intent(SettingsActivity2.this, SettingsActivity.class);
+            startActivity(intent);
         }
+
     }
 
     private boolean checkOldPassword(String oldPassword){
-        ParseUser.logInInBackground(ParseUser.getCurrentUser().getUsername(), oldPassword,
-                new LogInCallback() {
-                    @Override
-                    public void done(ParseUser parseUser, ParseException e) {
-                        if (parseUser != null) {
-                            // old password is correct
-                            incorrectOldPassword = false;
-                            Log.e(TAG, incorrectOldPassword + " correct");
-                        } else {
-                            Log.e(TAG, "incorrect");
-                            // old password is incorrect
-                            incorrectOldPassword = true;
-                        }
-                    }
-                });
-        Log.e(TAG, incorrectOldPassword + oldPassword);
+        correctOldPassword = false;
+        try {
+            ParseUser.logIn(ParseUser.getCurrentUser().getUsername(), oldPassword);
+            correctOldPassword = true;
+        } catch (Exception e) {
+
+        }
+//        ParseUser.logInInBackground(ParseUser.getCurrentUser().getUsername(), oldPassword,
+//                new LogInCallback() {
+//                    @Override
+//                    public void done(ParseUser parseUser, ParseException e) {
+//                        if (parseUser != null) {
+//                            // old password is correct
+//                            correctOldPassword = true;
+//                            Log.e(TAG, "correctOldPassword TRUE: " + correctOldPassword);
+//                        } else {
+//                            // old password is incorrect
+//                            correctOldPassword = true;
+//                            Log.e(TAG, "correctOldPassword FALSE: " + correctOldPassword);
+//                        }
+//                    }
+//                });
+        Log.e(TAG, "correctOldPassword: " + correctOldPassword + " " + oldPassword);
         // put code below in a method that will be called once done above
-        return incorrectOldPassword;
+        return correctOldPassword;
     }
 
 //    private void continueSavingChanges(boolean isCorrect, String newPassword1, String newPassword2, String oldPassword,

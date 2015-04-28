@@ -28,7 +28,9 @@ tools:context="hello.jcw27.washington.edu.so_so.SettingsActivity" >
             android:layout_height="wrap_content"
             android:inputType="textPersonName|textNoSuggestions"
             android:maxLines="1"
-            android:singleLine="true" />
+            android:singleLine="true"
+            android:editable="false"
+            android:focusable="false"/>
 
         <!-- Last name -->
         <TextView
@@ -42,7 +44,9 @@ tools:context="hello.jcw27.washington.edu.so_so.SettingsActivity" >
             android:layout_height="wrap_content"
             android:inputType="textPersonName|textNoSuggestions"
             android:maxLines="1"
-            android:singleLine="true" />
+            android:singleLine="true"
+            android:editable="false"
+            android:focusable="false"/>
 
         <!-- Email -->
         <TextView
@@ -56,7 +60,9 @@ tools:context="hello.jcw27.washington.edu.so_so.SettingsActivity" >
             android:layout_height="wrap_content"
             android:inputType="textEmailAddress|textNoSuggestions"
             android:maxLines="1"
-            android:singleLine="true" />
+            android:singleLine="true"
+            android:editable="false"
+            android:focusable="false"/>
 
         <!-- Phone number -->
         <TextView
@@ -71,13 +77,15 @@ tools:context="hello.jcw27.washington.edu.so_so.SettingsActivity" >
             android:inputType="phone"
             android:maxLines="1"
             android:singleLine="true"
+            android:editable="false"
+            android:focusable="false"
             />
 
         <Button
             android:id="@+id/edit_settings_button"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/edit_default_settings" />
+            android:text="@string/edit_settings" />
 
 
     </LinearLayout>

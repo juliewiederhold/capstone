@@ -75,6 +75,7 @@
     <string name="app_name">So-So</string>
     <string name="logo_desc">So-So Logo</string>
     <string name="title_activity_night_out_app_number_blocking">NightOutAppNumberBlocking</string>
+    <string name="edit_settings">Edit Settings</string>
 
     <string name="hello_world">Hello world!</string>
     <string name="title_activity_night_out_edit_blocked_contacts_list">
