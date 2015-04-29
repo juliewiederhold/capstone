@@ -169,17 +169,12 @@ public class AddFriends extends ActionBarActivity {
                                     // User exists and has a ContactsObject
 
                                     Log.e(TAG, "Current contacts[]: " + ParseUser.getCurrentUser().get("contacts").toString());
-//                                    parseObject.addAllUnique("contacts", instance.getCurrentContacts());
                                     parseObject.add("contacts", contact.getObjectId());
                                     parseObject.saveInBackground(new SaveCallback() {
                                         @Override
                                         public void done(ParseException e) {
-
-                                            // TO-DO: Remove contacts who have been added from the Contacts List
-                                            // Set pendingContacts and pendingParseContacts to empty
                                             Log.e(TAG, "ContactsObject: " + parseObject.get("contacts").toString());
-//                                            instance.getPendingContacts().clear();
-//                                            pendingParseContacts.clear();
+
                                         }
                                     });
                                 } else {
@@ -188,12 +183,31 @@ public class AddFriends extends ActionBarActivity {
                                 }
                             }
                         });
+
+                        // Create connection between current user and friends
+//                        ParseQuery<ParseObject> query2 = ParseQuery.getQuery("Friends");
+//                        query2.whereEqualTo("pendingUser", user);
+//                        query2.getFirstInBackground(new GetCallback<ParseObject>() {
+//                            @Override
+//                            public void done(final ParseObject parseObject, ParseException e) {
+//                                if (parseObject != null) {
+//                                    parseObject.add("requester", ParseUser.getCurrentUser().getObjectId());
+//                                    parseObject.add("accepter", contact.getObjectId());
+//                                    parseObject.saveInBackground(new SaveCallback() {
+//                                        @Override
+//                                        public void done(ParseException e) {
+//                                            // Done
+//                                        }
+//                                    });
+//                                } else {
+//                                    // Something went wrong
+//                                }
+//                            }
+//                        });
                     }
                     instance.getPendingContacts().clear();
                 }
             });
-            ////// End create ParseObject
-
         }
 
 

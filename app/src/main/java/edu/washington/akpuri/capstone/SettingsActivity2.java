@@ -144,31 +144,17 @@ public class SettingsActivity2 extends ActionBarActivity {
 
         // Check if old password entered is correct
         boolean isCorrect = checkOldPassword(oldPassword);
-
         if (isCorrect) {
-            Log.e(TAG, "isCorrect: " + isCorrect);
-
             // Only throw error for new passwords if user enters value for them
             Log.e(TAG, "LENGTH: 1 " + newPassword1.length() + " 2 " + newPassword2.length());
-            if ((newPassword1.length() > 0 && newPassword2.length() > 0) &&
-                    (!oldPassword.equals(newPassword1) || !oldPassword.equals(newPassword2))) {
+            if ((newPassword1.length() > 0 || newPassword2.length() > 0) &&
+                    (!newPassword1.equals(newPassword2))) {
                 if (validationError) {
                     validationErrorMessage.append(getString(R.string.error_join));
                 }
-                Log.e(TAG, "eeee");
                 validationError = true;
                 validationErrorMessage.append(getString(R.string.error_mismatched_passwords));
             }
-            if ((newPassword1.length() > 0 && newPassword2.length() > 0) && !newPassword1.equals(newPassword2)) {
-                if (validationError) {
-                    validationErrorMessage.append(getString(R.string.error_join));
-                }
-                Log.e(TAG, "ffff");
-                validationError = true;
-                // might have to edit error message
-                validationErrorMessage.append(getString(R.string.error_mismatched_passwords));
-            }
-
             if (email.length() == 0) {
                 if (validationError) {
                     validationErrorMessage.append(getString(R.string.error_join));
@@ -204,8 +190,6 @@ public class SettingsActivity2 extends ActionBarActivity {
             final ProgressDialog dialog = new ProgressDialog(SettingsActivity2.this);
             dialog.setMessage(getString(R.string.progress_saving));
             dialog.show();
-
-            // ******* NICOLE: Should probably check which data changed and then just save those
 
             // Set up a new Parse user
             ParseUser user = ParseUser.getCurrentUser();

@@ -11,6 +11,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
+import com.parse.FindCallback;
 import com.parse.GetCallback;
 import com.parse.ParseException;
 import com.parse.ParseObject;
@@ -22,6 +23,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by NR on 3/4/15.
@@ -81,6 +83,7 @@ public class MainActivity extends ActionBarActivity {
         instance = SingletonContacts.getInstance();
         pendingContacts = new ArrayList<>();
 
+        // Get all contacts
         if (ParseUser.getCurrentUser().get("contacts") != null) {
             JSONArray contacts = ParseUser.getCurrentUser().getJSONArray("contacts");
             Log.e(TAG, " contacts[] 1: " + contacts.toString());
@@ -113,10 +116,7 @@ public class MainActivity extends ActionBarActivity {
                 }
             }
             instance.setPendingFriends(pendingContacts);
-            // Should be same as contacts[] 1
-            Log.e(TAG, " contacts[] 2: " + instance.getCurrentContacts().toString());
-            // Probably will be empty here
-            Log.e(TAG, " pending friends: " + instance.getPendingFriends().toString());
+
         }
 
     }

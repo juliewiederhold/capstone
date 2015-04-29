@@ -24,6 +24,7 @@ public class SingletonContacts {
     private static ArrayList<Contact> pendingFriends;       // Friends/contacts currently on Parse.com
     private static ArrayList<Contact> blockedContacts;
     private static ArrayList<String> currentContacts;       // List of objectIds of user's contacts both on Parse.com and pending
+    private static ArrayList<Contact> allPendingRequests;
 
     private boolean imported;
 
@@ -49,6 +50,8 @@ public class SingletonContacts {
             currentContacts = new ArrayList<>();
 
             pendingParse = new ArrayList<>();
+
+            allPendingRequests = new ArrayList<>();
         }
         return instance;
     }
@@ -138,4 +141,12 @@ public class SingletonContacts {
         return pendingParse;
     }
 
+    // Add another So-So user's email address to pending requests
+    public void addPendingRequests(Contact pendingUser) {
+        allPendingRequests.add(pendingUser);
+    }
+
+    public ArrayList<Contact> getPendingRequests(){
+        return allPendingRequests;
+    }
 }
