@@ -345,9 +345,7 @@ public class Contacts extends ActionBarActivity {
             }
 
 
-            // Populate with current friends
-            // NICOLE: should replace pendingContacts with instance.getPendingFriends()
-            final ListAdapter adapter = new FriendAdapter(getActivity(), R.id.contactListItem, instance.getPendingRequests());
+            final ListAdapter adapter = new RequestsAdapter(getActivity(), R.id.requestsListItem, instance.getPendingRequests());
             contactListView.setAdapter(adapter);
 
             return rootView;

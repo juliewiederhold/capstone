@@ -103,7 +103,7 @@ public class AddFriends extends ActionBarActivity {
 
                 //            instance.setContacts(allContacts);
                 ListView contactListView = (ListView) findViewById(R.id.addFriendsList);
-                ListAdapter adapter = new ContactAdapter(this, R.id.contactListItem, instance.getAllContacts(), pendingContacts);
+                ListAdapter adapter = new ContactAdapter(this, R.id.friendListItem, instance.getAllContacts(), pendingContacts);
                 contactListView.setAdapter(adapter);
 
 
@@ -217,7 +217,7 @@ public class AddFriends extends ActionBarActivity {
     public void onResume(){
         super.onResume();
         ListView contactListView = (ListView) findViewById(R.id.addFriendsList);
-        ListAdapter adapter = new ContactAdapter(this, R.id.contactListItem, instance.getAllContacts(), pendingContacts);
+        ListAdapter adapter = new ContactAdapter(this, R.id.friendListItem, instance.getAllContacts(), pendingContacts);
         contactListView.setAdapter(adapter);
     }
 
