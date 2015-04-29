@@ -32,7 +32,7 @@
         android:textAppearance="?android:attr/textAppearanceLarge"
         android:text="You currently do not have any pending So-So friends"
         android:id="@+id/noPendingFriends"
-        android:layout_alignTop="@+id/friendListView"
+        android:layout_alignTop="@+id/pendingFriendListView"
         android:layout_alignParentRight="true"
         android:layout_alignParentEnd="true"
         android:layout_marginTop="175dp"
