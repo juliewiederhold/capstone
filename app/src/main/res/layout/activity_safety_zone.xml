@@ -100,7 +100,7 @@
         android:layout_marginTop="60dp">
 
         <TextView
-            android:layout_width="wrap_content"
+            android:layout_width="345dp"
             android:layout_height="wrap_content"
             android:textAppearance="?android:attr/textAppearanceMedium"
             android:text="@string/no_safety_zone_description"
