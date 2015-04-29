@@ -8,4 +8,7 @@
     <color name="login_help_button_label_focus">#CCCCCC</color>
     <color name="login_text_hint">#AAAAAA</color>
     <color name="login_display_text">@android:color/white</color>
+
+
+    <color name="blue_main">#00B8E8</color>
 </resources>
