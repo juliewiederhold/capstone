@@ -40,6 +40,7 @@ public class Contacts extends ActionBarActivity {
     private static boolean allowContactRetrieval;
     private android.support.v7.app.ActionBar actionBar;
     private static SingletonContacts instance;
+    private int counter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -130,6 +131,8 @@ public class Contacts extends ActionBarActivity {
 //        Log.i(TAG, " onCreate Pending Contacts " + pendingContacts.toString());
 
         // Get all friend requests
+        // To-do: Create a separate adapter for pending friend requests
+        // Should have buttons for accepting and rejecting
         ParseQuery<ParseObject> query = ParseQuery.getQuery("contact");
         Log.e(TAG, ParseUser.getCurrentUser().get("phone") + "");
         query.whereEqualTo("phone", ParseUser.getCurrentUser().get("phone"));
@@ -137,6 +140,7 @@ public class Contacts extends ActionBarActivity {
             @Override
             public void done(List<ParseObject> objects, ParseException e) {
                 if (e == null) {
+                    counter = 0;
                     for (ParseObject matches : objects) {
                         // use dealsObject.get('columnName') to access the properties of the Deals object.
                         String match = matches.get("user").toString();
@@ -147,14 +151,20 @@ public class Contacts extends ActionBarActivity {
                             @Override
                             public void done(ParseUser parseUser, ParseException e) {
                                 try {
-                                    // Maybe do this if the currentUser approves the request
-                                    ParseRelation<ParseUser> relation = ParseUser.getCurrentUser().getRelation("Friends");
-                                    relation.add(parseUser);
-                                    // to remove: relation.remove(post);
-                                    ParseUser.getCurrentUser().saveInBackground();
-                                    Log.e(TAG, parseUser.get("firstname").toString());
-                                    Log.e(TAG, parseUser.get("lastname").toString());
-                                    Log.e(TAG, parseUser.get("phone").toString());
+//                                    // Maybe do this if the currentUser approves the request
+//                                    ParseRelation<ParseUser> relation = ParseUser.getCurrentUser().getRelation("Friends");
+//                                    relation.add(parseUser);
+//                                    // to remove: relation.remove(post);
+//                                    ParseUser.getCurrentUser().saveInBackground();
+                                    Contact person = new Contact(parseUser.get("firstname").toString() + " " + parseUser.get("lastname").toString(),
+                                            parseUser.get("phone").toString(),
+                                            counter);
+//                                    Integer.parseInt(parseUser.getObjectId())
+//                                    Log.e(TAG, parseUser.get("firstname").toString());
+//                                    Log.e(TAG, parseUser.get("lastname").toString());
+//                                    Log.e(TAG, parseUser.get("phone").toString());
+                                    instance.addPendingRequests(person);
+                                    counter++;
                                 } catch (Exception e1) {
                                     e1.printStackTrace();
                                 }
@@ -307,24 +317,24 @@ public class Contacts extends ActionBarActivity {
                                  Bundle savedInstanceState) {
             final View rootView = inflater.inflate(R.layout.fragment_requests, container, false);
 
-            /// START CODE BLOCK
-            // This code should be for friends who have already accepted the friend request
-            // Nicole -----> move to correct place
-            ParseRelation<ParseUser> relation = ParseUser.getCurrentUser().getRelation("Friends");
-//            ParseQuery query = relation.getQuery();
-//            relation.getQuery().whereEqualTo("username", ParseUser.getCurrentUser());
-            relation.getQuery().findInBackground(new FindCallback<ParseUser>() {
-                @Override
-                public void done(List<ParseUser> results, ParseException e) {
-                    if (e != null) {
-                        // There was an error
-                    } else {
-                        // results have all the Posts the current user liked.
-                        Log.e(TAG, results.toString());
-                    }
-                }
-            });
-            // END CODE BLOCK
+//            /// START CODE BLOCK
+//            // This code should be for friends who have already accepted the friend request
+//            // Nicole -----> move to correct place
+//            ParseRelation<ParseUser> relation = ParseUser.getCurrentUser().getRelation("Friends");
+////            ParseQuery query = relation.getQuery();
+////            relation.getQuery().whereEqualTo("username", ParseUser.getCurrentUser());
+//            relation.getQuery().findInBackground(new FindCallback<ParseUser>() {
+//                @Override
+//                public void done(List<ParseUser> results, ParseException e) {
+//                    if (e != null) {
+//                        // There was an error
+//                    } else {
+//                        // results have all the Posts the current user liked.
+//                        Log.e(TAG, results.toString());
+//                    }
+//                }
+//            });
+//            // END CODE BLOCK
 
             ListView contactListView = (ListView) rootView.findViewById(R.id.pendingFriendListView);
             TextView noPendingFriends = (TextView) rootView.findViewById(R.id.noPendingFriends);
