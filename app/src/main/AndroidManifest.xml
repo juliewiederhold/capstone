@@ -176,6 +176,11 @@
                 <category android:name="edu.washington.akpuri.capstone" />
             </intent-filter>
         </receiver>
+
+        <activity
+            android:name=".MainMap"
+            android:label="@string/title_activity_main_map" >
+        </activity>
     </application>
 
 </manifest>

@@ -83,5 +83,6 @@
         NightOutEditBlockedContactsList
     </string>
     <string name="title_activity_night_out_block_contacts">NightOutBlockContacts</string>
+    <string name="title_activity_main_map">MainMap</string>
 
 </resources>
