@@ -28,4 +28,5 @@ dependencies {
     compile files('libs/Parse-*.jar')
     compile files('libs/ParseCrashReporting-1.8.3.jar')
     compile files('libs/bolts-android-1.1.4-javadoc.jar')
+    compile 'com.google.android.gms:play-services:7.3.0'
 }
