@@ -35,7 +35,8 @@
     <string name="zip">Zip Code</string>
     <string name="safety_zone_name">Safety Zone Name</string>
     <string name="update_safety_zone">Update Safety Zone</string>
-    <string name="no_safety_zone_description">You currently do not have any Safety Zones. Add locations you consider to be safe where you will end your night. Your group will automatically be notified once you make it home!</string>
+    <string name="no_safety_zone_description">You currently do not have any Safety Zones.
+      \n \nAdd locations you consider to be safe where you will end your night. Your group will automatically be notified once you make it home!</string>
     <string name="edit_contact">Edit Contact</string>
 
     <!-- Quick Text Information -->
@@ -75,6 +76,7 @@
     <string name="app_name">So-So</string>
     <string name="logo_desc">So-So Logo</string>
     <string name="title_activity_night_out_app_number_blocking">NightOutAppNumberBlocking</string>
+    <string name="edit_settings">Edit Settings</string>
 
     <string name="hello_world">Hello world!</string>
     <string name="title_activity_night_out_edit_blocked_contacts_list">

@@ -7,6 +7,8 @@
     <string name="prompt_firstname">First Name</string>
     <string name="prompt_lastname">Last Name</string>
     <string name="prompt_password">Password</string>
+    <string name="prompt_old_password">Old Password</string>
+    <string name="prompt_new_password">New Password</string>
     <string name="prompt_password_again">Password Again</string>
     <string name="prompt_email">Email Address</string>
     <string name="prompt_email_again">Email Address Again</string>
@@ -16,6 +18,7 @@
     <string name="error_blank_lastname">enter a last name</string>
     <string name="error_blank_password">enter a password</string>
     <string name="error_mismatched_passwords">enter the same password twice</string>
+    <string name="error_incorrect_passwords">enter correct password</string>
     <string name="error_blank_email">enter an email</string>
     <string name="error_mismatched_emails">enter the same email twice</string>
     <string name="error_blank_phone">enter a phone number</string>

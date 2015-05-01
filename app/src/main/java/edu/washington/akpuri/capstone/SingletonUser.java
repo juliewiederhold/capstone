@@ -23,6 +23,7 @@ public class SingletonUser {
             allowContactRetrieval = false;
             hasGoneThroughInitialSetUp = true;
             allDefaultSettings = new ArrayList<>();
+
             existingSafetyZones = new ArrayList<>();
 
             allDefaultSettings.add("Safety Zones");
@@ -45,4 +46,6 @@ public class SingletonUser {
     public ArrayList<SafetyZone> getExistingSafetyZones(){return this.existingSafetyZones;}
 
     public void setExistingSafetyZones(ArrayList<SafetyZone> existingSafetyZones) {this.existingSafetyZones = existingSafetyZones;}
+
+
 }

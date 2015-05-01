@@ -19,10 +19,17 @@ import android.widget.Button;
 import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
+
+import com.parse.FindCallback;
+import com.parse.GetCallback;
+import com.parse.ParseException;
 import com.parse.ParseObject;
+import com.parse.ParseQuery;
+import com.parse.ParseRelation;
 import com.parse.ParseUser;
 
 import java.util.ArrayList;
+import java.util.List;
 
 
 public class Contacts extends ActionBarActivity {
@@ -33,6 +40,7 @@ public class Contacts extends ActionBarActivity {
     private static boolean allowContactRetrieval;
     private android.support.v7.app.ActionBar actionBar;
     private static SingletonContacts instance;
+    private int counter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -63,6 +71,12 @@ public class Contacts extends ActionBarActivity {
                 .setTabListener(new FragmentTabListener<GroupsFragment>(
                         this, "Groups", GroupsFragment.class));
         actionBar.addTab(second);
+
+        android.support.v7.app.ActionBar.Tab third = actionBar.newTab()
+                .setText("Requests")
+                .setTabListener(new FragmentTabListener<RequestsFragment>(
+                        this, "Requests", RequestsFragment.class));
+        actionBar.addTab(third);
 
         Button next = (Button) findViewById(R.id.contactsNext);
         next.setOnClickListener(new View.OnClickListener() {
@@ -115,6 +129,57 @@ public class Contacts extends ActionBarActivity {
 //        Log.i(TAG, " Pending Friends " + instance.getPendingFriends().toString());
 //        Log.e(TAG, " adding " + instance.getPendingFriends().size() + "");
 //        Log.i(TAG, " onCreate Pending Contacts " + pendingContacts.toString());
+
+        // Get all friend requests
+        // To-do: Create a separate adapter for pending friend requests
+        // Should have buttons for accepting and rejecting
+        ParseQuery<ParseObject> query = ParseQuery.getQuery("contact");
+        Log.e(TAG, ParseUser.getCurrentUser().get("phone") + "");
+        query.whereEqualTo("phone", ParseUser.getCurrentUser().get("phone"));
+        query.findInBackground(new FindCallback<ParseObject>() {
+            @Override
+            public void done(List<ParseObject> objects, ParseException e) {
+                if (e == null) {
+                    counter = 0;
+                    for (ParseObject matches : objects) {
+                        // use dealsObject.get('columnName') to access the properties of the Deals object.
+                        String match = matches.get("user").toString();
+                        // Get each match's info from parse
+                        ParseQuery<ParseUser> query1 = ParseUser.getQuery();
+                        query1.whereContains("username", match);
+                        query1.getFirstInBackground(new GetCallback<ParseUser>() {
+                            @Override
+                            public void done(ParseUser parseUser, ParseException e) {
+                                try {
+//                                    // Maybe do this if the currentUser approves the request
+//                                    ParseRelation<ParseUser> relation = ParseUser.getCurrentUser().getRelation("Friends");
+//                                    relation.add(parseUser);
+//                                    // to remove: relation.remove(post);
+//                                    ParseUser.getCurrentUser().saveInBackground();
+                                    Contact person = new Contact(parseUser.get("firstname").toString() + " " + parseUser.get("lastname").toString(),
+                                            parseUser.get("phone").toString(),
+                                            counter);
+//                                    Integer.parseInt(parseUser.getObjectId())
+//                                    Log.e(TAG, parseUser.get("firstname").toString());
+//                                    Log.e(TAG, parseUser.get("lastname").toString());
+//                                    Log.e(TAG, parseUser.get("phone").toString());
+                                    instance.addPendingRequests(person);
+                                    counter++;
+                                } catch (Exception e1) {
+                                    e1.printStackTrace();
+                                }
+                            }
+                        });
+
+//                        Contact person = new Contact(name, phone, identity);
+//                        instance.addPendingRequests();
+                    }
+                } else {
+                    // Error
+                }
+
+            }
+        });
     }
 
     @Override
@@ -188,12 +253,9 @@ public class Contacts extends ActionBarActivity {
         @Override
         public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
-            Log.i("ContactsFragment", "onCreateView Fired for FriendsFragment");
             final View rootView = inflater.inflate(R.layout.fragment_friends, container, false);
 
-            Log.e(TAG, " Frag Pending Contacts " + pendingContacts.toString());
             ListView contactListView = (ListView) rootView.findViewById(R.id.friendListView);
-
             TextView noFriends = (TextView) rootView.findViewById(R.id.noFriends);
             if (!pendingContacts.isEmpty()) {
                 noFriends.setVisibility(View.GONE);
@@ -205,7 +267,6 @@ public class Contacts extends ActionBarActivity {
             // NICOLE: should replace pendingContacts with instance.getPendingFriends()
             final ListAdapter adapter = new FriendAdapter(getActivity(), R.id.contactListItem, pendingContacts);
             contactListView.setAdapter(adapter);
-
 
             return rootView;
         }
@@ -234,17 +295,61 @@ public class Contacts extends ActionBarActivity {
 //        http://cyrilmottier.com/2011/06/20/listview-tips-tricks-1-handle-emptiness/
     }
 
-    //
     public static class GroupsFragment extends Fragment {
         //Empty Constructor
         public GroupsFragment(){}
 
         @Override
         public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-            Log.i("ContactsFragment", "onCreateView Fired for GroupsFragment");
             final View rootView = inflater.inflate(R.layout.fragment_group, container, false);
 
             return rootView;
         }
+    }
+
+    public static class RequestsFragment extends Fragment {
+        public RequestsFragment() {
+            // Empty constructor
+        }
+
+        @Override
+        public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                                 Bundle savedInstanceState) {
+            final View rootView = inflater.inflate(R.layout.fragment_requests, container, false);
+
+//            /// START CODE BLOCK
+//            // This code should be for friends who have already accepted the friend request
+//            // Nicole -----> move to correct place
+//            ParseRelation<ParseUser> relation = ParseUser.getCurrentUser().getRelation("Friends");
+////            ParseQuery query = relation.getQuery();
+////            relation.getQuery().whereEqualTo("username", ParseUser.getCurrentUser());
+//            relation.getQuery().findInBackground(new FindCallback<ParseUser>() {
+//                @Override
+//                public void done(List<ParseUser> results, ParseException e) {
+//                    if (e != null) {
+//                        // There was an error
+//                    } else {
+//                        // results have all the Posts the current user liked.
+//                        Log.e(TAG, results.toString());
+//                    }
+//                }
+//            });
+//            // END CODE BLOCK
+
+            ListView contactListView = (ListView) rootView.findViewById(R.id.pendingFriendListView);
+            TextView noPendingFriends = (TextView) rootView.findViewById(R.id.noPendingFriends);
+            if (!instance.getPendingRequests().isEmpty()) {
+                noPendingFriends.setVisibility(View.GONE);
+            } else {
+                noPendingFriends.setVisibility(View.VISIBLE);
+            }
+
+
+            final ListAdapter adapter = new RequestsAdapter(getActivity(), R.id.requestsListItem, instance.getPendingRequests());
+            contactListView.setAdapter(adapter);
+
+            return rootView;
+        }
+
     }
 }

@@ -56,27 +56,32 @@ public class SettingsActivity extends ActionBarActivity {
 
             firstnameEditText = (EditText) findViewById(R.id.firstname_edit_text);
             lastnameEditText = (EditText) findViewById(R.id.lastname_edit_text);
-            passwordEditText = (EditText) findViewById(R.id.password_edit_text);
+//            passwordEditText = (TextView) findViewById(R.id.password_edit_text);
             emailEditText = (EditText) findViewById(R.id.email_edit_text);
             phoneEditText = (EditText) findViewById(R.id.phone_edit_text);
 
             firstnameTextView = (TextView) findViewById(R.id.firstname_textview);
             lastnameTextView = (TextView) findViewById(R.id.lastname_textview);
-            passwordTextView = (TextView) findViewById(R.id.password_textview);
+//            passwordTextView = (TextView) findViewById(R.id.password_textview);
             emailTextView = (TextView) findViewById(R.id.email_textview);
             phoneTextView = (TextView) findViewById(R.id.phone_textview);
 
             firstnameEditText.setText(firstname);
             lastnameEditText.setText(lastname);
-            passwordEditText.setText(password);
+//            passwordEditText.setText(password);
             emailEditText.setText(email);
-            // Will probably have to put a button here to change password
             phoneEditText.setText(phone);
 
-            Button saveChangesButton = (Button) findViewById(R.id.save_changes_button);
-            saveChangesButton.setOnClickListener(new View.OnClickListener() {
+            firstnameEditText.setKeyListener(null);
+            lastnameEditText.setKeyListener(null);
+            emailEditText.setKeyListener(null);
+            phoneEditText.setKeyListener(null);
+
+            Button editSettingsButton = (Button) findViewById(R.id.edit_settings_button);
+            editSettingsButton.setOnClickListener(new View.OnClickListener() {
                 public void onClick(View v) {
-                    saveChanges();
+                    Intent intent = new Intent(SettingsActivity.this, SettingsActivity2.class);
+                    startActivity(intent);
                 }
             });
         } else {
@@ -96,100 +101,6 @@ public class SettingsActivity extends ActionBarActivity {
                 startActivity(intent);
             }
         });
-    }
-
-    private void saveChanges() {
-        String firstname = firstnameEditText.getText().toString().trim();
-        String lastname = lastnameEditText.getText().toString().trim();
-//        String password = passwordEditText.getText().toString().trim();
-//        String passwordAgain = passwordAgainEditText.getText().toString().trim();
-        String email = emailEditText.getText().toString().trim();
-//        String emailAgain = emailAgainEditText.getText().toString().trim();
-        String phone = phoneEditText.getText().toString().trim();
-
-        // Validate the sign up data
-        boolean validationError = false;
-        StringBuilder validationErrorMessage = new StringBuilder(getString(R.string.error_intro));
-        if (firstname.length() == 0) {
-            validationError = true;
-            validationErrorMessage.append(getString(R.string.error_blank_firstname));
-        }
-        if (lastname.length() == 0) {
-            validationError = true;
-            validationErrorMessage.append(getString(R.string.error_blank_lastname));
-        }
-//        if (password.length() == 0) {
-//            if (validationError) {
-//                validationErrorMessage.append(getString(R.string.error_join));
-//            }
-//            validationError = true;
-//            validationErrorMessage.append(getString(R.string.error_blank_password));
-//        }
-//        if (!password.equals(passwordAgain)) {
-//            if (validationError) {
-//                validationErrorMessage.append(getString(R.string.error_join));
-//            }
-//            validationError = true;
-//            validationErrorMessage.append(getString(R.string.error_mismatched_passwords));
-//        }
-        if (email.length() == 0) {
-            if (validationError) {
-                validationErrorMessage.append(getString(R.string.error_join));
-            }
-            validationError = true;
-            validationErrorMessage.append(getString(R.string.error_blank_email));
-        }
-//        if (!email.equals(emailAgain)) {
-//            if (validationError) {
-//                validationErrorMessage.append(getString(R.string.error_join));
-//            }
-//            validationError = true;
-//            validationErrorMessage.append(getString(R.string.error_mismatched_emails));
-//        }
-        if (phone.length() == 0) {
-            if (validationError) {
-                validationErrorMessage.append(getString(R.string.error_join));
-            }
-            validationError = true;
-            validationErrorMessage.append(getString(R.string.error_blank_phone));
-        }
-        validationErrorMessage.append(getString(R.string.error_end));
-
-        // If there is a validation error, display the error
-        if (validationError) {
-            Toast.makeText(SettingsActivity.this, validationErrorMessage.toString(), Toast.LENGTH_LONG)
-                    .show();
-            return;
-        }
-
-        // Set up a progress dialog
-        final ProgressDialog dialog = new ProgressDialog(SettingsActivity.this);
-        dialog.setMessage(getString(R.string.progress_saving));
-        dialog.show();
-
-        // ******* NICOLE: Should probably check which data changed and then just save those
-
-        // Set up a new Parse user
-        ParseUser user = ParseUser.getCurrentUser();
-        user.setUsername(email);
-//        user.setPassword(password);
-        user.setEmail(email);
-        // other fields
-        user.put("firstname", firstname);
-        user.put("lastname", lastname);
-        user.put("phone", phone);
-        user.saveInBackground();
-
-        new CountDownTimer(1000, 1000) {
-            @Override
-            public void onTick(long millisUntilFinished) {
-            }
-
-            @Override
-            public void onFinish() {
-                dialog.dismiss();
-            }
-        }.start();
     }
 
     @Override

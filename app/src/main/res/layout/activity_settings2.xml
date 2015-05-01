@@ -1,0 +1,137 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingBottom="@dimen/activity_vertical_margin"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/activity_vertical_margin"
+    tools:context="hello.jcw27.washington.edu.so_so.SettingsActivity" >
+
+
+    <!-- User info -->
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <!-- First name -->
+        <TextView
+            android:id="@+id/firstname_textview"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/prompt_firstname"/>
+        <EditText
+            android:id="@+id/firstname_edit_text"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="textPersonName|textNoSuggestions"
+            android:maxLines="1"
+            android:singleLine="true" />
+
+        <!-- Last name -->
+        <TextView
+            android:id="@+id/lastname_textview"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/prompt_lastname"/>
+        <EditText
+            android:id="@+id/lastname_edit_text"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="textPersonName|textNoSuggestions"
+            android:maxLines="1"
+            android:singleLine="true" />
+
+        <!-- Email -->
+        <TextView
+            android:id="@+id/email_textview"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/prompt_email"/>
+        <EditText
+            android:id="@+id/email_edit_text"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="textEmailAddress|textNoSuggestions"
+            android:maxLines="1"
+            android:singleLine="true" />
+
+        <!-- Password -->
+        <TextView
+            android:id="@+id/old_password_textview"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/prompt_old_password"/>
+        <EditText
+            android:id="@+id/old_password_edit_text"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="textPassword"
+            android:password="true"
+            android:maxLines="1"
+            android:singleLine="true" />
+        <TextView
+            android:id="@+id/new_password1_textview"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/prompt_new_password"/>
+        <EditText
+            android:id="@+id/new_password1_edit_text"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="textPassword"
+            android:password="true"
+            android:maxLines="1"
+            android:singleLine="true" />
+        <TextView
+            android:id="@+id/new_password2_textview"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/prompt_new_password"/>
+        <EditText
+            android:id="@+id/new_password2_edit_text"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="textPassword"
+            android:password="true"
+            android:maxLines="1"
+            android:singleLine="true" />
+
+        <!-- Phone number -->
+        <TextView
+            android:id="@+id/phone_textview"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/prompt_phone"/>
+        <EditText
+            android:id="@+id/phone_edit_text"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="phone"
+            android:maxLines="1"
+            android:singleLine="true"
+            />
+
+        <Button
+            android:id="@+id/save_changes_button"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/save_changes" />
+
+
+    </LinearLayout>
+
+    <!--<Button-->
+        <!--android:id="@+id/logout_button"-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:layout_alignParentBottom="true"-->
+        <!--android:layout_alignParentLeft="true"-->
+        <!--android:layout_alignParentRight="true"-->
+        <!--android:layout_alignParentStart="true"-->
+        <!--android:layout_alignParentEnd="true"-->
+        <!--android:text="@string/logout_full" />-->
+
+</RelativeLayout>
