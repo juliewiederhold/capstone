@@ -61,6 +61,15 @@ public class MainActivity extends ActionBarActivity {
         }
 
         Button editDefaultSettings = (Button) findViewById(R.id.edit_default_settings);
+        Button map = (Button) findViewById(R.id.map);
+
+        map.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent next = new Intent(MainActivity.this, MainMap.class);
+                startActivity(next);
+            }
+        });
 
         editDefaultSettings.setOnClickListener(new View.OnClickListener() {
             @Override
