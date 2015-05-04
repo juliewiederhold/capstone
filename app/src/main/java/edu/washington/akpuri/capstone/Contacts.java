@@ -159,6 +159,7 @@ public class Contacts extends ActionBarActivity {
                                     Contact person = new Contact(parseUser.get("firstname").toString() + " " + parseUser.get("lastname").toString(),
                                             parseUser.get("phone").toString(),
                                             counter);
+                                    person.setEmail(parseUser.getUsername());
 //                                    Integer.parseInt(parseUser.getObjectId())
 //                                    Log.e(TAG, parseUser.get("firstname").toString());
 //                                    Log.e(TAG, parseUser.get("lastname").toString());
