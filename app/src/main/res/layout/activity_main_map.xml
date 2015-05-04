@@ -1,11 +1,46 @@
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools" android:id="@+id/container"
+    xmlns:tools="http://schemas.android.com/tools" android:id="@+id/bottom_bar"
     android:layout_width="match_parent" android:layout_height="match_parent"
     tools:context="edu.washington.akpuri.capstone.MainMap" tools:ignore="MergeRootFrame" >
 
+    <LinearLayout
+        android:id="@+id/map_friends_view"
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="62dp"
+        android:background="@color/blue_main">
+
+    </LinearLayout>
+
     <fragment
-        android:name="com.google.android.gms.maps.MapFragment"
+        android:name="com.google.android.gms.maps.SupportMapFragment"
         android:id="@+id/map"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="445dp"
+        android:layout_gravity="center" />
+
+    <LinearLayout
+        android:id="@+id/map_bottom_bar"
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="62dp"
+        android:gravity="bottom"
+        android:background="@color/blue_main"
+        android:layout_gravity="center_horizontal|bottom">
+
+        <ImageButton
+            android:id="@+id/message_friends"
+            android:layout_width="65dp"
+            android:layout_height="65dp"
+            android:src="@drawable/ic_messenger_black_48dp"
+            android:layout_marginLeft="10dp" />
+
+        <ImageButton
+            android:id="@+id/alert_friends"
+            android:layout_width="65dp"
+            android:layout_height="65dp"
+            android:src="@drawable/ic_warning_amber_48dp"
+            android:layout_marginLeft="230dp" />
+
+    </LinearLayout>
 </FrameLayout>
