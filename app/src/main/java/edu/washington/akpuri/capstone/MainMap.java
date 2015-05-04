@@ -1,5 +1,6 @@
 package edu.washington.akpuri.capstone;
 
+import android.app.Activity;
 import android.app.FragmentTransaction;
 import android.support.v4.app.FragmentActivity;
 import android.support.v7.app.ActionBarActivity;
@@ -18,7 +19,7 @@ import com.google.android.gms.maps.model.*;
 import com.google.android.gms.maps.MapFragment;
 
 
-public class MainMap extends FragmentActivity implements OnMapReadyCallback {
+public class MainMap extends Activity implements OnMapReadyCallback {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -27,7 +28,7 @@ public class MainMap extends FragmentActivity implements OnMapReadyCallback {
 
         MapFragment mapFragment = (MapFragment) getFragmentManager()
                 .findFragmentById(R.id.map);
-       // mapFragment.getMapAsync(this);
+        mapFragment.getMapAsync(this);
 
     }
 
