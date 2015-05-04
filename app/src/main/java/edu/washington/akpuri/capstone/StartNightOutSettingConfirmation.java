@@ -1,13 +1,18 @@
 package edu.washington.akpuri.capstone;
 
+import android.app.AlertDialog;
+import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.SimpleAdapter;
 import android.widget.TextView;
@@ -17,6 +22,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.ArrayList;
 import android.widget.AdapterView.OnItemClickListener;
+import android.widget.Toast;
 
 
 public class StartNightOutSettingConfirmation extends ActionBarActivity {
@@ -66,11 +72,63 @@ public class StartNightOutSettingConfirmation extends ActionBarActivity {
         confirm.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                instance = SingletonNightOutSettings.getInstance();
-                instance.restartInstance();
 
-                Intent intent = new Intent(StartNightOutSettingConfirmation.this, MainActivity.class);
-                startActivity(intent);
+
+                LayoutInflater inflater = getLayoutInflater();
+
+                final View fragmentView = inflater.inflate(R.layout.fragment_set_duration, null);
+                AlertDialog.Builder builder = new AlertDialog.Builder(fragmentView.getContext());
+
+                // Inflate and set the layout for the dialog
+                // Pass null as the parent view because its going in the dialog layout
+                builder.setView(fragmentView)
+                        // Add action buttons
+                        .setPositiveButton("Begin Night Out", new DialogInterface.OnClickListener(){
+                            @Override
+                            public void onClick(DialogInterface dialog, int id) {
+                                EditText hoursText = (EditText) fragmentView.findViewById(R.id.duration_hours);
+                                EditText minutesText = (EditText) fragmentView.findViewById(R.id.duration_minutes);
+
+                                String hours = hoursText.getText().toString();
+                                String minutes = minutesText.getText().toString();
+
+                                if(!hours.equals("") && !minutes.equals("")){
+
+                                    Intent intent = getIntent();
+                                    finish();
+                                    startActivity(intent);
+
+
+
+                                    instance = SingletonNightOutSettings.getInstance();
+                                    instance.setDurationHours(Integer.parseInt(hours));
+                                    instance.setDurationMinutes(Integer.parseInt(minutes));
+        /* WILL NEED TO DELETE */   instance.restartInstance();
+
+                                    Intent beginNightOut = new Intent(StartNightOutSettingConfirmation.this, MainMap.class);
+                                    startActivity(beginNightOut);
+
+                                    hoursText.setText("");
+                                    minutesText.setText("");
+
+                                } else {
+                                    Context context = getApplicationContext();
+                                    CharSequence text = "All fields must be filled out";
+                                    int duration = Toast.LENGTH_SHORT;
+
+                                    Toast toast = Toast.makeText(context, text, duration);
+                                    toast.show();
+                                }
+                            }
+                        })
+                        .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int id) {
+
+                            }
+                        });
+
+                builder.create();
+                builder.show();
             }
         });
     }
