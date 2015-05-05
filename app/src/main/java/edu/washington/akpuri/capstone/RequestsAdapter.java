@@ -55,7 +55,7 @@ public class RequestsAdapter extends ArrayAdapter<Contact> {
     @Override
     public View getView(final int position, final View convertView, ViewGroup parent) {
 //        Log.d(TAG, "position=" + position);
-        final Contact data = list.get(position);
+        final Contact person = list.get(position);
         View view = null;
         if (convertView == null) {
 //            LayoutInflater inflater = LayoutInflater.from(getContext());
@@ -70,28 +70,75 @@ public class RequestsAdapter extends ArrayAdapter<Contact> {
             viewHolder.acceptRequest.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Log.e(TAG, data.getPhone());
+                    Log.e(TAG, person.getPhone());
                     ParseQuery<ParseUser> query = ParseUser.getQuery();
-                    query.whereContains("phone", data.getPhone());
+                    query.whereContains("phone", person.getPhone());
                     query.getFirstInBackground(new GetCallback<ParseUser>() {
                         @Override
                         public void done(ParseUser parseUser, ParseException e) {
                             try {
-                                Log.e(TAG, "Pending: " + instance.getPendingRequests().toString());
-                                ParseUser currentUser = ParseUser.getCurrentUser();
+                                final ParseUser currentUser = ParseUser.getCurrentUser();
+                                // Add to currentUser's Friends on Parse.com
                                 ParseRelation<ParseUser> relation = currentUser.getRelation("Friends");
                                 relation.add(parseUser);
                                 currentUser.saveInBackground();
+                                // To-do: Add to parseUser's Friends
                                 // Remove from pending requests
-                                instance.getPendingRequests().remove(data);
-                                remove(getItem(position));
+                                instance.getPendingRequests().remove(person);
+                                Log.e(TAG, position + "");
+//                                remove(getItem(position));
                                 notifyDataSetChanged();
-                                Log.e(TAG, "Pending: " + instance.getPendingRequests().toString());
                                 // TO-DO
-                                // Add to current user's ContactsObject[] and ParseUser contacts[] - Parse.com
+                                // Add to pending contacts
+                                // TO-DO: Probably should be pending friends
+                                instance.addPendingContact(person);
                                 // Create contact object for current user - Parse.com
-                                // Add to current user's instance: currentContacts, pendingContacts, pendingFriends
-                                // LOOK AT AddFriends.java
+                                ////// Create contact ParseObject here
+                                final ParseObject contact = new ParseObject("contact");
+                                contact.put("name", person.getName());
+                                contact.put("phone", person.getPhone());
+                                contact.put("user", currentUser.getUsername());
+                                contact.put("id", person.getId());
+                                contact.put("pending", false);
+                                contact.saveInBackground(new SaveCallback() {
+                                    @Override
+                                    public void done(ParseException e) {
+                                        if (e != null) {
+                                            Log.e(TAG, "Error saving contactsId: " + e);
+                                        } else {
+                                            // Add to instance current contacts
+                                            instance.addCurrentContact(contact.getObjectId());
+                                            person.setObjectId(contact.getObjectId());
+                                            Log.e(TAG, person.getObjectId());
+                                            // Add to currentUser's contacts[]
+                                            currentUser.add("contacts", contact.getObjectId());
+                                            currentUser.saveInBackground();
+                                            // ContactsObject[]
+                                            ParseQuery<ParseObject> query = ParseQuery.getQuery("ContactsObject");
+                                            query.whereEqualTo("user", currentUser.getUsername());
+                                            query.getFirstInBackground(new GetCallback<ParseObject>() {
+                                                @Override
+                                                public void done(final ParseObject parseObject, ParseException e) {
+                                                    if (parseObject != null) {
+                                                        // User exists and has a ContactsObject
+                                                        parseObject.add("contacts", contact.getObjectId());
+                                                        parseObject.saveInBackground(new SaveCallback() {
+                                                            @Override
+                                                            public void done(ParseException e) {
+                                                                // Log.e(TAG, "ContactsObject: " + parseObject.get("contacts").toString());
+                                                            }
+                                                        });
+                                                    } else {
+                                                        // Something went wrong
+                                                        Log.e("Contacts", "Failed to retrieve contactsObject: " + e);
+                                                    }
+                                                }
+                                            });
+                                        }
+                                    }
+//                                    instance.getPendingContacts().clear();
+                                });
+                                // Add to current user's instance: pendingFriends?
                             } catch (Exception err) {
                                 err.printStackTrace();
                             }
@@ -99,8 +146,8 @@ public class RequestsAdapter extends ArrayAdapter<Contact> {
                     });
                     // Get contact's contact object containing pending request
                     ParseQuery<ParseObject> query1 = ParseQuery.getQuery("contact");
-                    query1.whereEqualTo("user", data.getEmail());
-                    query1.whereEqualTo("phone", data.getPhone());
+                    query1.whereEqualTo("user", person.getEmail());
+                    query1.whereEqualTo("phone", person.getPhone());
                     query1.getFirstInBackground(new GetCallback<ParseObject>() {
                         @Override
                         public void done(final ParseObject parseObject, ParseException e) {
@@ -120,125 +167,18 @@ public class RequestsAdapter extends ArrayAdapter<Contact> {
 
                 }
             });
-//            view.setOnClickListener(new View.OnClickListener() {
-//                @Override
-//                public void onClick(View v) {
-//                    Log.e(TAG, data.getName() + " " + data.getId() + " clicked");
-//
-//                    AlertDialog.Builder alert = new AlertDialog.Builder(context);
-//                    alert.setMessage("Do you want to delete " + data.getName() + "?");
-//                    alert.setNegativeButton("Cancel",
-//                            new DialogInterface.OnClickListener() {
-//                                @Override
-//                                public void onClick(DialogInterface dialog, int which) {
-//                                    dialog.cancel();
-//                                }
-//                            });
-//                    alert.setPositiveButton("OK",
-//                            new DialogInterface.OnClickListener() {
-//                                @Override
-//                                public void onClick(DialogInterface dialog, int which) {
-//                                    // Remove Contact from list & update list
-//                                    Log.e(TAG, " BEFORE Pending Friends " + instance.getPendingFriends().toString());
-//                                    instance.getPendingFriends().remove(data);
-//                                    // Add deleted So-So friend back to Contacts list
-//                                    instance.getAllContacts().add(data);
-//                                    Log.e(TAG, " AFTER Pending Friends " + instance.getPendingFriends().toString());
-//
-//                                    remove(getItem(position));  // Remove from list
-//                                    notifyDataSetChanged();
-//
-//                                    // Remove from Parse
-//                                    final String user = ParseUser.getCurrentUser().getString("email");
-//                                    ParseQuery<ParseObject> query = ParseQuery.getQuery("ContactsObject");
-//                                    query.whereEqualTo("user", user);
-//                                    query.getFirstInBackground(new GetCallback<ParseObject>() {
-//                                        @Override
-//                                        public void done(final ParseObject parseObject1, ParseException e) {
-//                                            if (parseObject1 != null) {
-//                                                // get contact object
-//                                                ParseQuery<ParseObject> query = ParseQuery.getQuery("contact");
-//                                                query.whereEqualTo("user", user);
-//                                                query.whereEqualTo("phone", data.getPhone());
-//                                                query.getFirstInBackground(new GetCallback<ParseObject>() {
-//                                                    @Override
-//                                                    public void done(final ParseObject parseObject, ParseException e) {
-//                                                        if (parseObject != null) {
-//                                                            Log.e(TAG, "Contact exists. Delete!");
-//
-//                                                            String objectId = parseObject.getObjectId();
-//                                                            Log.e(TAG, "from parse: " + objectId);
-//                                                            Log.e(TAG, "from data obj: " + data.getObjectId());
-//
-//                                                            for(int i=0; i < instance.getCurrentContacts().size(); i++) {
-//                                                                String currentId = instance.getCurrentContacts().get(i);
-//                                                                if (!currentId.equals(objectId)) {
-//                                                                    newPendingRequests.add(currentId);
-//                                                                }
-//                                                            }
-//                                                            instance.getCurrentContacts().clear();
-//                                                            instance.setCurrentContacts(newPendingRequests);
-//                                                            newPendingRequests = null;
-//
-//                                                            Log.e(TAG, "current contacts" + instance.getCurrentContacts());
-//                                                            // Delete from user's contact list
-//                                                            // Part 1: Delete from current user's contacts[]
-//                                                            ParseUser.getCurrentUser().put("contacts", instance.getCurrentContacts());
-//                                                            ParseUser.getCurrentUser().saveInBackground(new SaveCallback() {
-//                                                                @Override
-//                                                                public void done(ParseException e) {
-//                                                                    Log.e(TAG, "Saved contacts[]");
-//                                                                }
-//                                                            });
-//                                                            // Part 2: Delete from current user's ContactsObject[]
-//                                                            parseObject1.put("contacts", instance.getCurrentContacts());
-//                                                            parseObject1.saveInBackground(new SaveCallback() {
-//                                                                @Override
-//                                                                public void done(ParseException e) {
-//                                                                    Log.e(TAG, "Saved ContactsObject[]");
-//                                                                }
-//                                                            });
-//
-//                                                            // Delete contact object
-//                                                            parseObject.deleteInBackground();
-//
-//                                                            notifyDataSetChanged();
-//                                                        } else {
-//                                                            Log.e(TAG, "Contact DNE yet. Can't delete");
-//
-//                                                        }
-//                                                        // Where Part II used to be
-//                                                    }
-//                                                });
-//                                                // end get contact object
-//
-//                                            } else {
-//                                                // Something went wrong
-//                                                Log.e("Contacts", "Failed to retrieve contactsObject: " + e);
-//                                            }
-//                                        }
-//                                    });
-//                                    // End remove from Parse
-//                                    Toast mes = Toast.makeText(context, "Friend Requests Sent", Toast.LENGTH_LONG);
-//                                    mes.show();
-//                                }
-//                            });
-//                    alert.create().show();
-//
-//                }
-//            });
             view.setTag(viewHolder);
         } else {
             view = convertView;
         }
         ViewHolder holder = (ViewHolder) view.getTag();
-        holder.contactName.setText(data.getName());
-        if (data.isPending()) {
-            // TEMPORARY ****
-            holder.contactName.setText(holder.contactName.getText() + " Pending");
+        holder.contactName.setText(person.getName());
+        if (person.isPending()) {
+            // TEMPORARY **** NICOLE: PROBABLY DON'T NEED THIS HERE
+            holder.contactName.setText(holder.contactName.getText());
         }
-        holder.contactNumber.setText(data.getPhone());
-        Log.e("height", getCount()+ "");
+        holder.contactNumber.setText(person.getPhone());
+//        Log.e("height", getCount()+ "");
         return view;
     }
 }

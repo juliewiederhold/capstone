@@ -114,12 +114,7 @@ public class AddFriends extends ActionBarActivity {
         sendRequest.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
-
                 createParseObjects(instance.getPendingContacts());
-
-
-
                 Toast mes = Toast.makeText(getApplicationContext(), "Friend Requests Sent", Toast.LENGTH_LONG);
                 mes.show();
                 finish();
@@ -148,7 +143,6 @@ public class AddFriends extends ActionBarActivity {
                         Log.e(TAG, "Error saving contactsId: " + e);
                     } else {
                         instance.addCurrentContact(contact.getObjectId());
-                        instance.addPendingParse(contact);
                         person.setObjectId(contact.getObjectId());
                         Log.e(TAG, person.getObjectId());
                         ParseUser.getCurrentUser().add("contacts", contact.getObjectId());
