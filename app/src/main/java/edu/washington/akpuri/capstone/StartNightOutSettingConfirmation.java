@@ -72,8 +72,6 @@ public class StartNightOutSettingConfirmation extends ActionBarActivity {
         confirm.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
-
                 LayoutInflater inflater = getLayoutInflater();
 
                 final View fragmentView = inflater.inflate(R.layout.fragment_set_duration, null);
@@ -98,8 +96,6 @@ public class StartNightOutSettingConfirmation extends ActionBarActivity {
                                     finish();
                                     startActivity(intent);
 
-
-
                                     instance = SingletonNightOutSettings.getInstance();
                                     instance.setDurationHours(Integer.parseInt(hours));
                                     instance.setDurationMinutes(Integer.parseInt(minutes));
@@ -107,6 +103,8 @@ public class StartNightOutSettingConfirmation extends ActionBarActivity {
 
                                     Intent beginNightOut = new Intent(StartNightOutSettingConfirmation.this, MainMap.class);
                                     startActivity(beginNightOut);
+
+
 
                                     hoursText.setText("");
                                     minutesText.setText("");

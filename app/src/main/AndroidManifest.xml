@@ -162,7 +162,7 @@
         </activity>
         <activity
             android:name=".StartNightOutSettingConfirmation"
-            android:label="@string/title_activity_start_night_out" >
+            android:label="@string/title_activity_start_night_out">
         </activity>
         <activity
             android:name=".NightOutSafetyZones"
@@ -184,6 +184,12 @@
             android:name=".NightOutBlockContacts"
             android:label="@string/title_activity_night_out_block_contacts" >
         </activity>
+        <activity
+            android:name=".MainMap"
+            android:label="@string/title_activity_main_map"
+            android:noHistory="true">
+        </activity>
+
         <!-- For push notifications -->
         <service android:name="com.parse.PushService" />
 
@@ -213,12 +219,6 @@
                 <category android:name="edu.washington.akpuri.capstone" />
             </intent-filter>
         </receiver>
-
-        <activity
-            android:name=".MainMap"
-            android:label="@string/title_activity_main_map" >
-        </activity>
-
     </application>
 
 </manifest>

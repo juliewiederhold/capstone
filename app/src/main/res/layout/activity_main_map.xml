@@ -10,6 +10,13 @@
         android:layout_height="62dp"
         android:background="@color/blue_main">
 
+        <ImageButton
+            android:name="@+id/exit_night_out"
+            android:src="@drawable/ic_clear_black_48dp"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_marginLeft="340dp"
+            android:id="@+id/exit_night_out" />
     </LinearLayout>
 
     <fragment
