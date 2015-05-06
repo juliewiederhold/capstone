@@ -135,6 +135,7 @@ public class Contacts extends ActionBarActivity {
         // Should have buttons for accepting and rejecting
         ParseQuery<ParseObject> query = ParseQuery.getQuery("contact");
         query.whereEqualTo("phone", ParseUser.getCurrentUser().get("phone"));
+        query.whereEqualTo("pending", true);
         query.findInBackground(new FindCallback<ParseObject>() {
             @Override
             public void done(List<ParseObject> objects, ParseException e) {
@@ -189,11 +190,15 @@ public class Contacts extends ActionBarActivity {
         pendingContacts.clear();
         if (!instance.getPendingContacts().isEmpty()) {
             instance.addPendingFriends(instance.getPendingContacts());
-            instance.getPendingContacts().clear();
+//            instance.getPendingContacts().clear();
         }
         if (!instance.getPendingFriends().isEmpty()) {
             pendingContacts.addAll(instance.getPendingFriends());
         }
+
+        Log.e(TAG, "pending friends: " + instance.getPendingFriends().toString());
+        Log.e(TAG, "pending contacts: " + instance.getPendingContacts().toString());
+        Log.e(TAG, "pending requests: " + instance.getPendingRequests().toString());
     }
 
 
@@ -274,6 +279,11 @@ public class Contacts extends ActionBarActivity {
         @Override
         public void onResume() {
             super.onResume();
+            // Hits this but not the contacts.java onresume
+            Log.e(TAG, "Frag pending friends: " + instance.getPendingFriends().toString());
+            Log.e(TAG, "Frag pending contacts: " + instance.getPendingContacts().toString());
+            Log.e(TAG, "Frag pending requests: " + instance.getPendingRequests().toString());
+
             if (!instance.getPendingContacts().isEmpty()) {
                 pendingContacts.addAll(instance.getPendingContacts());
                 instance.getPendingContacts().clear();
@@ -351,6 +361,8 @@ public class Contacts extends ActionBarActivity {
 
             return rootView;
         }
+
+
 
     }
 }
