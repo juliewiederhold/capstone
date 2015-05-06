@@ -63,6 +63,63 @@ public class MainMap extends FragmentActivity implements
                 .setInterval(10 * 1000)        // 10 seconds, in milliseconds
                 .setFastestInterval(1 * 1000); // 1 second, in milliseconds
 
+        ImageButton quickText = (ImageButton) findViewById(R.id.message_friends);
+        quickText.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                LayoutInflater inflater = getLayoutInflater();
+
+                final View fragmentView = inflater.inflate(R.layout.fragment_send_quick_text, null);
+                AlertDialog.Builder builder = new AlertDialog.Builder(fragmentView.getContext());
+
+                SingletonNightOutSettings instance = SingletonNightOutSettings.getInstance();
+
+
+                // Inflate and set the layout for the dialog
+                // Pass null as the parent view because its going in the dialog layout
+                builder.setView(fragmentView)
+                        // Add action buttons
+                        .setPositiveButton("Send Quick Text", new DialogInterface.OnClickListener(){
+                            @Override
+                            public void onClick(DialogInterface dialog, int id) {
+
+                                EditText answerText = (EditText) fragmentView.findViewById(R.id.exit_night_out_answer);
+
+                                int answer = Integer.parseInt(answerText.getText().toString());
+
+                                if(answer == 1088){
+
+                                    Intent intent = getIntent();
+                                    finish();
+                                    startActivity(intent);
+
+
+                                    Intent endNightOut = new Intent(MainMap.this, MainActivity.class);
+                                    startActivity(endNightOut);
+
+                                    answerText.setText("");
+
+                                } else {
+                                    Context context = getApplicationContext();
+                                    CharSequence text = "Incorrect Answer";
+                                    int duration = Toast.LENGTH_SHORT;
+
+                                    Toast toast = Toast.makeText(context, text, duration);
+                                    toast.show();
+                                }
+                            }
+                        })
+                        .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int id) {
+
+                            }
+                        });
+
+                builder.create();
+                builder.show();
+            }
+        });
+
         ImageButton exit = (ImageButton) findViewById(R.id.exit_night_out);
         exit.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -83,7 +140,7 @@ public class MainMap extends FragmentActivity implements
 
                                 int answer = Integer.parseInt(answerText.getText().toString());
 
-                                if(answer == 1088){
+                                if(answer == 1088 || !answerText.getText().toString().equals("")){
 
                                     Intent intent = getIntent();
                                     finish();
