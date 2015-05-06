@@ -134,7 +134,6 @@ public class Contacts extends ActionBarActivity {
         // To-do: Create a separate adapter for pending friend requests
         // Should have buttons for accepting and rejecting
         ParseQuery<ParseObject> query = ParseQuery.getQuery("contact");
-        Log.e(TAG, ParseUser.getCurrentUser().get("phone") + "");
         query.whereEqualTo("phone", ParseUser.getCurrentUser().get("phone"));
         query.findInBackground(new FindCallback<ParseObject>() {
             @Override
@@ -159,6 +158,7 @@ public class Contacts extends ActionBarActivity {
                                     Contact person = new Contact(parseUser.get("firstname").toString() + " " + parseUser.get("lastname").toString(),
                                             parseUser.get("phone").toString(),
                                             counter);
+                                    person.setEmail(parseUser.getUsername());
 //                                    Integer.parseInt(parseUser.getObjectId())
 //                                    Log.e(TAG, parseUser.get("firstname").toString());
 //                                    Log.e(TAG, parseUser.get("lastname").toString());
@@ -276,8 +276,9 @@ public class Contacts extends ActionBarActivity {
             super.onResume();
             if (!instance.getPendingContacts().isEmpty()) {
                 pendingContacts.addAll(instance.getPendingContacts());
+                instance.getPendingContacts().clear();
             }
-            Log.e(TAG, "onResume: " + instance.getPendingContacts().toString());
+
             ListView contactListView = (ListView) getView().findViewById(R.id.friendListView);
 
             TextView noFriends = (TextView) getView().findViewById(R.id.noFriends);

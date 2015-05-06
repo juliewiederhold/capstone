@@ -10,6 +10,7 @@ import android.util.Log;
 public class Contact {
     private String name;
     private String phone;
+    private String email;
     private int id;
     private boolean hasSoSo;
     private boolean isPending;
@@ -27,6 +28,7 @@ public class Contact {
         this.selected = false;
         this.hasBeenAdded = false;
         this.isPending = true;
+        this.email = "";    // for now; set when needed
     }
 
     public String getName() {
@@ -76,6 +78,14 @@ public class Contact {
 
     public void setObjectId(String objectId) {
         this.objectId = objectId;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public String getEmail() {
+        return this.email;
     }
 
 }

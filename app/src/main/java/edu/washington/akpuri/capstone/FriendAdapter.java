@@ -17,6 +17,7 @@ import com.parse.Parse;
 import com.parse.ParseException;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
+import com.parse.ParseRelation;
 import com.parse.ParseUser;
 import com.parse.SaveCallback;
 
@@ -72,7 +73,7 @@ public class FriendAdapter extends ArrayAdapter<Contact> {
             view.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Log.e(TAG, data.getName() + " " + data.getId() + " clicked");
+                    Log.e(TAG, data.getName() + " " + position + " clicked");
 
                     AlertDialog.Builder alert = new AlertDialog.Builder(context);
                     alert.setMessage("Do you want to delete " + data.getName() + "?");
@@ -167,6 +168,22 @@ public class FriendAdapter extends ArrayAdapter<Contact> {
                                             }
                                         }
                                     });
+                                    // Remove from currentUser's Friends
+                                    ParseQuery<ParseUser> query1 = ParseUser.getQuery();
+                                    query1.whereContains("username", data.getEmail());
+                                    query1.getFirstInBackground(new GetCallback<ParseUser>() {
+                                        @Override
+                                        public void done(ParseUser parseUser, ParseException e) {
+                                            try {
+                                                ParseRelation<ParseUser> relation = ParseUser.getCurrentUser().getRelation("Friends");
+                                                relation.remove(parseUser);
+                                                ParseUser.getCurrentUser().saveInBackground();
+                                            } catch (Exception e1) {
+                                                e1.printStackTrace();
+                                            }
+                                        }
+                                    });
+
                                     // End remove from Parse
                                     Toast mes = Toast.makeText(context, "Friend Requests Sent", Toast.LENGTH_LONG);
                                     mes.show();
@@ -187,7 +204,7 @@ public class FriendAdapter extends ArrayAdapter<Contact> {
             holder.contactName.setText(holder.contactName.getText() + " Pending");
         }
         holder.contactNumber.setText(data.getPhone());
-        Log.e("height", getCount()+ "");
+//        Log.e("height", getCount()+ "");
         return view;
     }
 }

@@ -35,8 +35,6 @@ public class SingletonContacts {
     public void setHasImported(boolean imported) {
         this.imported = imported;
     }
-    ///
-    private static ArrayList<ParseObject> pendingParse;
 
     //Empty Constructor, it's a singleton
     protected SingletonContacts() {
@@ -48,9 +46,6 @@ public class SingletonContacts {
             allContacts = new ArrayList<Contact>();
             pendingContacts = new ArrayList<Contact>();
             currentContacts = new ArrayList<>();
-
-            pendingParse = new ArrayList<>();
-
             allPendingRequests = new ArrayList<>();
         }
         return instance;
@@ -129,17 +124,6 @@ public class SingletonContacts {
         pendingFriends.addAll(objects);
     }
 
-    public void addPendingParse(ParseObject parseObject) {
-        pendingParse.add(parseObject);
-    }
-
-    public void setPendingParse(ArrayList<ParseObject> parseObjects) {
-        pendingParse.addAll(parseObjects);
-    }
-
-    public ArrayList<ParseObject> getPendingParse() {
-        return pendingParse;
-    }
 
     // Add another So-So user's email address to pending requests
     public void addPendingRequests(Contact pendingUser) {

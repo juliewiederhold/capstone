@@ -17,6 +17,8 @@ public class SingletonNightOutSettings {
     private static ArrayList<String> nightOutQuickTexts;
     private static ArrayList<App> nightOutBlockedApps;
     private static ArrayList<Contact> nightOutBlockedContacts;
+    private static int durationMinutes;
+    private static int durationHours;
 
     //Empty Constructor, it's a singleton
     protected SingletonNightOutSettings(){
@@ -35,6 +37,9 @@ public class SingletonNightOutSettings {
             nightOutSafetyZones = new ArrayList<>();
             nightOutBlockedApps = new ArrayList<>();
             nightOutBlockedContacts = new ArrayList<>();
+
+            durationHours = 0;
+            durationMinutes = 0;
 
              initializeBlockedApps();
         }
@@ -89,5 +94,8 @@ public class SingletonNightOutSettings {
 
     public void setNightOutBlockedContacts(ArrayList<Contact> list){ this.nightOutBlockedContacts = list;}
 
+    public void setDurationMinutes(int minutes){this.durationMinutes = minutes;}
+
+    public void setDurationHours(int hours){this.durationHours = hours;}
 
 }
