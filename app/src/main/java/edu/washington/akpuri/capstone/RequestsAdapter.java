@@ -85,13 +85,15 @@ public class RequestsAdapter extends ArrayAdapter<Contact> {
                                 // To-do: Add to parseUser's Friends
                                 // Remove from pending requests
                                 instance.getPendingRequests().remove(person);
+                                // Change contact pending to false
                                 Log.e(TAG, position + "");
 //                                remove(getItem(position));
                                 notifyDataSetChanged();
                                 // TO-DO
                                 // Add to pending contacts
                                 // TO-DO: Probably should be pending friends
-                                instance.addPendingContact(person);
+//                                instance.addPendingContact(person);
+                                instance.addPendingFriend(person);
                                 // Create contact object for current user - Parse.com
                                 ////// Create contact ParseObject here
                                 final ParseObject contact = new ParseObject("contact");
@@ -156,7 +158,7 @@ public class RequestsAdapter extends ArrayAdapter<Contact> {
                                 parseObject.saveInBackground(new SaveCallback() {
                                     @Override
                                     public void done(ParseException e) {
-                                        Log.e(TAG, parseObject.get("phone") + "Pending: " + parseObject.get("pending").toString());
+                                        Log.e(TAG, parseObject.get("user").toString() + " " + parseObject.get("phone") + "Pending: " + parseObject.get("pending").toString());
                                     }
                                 });
                             } else {
@@ -164,7 +166,6 @@ public class RequestsAdapter extends ArrayAdapter<Contact> {
                             }
                         }
                     });
-
                 }
             });
             view.setTag(viewHolder);
