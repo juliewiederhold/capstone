@@ -99,12 +99,9 @@ public class StartNightOutSettingConfirmation extends ActionBarActivity {
                                     instance = SingletonNightOutSettings.getInstance();
                                     instance.setDurationHours(Integer.parseInt(hours));
                                     instance.setDurationMinutes(Integer.parseInt(minutes));
-        /* WILL NEED TO DELETE */   instance.restartInstance();
 
                                     Intent beginNightOut = new Intent(StartNightOutSettingConfirmation.this, MainMap.class);
                                     startActivity(beginNightOut);
-
-
 
                                     hoursText.setText("");
                                     minutesText.setText("");

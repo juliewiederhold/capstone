@@ -6,13 +6,20 @@ import android.content.Intent;
 import android.content.IntentSender;
 import android.location.Location;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.ListView;
+import android.widget.SimpleAdapter;
 import android.widget.Toast;
 
 import com.google.android.gms.common.ConnectionResult;
@@ -27,12 +34,16 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+
 public class MainMap extends FragmentActivity implements
         GoogleApiClient.ConnectionCallbacks,
         GoogleApiClient.OnConnectionFailedListener,
         LocationListener {
 
     public static final String TAG = MainMap.class.getSimpleName();
+    public static SingletonNightOutSettings instance;
 
     /*
      * Define a request code to send to Google Play services
@@ -51,6 +62,8 @@ public class MainMap extends FragmentActivity implements
         setContentView(R.layout.activity_main_map);
         setUpMapIfNeeded();
 
+        instance = SingletonNightOutSettings.getInstance();
+
         mGoogleApiClient = new GoogleApiClient.Builder(this)
                 .addConnectionCallbacks(this)
                 .addOnConnectionFailedListener(this)
@@ -67,56 +80,8 @@ public class MainMap extends FragmentActivity implements
         quickText.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                LayoutInflater inflater = getLayoutInflater();
-
-                final View fragmentView = inflater.inflate(R.layout.fragment_send_quick_text, null);
-                AlertDialog.Builder builder = new AlertDialog.Builder(fragmentView.getContext());
-
-                SingletonNightOutSettings instance = SingletonNightOutSettings.getInstance();
-
-
-                // Inflate and set the layout for the dialog
-                // Pass null as the parent view because its going in the dialog layout
-                builder.setView(fragmentView)
-                        // Add action buttons
-                        .setPositiveButton("Send Quick Text", new DialogInterface.OnClickListener(){
-                            @Override
-                            public void onClick(DialogInterface dialog, int id) {
-
-                                EditText answerText = (EditText) fragmentView.findViewById(R.id.exit_night_out_answer);
-
-                                int answer = Integer.parseInt(answerText.getText().toString());
-
-                                if(answer == 1088){
-
-                                    Intent intent = getIntent();
-                                    finish();
-                                    startActivity(intent);
-
-
-                                    Intent endNightOut = new Intent(MainMap.this, MainActivity.class);
-                                    startActivity(endNightOut);
-
-                                    answerText.setText("");
-
-                                } else {
-                                    Context context = getApplicationContext();
-                                    CharSequence text = "Incorrect Answer";
-                                    int duration = Toast.LENGTH_SHORT;
-
-                                    Toast toast = Toast.makeText(context, text, duration);
-                                    toast.show();
-                                }
-                            }
-                        })
-                        .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog, int id) {
-
-                            }
-                        });
-
-                builder.create();
-                builder.show();
+                Intent text = new Intent(MainMap.this, SendQuickText.class);
+                startActivity(text);
             }
         });
 
@@ -133,19 +98,19 @@ public class MainMap extends FragmentActivity implements
                 // Pass null as the parent view because its going in the dialog layout
                 builder.setView(fragmentView)
                         // Add action buttons
-                        .setPositiveButton("End Night Out", new DialogInterface.OnClickListener(){
+                        .setPositiveButton("End Night Out", new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int id) {
                                 EditText answerText = (EditText) fragmentView.findViewById(R.id.exit_night_out_answer);
 
                                 int answer = Integer.parseInt(answerText.getText().toString());
 
-                                if(answer == 1088 || !answerText.getText().toString().equals("")){
+                                if (answer == 1088 || !answerText.getText().toString().equals("")) {
 
                                     Intent intent = getIntent();
                                     finish();
                                     startActivity(intent);
-
+                                    instance.restartInstance();
 
                                     Intent endNightOut = new Intent(MainMap.this, MainActivity.class);
                                     startActivity(endNightOut);
@@ -247,10 +212,10 @@ public class MainMap extends FragmentActivity implements
                 .position(latLng)
                 .title("I am here!");
         mMap.addMarker(options);
-       // mMap.moveCamera(CameraUpdateFactory.newLatLng(latLng));
+        // mMap.moveCamera(CameraUpdateFactory.newLatLng(latLng));
 
-        CameraUpdate center= CameraUpdateFactory.newLatLng(new LatLng(currentLatitude, currentLongitude));
-        CameraUpdate zoom=CameraUpdateFactory.zoomTo(15);
+        CameraUpdate center = CameraUpdateFactory.newLatLng(new LatLng(currentLatitude, currentLongitude));
+        CameraUpdate zoom = CameraUpdateFactory.zoomTo(15);
 
         mMap.moveCamera(center);
         mMap.animateCamera(zoom);
@@ -261,8 +226,7 @@ public class MainMap extends FragmentActivity implements
         Location location = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
         if (location == null) {
             LocationServices.FusedLocationApi.requestLocationUpdates(mGoogleApiClient, mLocationRequest, this);
-        }
-        else {
+        } else {
             handleNewLocation(location);
         }
     }
@@ -305,7 +269,9 @@ public class MainMap extends FragmentActivity implements
     public void onLocationChanged(Location location) {
         handleNewLocation(location);
     }
+
 }
+
 /*
 import android.app.Activity;
 import android.app.FragmentTransaction;

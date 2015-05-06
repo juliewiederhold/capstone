@@ -47,7 +47,6 @@
     <string name="appNumberBlock">Add apps and contacts you want to block during your night out!</string>
     <string name="no_blocked_contacts_description">You currently have no blocked contacts.</string>
 
-
     <!-- Contact / Friends Information -->
     <string name="contact_group_description">Create a group with friends you commonly go out with to make adding inviting friends to a Night Out faster! </string>
     <string name="contact_group_message_when_contacts_empty">You currently do not have any So-So friends. Add contacts from the Contacts Tab or wait for your friends to accept your invite!</string>
@@ -77,12 +76,10 @@
     <string name="logo_desc">So-So Logo</string>
     <string name="title_activity_night_out_app_number_blocking">NightOutAppNumberBlocking</string>
     <string name="edit_settings">Edit Settings</string>
-
     <string name="hello_world">Hello world!</string>
-    <string name="title_activity_night_out_edit_blocked_contacts_list">
-        NightOutEditBlockedContactsList
-    </string>
+    <string name="title_activity_night_out_edit_blocked_contacts_list">        NightOutEditBlockedContactsList</string>
     <string name="title_activity_night_out_block_contacts">NightOutBlockContacts</string>
     <string name="title_activity_main_map">MainMap</string>
+    <string name="title_activity_send_quick_text">SendQuickText</string>
 
 </resources>

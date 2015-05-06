@@ -17,21 +17,22 @@
     <permission
         android:name="edu.washington.akpuri.capstone.permission.MAPS_RECEIVE"
         android:protectionLevel="signature" />
-    <uses-permission android:name="edu.washington.akpuri.capstone.permission.MAPS_RECEIVE"/>
 
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
-    <uses-permission android:name="com.google.android.providers.gsf.permission.READ_GSERVICES"/>
-    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
-    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
+    <uses-permission android:name="edu.washington.akpuri.capstone.permission.MAPS_RECEIVE" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="com.google.android.providers.gsf.permission.READ_GSERVICES" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
 
     <!-- Google maps stuff -->
 
-
-    <permission android:name="edu.washington.akpuri.capstone.permission.C2D_MESSAGE" android:protectionLevel="signature" />
+    <permission
+        android:name="edu.washington.akpuri.capstone.permission.C2D_MESSAGE"
+        android:protectionLevel="signature" />
 
     <uses-feature
         android:glEsVersion="0x00020000"
-        android:required="true"/>
+        android:required="true" />
 
     <!--
      The following permission is not required to use
@@ -66,15 +67,23 @@
         <meta-data
             android:name="com.google.android.gms.version"
             android:value="@integer/google_play_services_version" />
-        <meta-data android:name="com.google.android.maps.v2.API_KEY" android:value="AIzaSyAVgP_BqXlPUcm3c8C2S10eU66bznDIvPg"/>
+        <meta-data
+            android:name="com.google.android.maps.v2.API_KEY"
+            android:value="AIzaSyAVgP_BqXlPUcm3c8C2S10eU66bznDIvPg" />
+
         <service android:name="com.parse.PushService" />
-        <receiver android:name="com.parse.GcmBroadcastReceiver" android:permission="com.google.android.c2dm.permission.SEND">
+
+        <receiver
+            android:name="com.parse.GcmBroadcastReceiver"
+            android:permission="com.google.android.c2dm.permission.SEND" >
             <intent-filter>
                 <action android:name="com.google.android.c2dm.intent.RECEIVE" />
                 <action android:name="com.google.android.c2dm.intent.REGISTRATION" />
+
                 <category android:name="edu.washington.akpuri.capstone" />
             </intent-filter>
         </receiver>
+
         <uses-library android:name="com.google.android.maps" />
 
         <activity
@@ -158,7 +167,7 @@
         </activity>
         <activity
             android:name=".StartNightOutSettingConfirmation"
-            android:label="@string/title_activity_start_night_out">
+            android:label="@string/title_activity_start_night_out" >
         </activity>
         <activity
             android:name=".NightOutSafetyZones"
@@ -183,7 +192,7 @@
         <activity
             android:name=".MainMap"
             android:label="@string/title_activity_main_map"
-            android:noHistory="true">
+            android:noHistory="true" >
         </activity>
 
         <!-- For push notifications -->
@@ -215,6 +224,11 @@
                 <category android:name="edu.washington.akpuri.capstone" />
             </intent-filter>
         </receiver>
+
+        <activity
+            android:name=".SendQuickText"
+            android:label="@string/title_activity_send_quick_text" >
+        </activity>
     </application>
 
 </manifest>
