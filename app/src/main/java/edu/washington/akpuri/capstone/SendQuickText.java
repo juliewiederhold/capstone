@@ -1,14 +1,19 @@
 package edu.washington.akpuri.capstone;
 
+import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.PendingIntent;
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
+import android.telephony.SmsManager;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -31,16 +36,15 @@ import java.util.HashMap;
 public class SendQuickText extends ActionBarActivity {
     private static ArrayList<HashMap<String, String>> quickTextInformation = new ArrayList<>();
     private static SingletonNightOutSettings instance;
+    private static String messageToBeSent;
+    private static TextView messageNumber;
 
-    static class ViewHolder {
-        protected TextView appName;
-        protected CheckBox checkbox;
-    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_send_quick_text);
+        messageNumber=(TextView) findViewById(R.id.messageNumber);
 
         instance = SingletonNightOutSettings.getInstance();
 
@@ -48,6 +52,13 @@ public class SendQuickText extends ActionBarActivity {
         if(instance.getNightOutQuickTexts().size() > 0){
             TextView empty = (TextView) findViewById(R.id.emptyQuickTextMessage);
             empty.setText("");
+        }
+
+        if(messageToBeSent != null){
+            EditText currentMessage = (EditText)  findViewById(R.id.message);
+            currentMessage.setText(messageToBeSent);
+        } else {
+            messageToBeSent = "";
         }
 
         if (savedInstanceState == null) {
@@ -61,6 +72,8 @@ public class SendQuickText extends ActionBarActivity {
         send.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                sendMesage(v);
+                messageToBeSent = "";
                 Intent backToMap = new Intent(SendQuickText.this, MainMap.class);
                 startActivity(backToMap);
             }
@@ -70,6 +83,7 @@ public class SendQuickText extends ActionBarActivity {
         cancel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                messageToBeSent = "";
                 Intent backToMap = new Intent(SendQuickText.this, MainMap.class);
                 startActivity(backToMap);
             }
@@ -77,6 +91,36 @@ public class SendQuickText extends ActionBarActivity {
 
 
 
+    }
+
+    public void sendMesage(View v){
+        //String _messageNumber = messageNumber.getText().toString();
+        String _messageNumber = "4082096381";
+
+        String sent = "SMS_SENT";
+
+        PendingIntent sentPI = PendingIntent.getBroadcast(this, 0,
+                new Intent(sent), 0);
+
+        //---when the SMS has been sent---
+        registerReceiver(new BroadcastReceiver(){
+            @Override
+            public void onReceive(Context arg0, Intent arg1) {
+                if(getResultCode() == Activity.RESULT_OK)
+                {
+                    Toast.makeText(getBaseContext(), "SMS sent",
+                            Toast.LENGTH_SHORT).show();
+                }
+                else
+                {
+                    Toast.makeText(getBaseContext(), "SMS could not sent",
+                            Toast.LENGTH_SHORT).show();
+                }
+            }
+        }, new IntentFilter(sent));
+
+        SmsManager sms = SmsManager.getDefault();
+        sms.sendTextMessage(_messageNumber, null, messageToBeSent, sentPI, null);
     }
 
     private static void initList(){
@@ -131,6 +175,8 @@ public class SendQuickText extends ActionBarActivity {
                                  Bundle savedInstanceState) {
             final View rootView = inflater.inflate(R.layout.current_quick_text_view, container, false);
             final ListView lv = (ListView) rootView.findViewById(R.id.listViewQuickText);
+
+
             initList();
 
             SimpleAdapter simpleAdpt = new SimpleAdapter(rootView.getContext(), quickTextInformation, android.R.layout.simple_list_item_1,
@@ -142,7 +188,22 @@ public class SendQuickText extends ActionBarActivity {
             lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                 @Override
                 public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                    LayoutInflater inflater = getActivity().getLayoutInflater();
+
+                    String itemSelected = lv.getItemAtPosition(position).toString();
+                    String[] fullAddress = itemSelected.split(",");
+                    String quickTextToAdd = fullAddress[0].split("=")[1];
+                    if(messageToBeSent == null || messageToBeSent.equals("")){
+                        messageToBeSent = quickTextToAdd;
+                    } else {
+                        messageToBeSent = messageToBeSent + " " + quickTextToAdd;
+                    }
+
+                    Intent intent = getActivity().getIntent();
+                    getActivity().finish();
+                    startActivity(intent);
+                   // EditText currentMessage = (EditText) rootView.findViewById(R.id.message);
+                   // currentMessage.setText(messageToBeSent);
+                   /* LayoutInflater inflater = getActivity().getLayoutInflater();
 
                     final View fragmentView = inflater.inflate(R.layout.fragment_send_quick_text, null);
                     AlertDialog.Builder builder = new AlertDialog.Builder(fragmentView.getContext());
@@ -165,7 +226,7 @@ public class SendQuickText extends ActionBarActivity {
 
 
                     builder.create();
-                    builder.show();
+                    builder.show();*/
                 }
             });
             return rootView;
