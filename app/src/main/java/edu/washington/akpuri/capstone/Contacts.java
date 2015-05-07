@@ -288,6 +288,10 @@ public class Contacts extends ActionBarActivity {
                 pendingContacts.addAll(instance.getPendingContacts());
                 instance.getPendingContacts().clear();
             }
+            // ADDED THIS, but adds over and over
+//            if (!instance.getPendingFriends().isEmpty()) {
+//                pendingContacts.addAll(instance.getPendingFriends());
+//            }
 
             ListView contactListView = (ListView) getView().findViewById(R.id.friendListView);
 
