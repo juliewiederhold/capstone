@@ -28,16 +28,16 @@ public class RequestsAdapter extends ArrayAdapter<Contact> {
 
     private final static String TAG = "RequestsAdapter";
 
-    private final ArrayList<Contact> list;
+    private final ArrayList<Contact> pendingRequests;
     private final Context context;
     private final SingletonContacts instance;
     private LayoutInflater mInflater;
     private ArrayList<String> newPendingRequests = new ArrayList<String>();
 
-    public RequestsAdapter(Context context, int resource, ArrayList<Contact> contacts) {
-        super(context, resource, contacts);
+    public RequestsAdapter(Context context, int resource, ArrayList<Contact> pendingRequests) {
+        super(context, resource, pendingRequests);
         this.context = context;
-        this.list = contacts;
+        this.pendingRequests = pendingRequests;
         this.instance = SingletonContacts.getInstance();
         // Cache reference to avoid looking it up on every getView call
         mInflater = LayoutInflater.from(context);
@@ -55,12 +55,10 @@ public class RequestsAdapter extends ArrayAdapter<Contact> {
     @Override
     public View getView(final int position, final View convertView, ViewGroup parent) {
 //        Log.d(TAG, "position=" + position);
-        final Contact person = list.get(position);
+        final Contact person = pendingRequests.get(position);
         View view = null;
         if (convertView == null) {
-//            LayoutInflater inflater = LayoutInflater.from(getContext());
             view = mInflater.inflate(R.layout.requests_list_item, parent, false);
-//            Log.e("FriendAdapter", instance.getPendingFriends().toString());
             final ViewHolder viewHolder = new ViewHolder();
             viewHolder.contactName = (TextView) view.findViewById(R.id.appName);
             viewHolder.contactNumber = (TextView) view.findViewById(R.id.contactNumber);
@@ -81,10 +79,10 @@ public class RequestsAdapter extends ArrayAdapter<Contact> {
                                 // Add to currentUser's Friends on Parse.com
                                 ParseRelation<ParseUser> relation = currentUser.getRelation("Friends");
                                 relation.add(parseUser);
-                                currentUser.saveInBackground();
-                                // To-do: Add to parseUser's Friends
+                                currentUser.save();
                                 // Remove from pending requests
-                                instance.getPendingRequests().remove(person);
+//                                instance.getPendingRequests().remove(person);
+                                pendingRequests.remove(person);
                                 // Change contact pending to false
                                 Log.e(TAG, position + "");
 //                                remove(getItem(position));

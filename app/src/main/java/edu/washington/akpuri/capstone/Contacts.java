@@ -133,54 +133,45 @@ public class Contacts extends ActionBarActivity {
         // Get all friend requests
         // To-do: Create a separate adapter for pending friend requests
         // Should have buttons for accepting and rejecting
-        ParseQuery<ParseObject> query = ParseQuery.getQuery("contact");
-        query.whereEqualTo("phone", ParseUser.getCurrentUser().get("phone"));
-        query.whereEqualTo("pending", true);
-        query.findInBackground(new FindCallback<ParseObject>() {
-            @Override
-            public void done(List<ParseObject> objects, ParseException e) {
-                if (e == null) {
-                    counter = 0;
-                    for (ParseObject matches : objects) {
-                        // use dealsObject.get('columnName') to access the properties of the Deals object.
-                        String match = matches.get("user").toString();
-                        // Get each match's info from parse
-                        ParseQuery<ParseUser> query1 = ParseUser.getQuery();
-                        query1.whereContains("username", match);
-                        query1.getFirstInBackground(new GetCallback<ParseUser>() {
-                            @Override
-                            public void done(ParseUser parseUser, ParseException e) {
-                                try {
-//                                    // Maybe do this if the currentUser approves the request
-//                                    ParseRelation<ParseUser> relation = ParseUser.getCurrentUser().getRelation("Friends");
-//                                    relation.add(parseUser);
-//                                    // to remove: relation.remove(post);
-//                                    ParseUser.getCurrentUser().saveInBackground();
-                                    Contact person = new Contact(parseUser.get("firstname").toString() + " " + parseUser.get("lastname").toString(),
-                                            parseUser.get("phone").toString(),
-                                            counter);
-                                    person.setEmail(parseUser.getUsername());
-//                                    Integer.parseInt(parseUser.getObjectId())
-//                                    Log.e(TAG, parseUser.get("firstname").toString());
-//                                    Log.e(TAG, parseUser.get("lastname").toString());
-//                                    Log.e(TAG, parseUser.get("phone").toString());
-                                    instance.addPendingRequests(person);
-                                    counter++;
-                                } catch (Exception e1) {
-                                    e1.printStackTrace();
+        if (!instance.hasSavedRequests()) {
+            ParseQuery<ParseObject> query = ParseQuery.getQuery("contact");
+            query.whereEqualTo("phone", ParseUser.getCurrentUser().get("phone"));
+            query.whereEqualTo("pending", true);
+            query.findInBackground(new FindCallback<ParseObject>() {
+                @Override
+                public void done(List<ParseObject> objects, ParseException e) {
+                    if (e == null) {
+                        counter = 0;
+                        for (ParseObject matches : objects) {
+                            // use dealsObject.get('columnName') to access the properties of the Deals object.
+                            String match = matches.get("user").toString();
+                            // Get each match's info from parse
+                            ParseQuery<ParseUser> query1 = ParseUser.getQuery();
+                            query1.whereContains("username", match);
+                            query1.getFirstInBackground(new GetCallback<ParseUser>() {
+                                @Override
+                                public void done(ParseUser parseUser, ParseException e) {
+                                    try {
+                                        Contact person = new Contact(parseUser.get("firstname").toString() + " " + parseUser.get("lastname").toString(),
+                                                parseUser.get("phone").toString(),
+                                                counter);
+                                        person.setEmail(parseUser.getUsername());
+                                        instance.addPendingRequests(person);
+                                        counter++;
+                                    } catch (Exception e1) {
+                                        e1.printStackTrace();
+                                    }
                                 }
-                            }
-                        });
-
-//                        Contact person = new Contact(name, phone, identity);
-//                        instance.addPendingRequests();
+                            });
+                        }
+                    } else {
+                        // Error
                     }
-                } else {
-                    // Error
-                }
 
-            }
-        });
+                }
+            });
+            instance.setHasSavedRequests(true);
+        }
     }
 
     @Override
@@ -234,10 +225,7 @@ public class Contacts extends ActionBarActivity {
     }
 
     private void logout() {
-        // Call the Parse log out method
         ParseUser.logOut();
-        // Start and intent for the dispatch activity
-        // Below will start invalidate user's session and redirect to WelcomeActivity
         Intent intent = new Intent(this, DispatchActivity.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
         startActivity(intent);

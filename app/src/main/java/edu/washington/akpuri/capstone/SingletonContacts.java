@@ -27,6 +27,7 @@ public class SingletonContacts {
     private static ArrayList<Contact> allPendingRequests;
 
     private boolean imported;
+    private boolean savedRequests;
 
     public boolean hasImported(){
         return imported;
@@ -34,6 +35,14 @@ public class SingletonContacts {
 
     public void setHasImported(boolean imported) {
         this.imported = imported;
+    }
+
+    public boolean hasSavedRequests() {
+        return savedRequests;
+    }
+
+    public void setHasSavedRequests(boolean savedRequests) {
+        this.savedRequests = savedRequests;
     }
 
     //Empty Constructor, it's a singleton
