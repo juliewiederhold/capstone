@@ -60,6 +60,8 @@ public class Application extends android.app.Application {
 
         // Testing push notifications
         push();
+
+
     }
 
     private void push() {

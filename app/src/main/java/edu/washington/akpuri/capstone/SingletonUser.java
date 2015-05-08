@@ -1,5 +1,8 @@
 package edu.washington.akpuri.capstone;
 
+import com.parse.ParseInstallation;
+import com.parse.ParseUser;
+
 import java.util.ArrayList;
 
 /**
@@ -11,6 +14,11 @@ public class SingletonUser {
     private static boolean hasGoneThroughInitialSetUp;
     private static ArrayList<String> allDefaultSettings;
     private static ArrayList<SafetyZone> existingSafetyZones;
+    private static ParseUser currentUser;
+    private static ParseInstallation currentInstallation;
+    private static String name;
+    private static String phone;
+    private static String username;
 
     //Empty Constructor, it's a singleton
     protected SingletonUser(){
@@ -29,6 +37,14 @@ public class SingletonUser {
             allDefaultSettings.add("Safety Zones");
             allDefaultSettings.add("Blocked Apps and Contacts");
             allDefaultSettings.add("Quick Texts");
+
+            currentUser = ParseUser.getCurrentUser();
+            name = currentUser.get("firstname").toString() + " " + currentUser.get("lastname").toString();
+            phone = currentUser.get("phone").toString();
+            username = currentUser.getUsername().toString();
+
+            currentInstallation = ParseInstallation.getCurrentInstallation();
+            currentInstallation.saveInBackground();
         }
         return instance;
     }
@@ -47,5 +63,23 @@ public class SingletonUser {
 
     public void setExistingSafetyZones(ArrayList<SafetyZone> existingSafetyZones) {this.existingSafetyZones = existingSafetyZones;}
 
+    public ParseUser getCurrentUser() {
+        return this.currentUser;
+    }
+
+    public ParseInstallation getCurrentInstallation () {
+        return this.currentInstallation;
+    }
+
+    public String getName() {
+        return this.name;
+    }
+
+    public String getPhone() {
+        return this.phone;
+    }
+    public String getUsername() {
+        return this.username;
+    }
 
 }

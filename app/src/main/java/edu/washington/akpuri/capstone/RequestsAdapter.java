@@ -31,6 +31,7 @@ public class RequestsAdapter extends ArrayAdapter<Contact> {
     private final ArrayList<Contact> pendingRequests;
     private final Context context;
     private final SingletonContacts instance;
+    private final SingletonUser userInstance;
     private LayoutInflater mInflater;
     private ArrayList<String> newPendingRequests = new ArrayList<String>();
 
@@ -39,6 +40,7 @@ public class RequestsAdapter extends ArrayAdapter<Contact> {
         this.context = context;
         this.pendingRequests = pendingRequests;
         this.instance = SingletonContacts.getInstance();
+        this.userInstance = SingletonUser.getInstance();
         // Cache reference to avoid looking it up on every getView call
         mInflater = LayoutInflater.from(context);
     }
@@ -75,11 +77,13 @@ public class RequestsAdapter extends ArrayAdapter<Contact> {
                         @Override
                         public void done(ParseUser parseUser, ParseException e) {
                             try {
-                                final ParseUser currentUser = ParseUser.getCurrentUser();
+                                person.setIsPending(false);
+//                                final ParseUser currentUser = ParseUser.getCurrentUser();
                                 // Add to currentUser's Friends on Parse.com
-                                ParseRelation<ParseUser> relation = currentUser.getRelation("Friends");
+                                ParseRelation<ParseUser> relation = userInstance.getCurrentUser().getRelation("Friends");
                                 relation.add(parseUser);
-                                currentUser.save();
+//                                currentUser.save();
+                                userInstance.getCurrentUser().saveEventually();
                                 // Remove from pending requests
 //                                instance.getPendingRequests().remove(person);
                                 pendingRequests.remove(person);
@@ -91,13 +95,14 @@ public class RequestsAdapter extends ArrayAdapter<Contact> {
                                 // Add to pending contacts
                                 // TO-DO: Probably should be pending friends
 //                                instance.addPendingContact(person);
-                                instance.addPendingFriend(person);
+                                instance.addSosoFriend(person);
                                 // Create contact object for current user - Parse.com
                                 ////// Create contact ParseObject here
+
                                 final ParseObject contact = new ParseObject("contact");
                                 contact.put("name", person.getName());
                                 contact.put("phone", person.getPhone());
-                                contact.put("user", currentUser.getUsername());
+                                contact.put("user", userInstance.getCurrentUser().getUsername());
                                 contact.put("id", person.getId());
                                 contact.put("pending", false);
                                 contact.saveInBackground(new SaveCallback() {
@@ -111,11 +116,11 @@ public class RequestsAdapter extends ArrayAdapter<Contact> {
                                             person.setObjectId(contact.getObjectId());
                                             Log.e(TAG, person.getObjectId());
                                             // Add to currentUser's contacts[]
-                                            currentUser.add("contacts", contact.getObjectId());
-                                            currentUser.saveInBackground();
+                                            userInstance.getCurrentUser().add("contacts", contact.getObjectId());
+                                            userInstance.getCurrentUser().saveInBackground();
                                             // ContactsObject[]
                                             ParseQuery<ParseObject> query = ParseQuery.getQuery("ContactsObject");
-                                            query.whereEqualTo("user", currentUser.getUsername());
+                                            query.whereEqualTo("user", userInstance.getCurrentUser().getUsername());
                                             query.getFirstInBackground(new GetCallback<ParseObject>() {
                                                 @Override
                                                 public void done(final ParseObject parseObject, ParseException e) {
@@ -138,7 +143,26 @@ public class RequestsAdapter extends ArrayAdapter<Contact> {
                                     }
 //                                    instance.getPendingContacts().clear();
                                 });
-                                // Add to current user's instance: pendingFriends?
+                                ParseQuery<ParseObject> query = ParseQuery.getQuery("contact");
+                                query.whereEqualTo("phone", userInstance.getCurrentUser().get("phone"));
+                                query.whereEqualTo("user", parseUser.getUsername().toString());
+                                query.getFirstInBackground(new GetCallback<ParseObject>() {
+                                    @Override
+                                    public void done(ParseObject object, ParseException e) {
+                                        try {
+                                            if (e == null) {
+                                                object.put("pending", false);
+                                                Log.e(TAG, object.get("user").toString() + " " + object.get("phone").toString() + " " + object.get("pending").toString());
+                                                object.save();
+                                            } else {
+                                                e.printStackTrace();
+                                            }
+                                        } catch (Exception error) {
+                                            error.printStackTrace();
+                                        }
+                                    }
+                                });
+                                // Add to current user's instance: sosoFriends?
                             } catch (Exception err) {
                                 err.printStackTrace();
                             }

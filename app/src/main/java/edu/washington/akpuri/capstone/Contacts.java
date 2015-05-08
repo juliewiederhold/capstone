@@ -40,6 +40,7 @@ public class Contacts extends ActionBarActivity {
     private static boolean allowContactRetrieval;
     private android.support.v7.app.ActionBar actionBar;
     private static SingletonContacts instance;
+    private SingletonUser userInstance;
     private int counter;
 
     @Override
@@ -47,9 +48,11 @@ public class Contacts extends ActionBarActivity {
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.activity_contacts);
-        allowContactRetrieval = false;
+
         instance = SingletonContacts.getInstance();
+        userInstance = SingletonUser.getInstance();
         pendingContacts = new ArrayList<Contact>();
+        allowContactRetrieval = userInstance.getAllowContactRetrieval();
 
         //Get the actionbar
         // setup action bar for tabs
@@ -99,6 +102,8 @@ public class Contacts extends ActionBarActivity {
                     builder.setPositiveButton("Allow", new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int id) {
                             allowContactRetrieval = true;
+                            userInstance.setAllowContactRetrieval(true);
+                            userInstance.getCurrentUser().put("importContacts", true);
                             Intent addFriends = new Intent(Contacts.this, AddFriends.class);
                             addFriends.putExtra("caller", "Contacts");
                             startActivity(addFriends);
@@ -122,20 +127,20 @@ public class Contacts extends ActionBarActivity {
         });
 
         // Removing this fixed the bug where friends disappear when going through Edit Default Settings
-//        if (!instance.getPendingFriends().isEmpty()) {
-//            pendingContacts.addAll(instance.getPendingFriends());
+//        if (!instance.getSosoFriends().isEmpty()) {
+//            pendingContacts.addAll(instance.getSosoFriends());
 //        }
 
-//        Log.i(TAG, " Pending Friends " + instance.getPendingFriends().toString());
-//        Log.e(TAG, " adding " + instance.getPendingFriends().size() + "");
+//        Log.i(TAG, " Soso Friends " + instance.getSosoFriends().toString());
+//        Log.e(TAG, " adding " + instance.getSosoFriends().size() + "");
 //        Log.i(TAG, " onCreate Pending Contacts " + pendingContacts.toString());
 
         // Get all friend requests
         // To-do: Create a separate adapter for pending friend requests
         // Should have buttons for accepting and rejecting
-        if (!instance.hasSavedRequests()) {
+        //if (!instance.hasSavedRequests()) {
             ParseQuery<ParseObject> query = ParseQuery.getQuery("contact");
-            query.whereEqualTo("phone", ParseUser.getCurrentUser().get("phone"));
+            query.whereEqualTo("phone", userInstance.getCurrentUser().get("phone"));
             query.whereEqualTo("pending", true);
             query.findInBackground(new FindCallback<ParseObject>() {
                 @Override
@@ -171,25 +176,25 @@ public class Contacts extends ActionBarActivity {
                 }
             });
             instance.setHasSavedRequests(true);
-        }
+        //}
     }
 
     @Override
     public void onResume() {
         super.onResume();
         Log.e(TAG, "on resume");
-        pendingContacts.clear();
-        if (!instance.getPendingContacts().isEmpty()) {
-            instance.addPendingFriends(instance.getPendingContacts());
-//            instance.getPendingContacts().clear();
-        }
-        if (!instance.getPendingFriends().isEmpty()) {
-            pendingContacts.addAll(instance.getPendingFriends());
-        }
+//        pendingContacts.clear();
+//        if (!instance.getPendingContacts().isEmpty()) {
+//            instance.addSosoFriends(instance.getPendingContacts());
+////            instance.getPendingContacts().clear();
+//        }
+//        if (!instance.getSosoFriends().isEmpty()) {
+//            pendingContacts.addAll(instance.getSosoFriends());
+//        }
 
-        Log.e(TAG, "pending friends: " + instance.getPendingFriends().toString());
-        Log.e(TAG, "pending contacts: " + instance.getPendingContacts().toString());
-        Log.e(TAG, "pending requests: " + instance.getPendingRequests().toString());
+//        Log.e(TAG, "pending friends: " + instance.getSosoFriends().toString());
+//        Log.e(TAG, "pending contacts: " + instance.getPendingContacts().toString());
+//        Log.e(TAG, "pending requests: " + instance.getPendingRequests().toString());
     }
 
 
@@ -257,7 +262,7 @@ public class Contacts extends ActionBarActivity {
             }
 
             // Populate with current friends
-            // NICOLE: should replace pendingContacts with instance.getPendingFriends()
+            // NICOLE: should replace pendingContacts with instance.getSosoFriends()
             final ListAdapter adapter = new FriendAdapter(getActivity(), R.id.contactListItem, pendingContacts);
             contactListView.setAdapter(adapter);
 
@@ -268,18 +273,29 @@ public class Contacts extends ActionBarActivity {
         public void onResume() {
             super.onResume();
             // Hits this but not the contacts.java onresume
-            Log.e(TAG, "Frag pending friends: " + instance.getPendingFriends().toString());
+            Log.e(TAG, "Frag pending friends: " + instance.getSosoFriends().toString());
             Log.e(TAG, "Frag pending contacts: " + instance.getPendingContacts().toString());
             Log.e(TAG, "Frag pending requests: " + instance.getPendingRequests().toString());
 
-            if (!instance.getPendingContacts().isEmpty()) {
-                pendingContacts.addAll(instance.getPendingContacts());
-                instance.getPendingContacts().clear();
-            }
-            // ADDED THIS, but adds over and over
-//            if (!instance.getPendingFriends().isEmpty()) {
-//                pendingContacts.addAll(instance.getPendingFriends());
+//            if (!instance.getPendingContacts().isEmpty()) {
+//                pendingContacts.addAll(instance.getPendingContacts());
+//                instance.getPendingContacts().clear();
 //            }
+
+
+            // ADDED THIS, but adds over and over
+//            if (!instance.getSosoFriends().isEmpty()) {
+//                pendingContacts.addAll(instance.getSosoFriends());
+//            }
+
+            pendingContacts.clear();
+            if (!instance.getPendingContacts().isEmpty()) {
+                instance.addSosoFriends(instance.getPendingContacts());
+//            instance.getPendingContacts().clear();
+            }
+            if (!instance.getSosoFriends().isEmpty()) {
+                pendingContacts.addAll(instance.getSosoFriends());
+            }
 
             ListView contactListView = (ListView) getView().findViewById(R.id.friendListView);
 

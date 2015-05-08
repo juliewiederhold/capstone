@@ -21,13 +21,30 @@ public class SingletonContacts {
     private static SingletonContacts instance = null;
     private static ArrayList<Contact> allContacts;
     private static ArrayList<Contact> pendingContacts;      // Temporarily hold phone contacts to add to Parse.com
-    private static ArrayList<Contact> pendingFriends;       // Friends/contacts currently on Parse.com
+    private static ArrayList<Contact> sosoFriends;       // Friends/contacts currently on Parse.com
     private static ArrayList<Contact> blockedContacts;
     private static ArrayList<String> currentContacts;       // List of objectIds of user's contacts both on Parse.com and pending
     private static ArrayList<Contact> allPendingRequests;
 
     private boolean imported;
     private boolean savedRequests;
+
+
+
+    //Empty Constructor, it's a singleton
+    protected SingletonContacts() {
+    }
+
+    public static SingletonContacts getInstance() {
+        if (instance == null) {
+            instance = new SingletonContacts();
+            allContacts = new ArrayList<Contact>();
+            pendingContacts = new ArrayList<Contact>();
+            currentContacts = new ArrayList<>();
+            allPendingRequests = new ArrayList<>();
+        }
+        return instance;
+    }
 
     public boolean hasImported(){
         return imported;
@@ -45,21 +62,6 @@ public class SingletonContacts {
         this.savedRequests = savedRequests;
     }
 
-    //Empty Constructor, it's a singleton
-    protected SingletonContacts() {
-    }
-
-    public static SingletonContacts getInstance() {
-        if (instance == null) {
-            instance = new SingletonContacts();
-            allContacts = new ArrayList<Contact>();
-            pendingContacts = new ArrayList<Contact>();
-            currentContacts = new ArrayList<>();
-            allPendingRequests = new ArrayList<>();
-        }
-        return instance;
-    }
-
     public boolean hasContacts() {
         return (allContacts.size() != 0);
     }
@@ -75,6 +77,7 @@ public class SingletonContacts {
     public void addContact(Contact contact) {
         allContacts.add(contact);
     }
+
     public void removeContact(Contact contact){
         allContacts.remove(contact);
     }
@@ -93,13 +96,14 @@ public class SingletonContacts {
         this.pendingContacts = pendingContacts;
     }
 
-    public void setPendingFriends(ArrayList<Contact> pendingFriends) {
-        this.pendingFriends = pendingFriends;
+    public void setSosoFriends(ArrayList<Contact> sosoFriends) {
+        this.sosoFriends = sosoFriends;
     }
 
-    public ArrayList<Contact> getPendingFriends() {
-        return pendingFriends;
+    public ArrayList<Contact> getSosoFriends() {
+        return sosoFriends;
     }
+
     public ArrayList<Contact> getPendingContacts() {
         return pendingContacts;
     }
@@ -114,9 +118,7 @@ public class SingletonContacts {
         currentContacts.addAll(objectIds);
     }
 
-
     /// Adding single objects
-
     public void addCurrentContact(String objectId) {
         currentContacts.add(objectId);
     }
@@ -125,14 +127,13 @@ public class SingletonContacts {
         pendingContacts.add(contact);
     }
 
-    public void addPendingFriend(Contact object) {
-        pendingFriends.add(object);
+    public void addSosoFriend(Contact object) {
+        sosoFriends.add(object);
     }
 
-    public void addPendingFriends(ArrayList<Contact> objects) {
-        pendingFriends.addAll(objects);
+    public void addSosoFriends(ArrayList<Contact> objects) {
+        sosoFriends.addAll(objects);
     }
-
 
     // Add another So-So user's email address to pending requests
     public void addPendingRequests(Contact pendingUser) {

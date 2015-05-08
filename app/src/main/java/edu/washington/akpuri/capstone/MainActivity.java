@@ -13,7 +13,9 @@ import android.widget.TextView;
 
 import com.parse.FindCallback;
 import com.parse.GetCallback;
+import com.parse.Parse;
 import com.parse.ParseException;
+import com.parse.ParseInstallation;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
 import com.parse.ParseUser;
@@ -90,11 +92,27 @@ public class MainActivity extends ActionBarActivity {
 
         // Set-up user's information
         instance = SingletonContacts.getInstance();
+        userInstance = SingletonUser.getInstance();
+
+        // contact retrievaal
+        userInstance.setAllowContactRetrieval(userInstance.getCurrentUser().getBoolean("importContacts"));
+        // Associate device with user
+//        userInstance.getCurrentInstallation().put("user", userInstance.getCurrentUser().getUsername());
+//        userInstance.getCurrentInstallation().saveInBackground();
+        try {
+            ParseInstallation installation = ParseInstallation.getCurrentInstallation();
+            installation.put("user", userInstance.getCurrentUser().getUsername());
+            installation.save();
+        } catch (Exception err) {
+            err.printStackTrace();
+        }
+
+
         pendingContacts = new ArrayList<>();
 
         // Get all contacts
-        if (ParseUser.getCurrentUser().get("contacts") != null) {
-            JSONArray contacts = ParseUser.getCurrentUser().getJSONArray("contacts");
+        if (userInstance.getCurrentUser().get("contacts") != null) {
+            JSONArray contacts = userInstance.getCurrentUser().getJSONArray("contacts");
             Log.e(TAG, " contacts[] 1: " + contacts.toString());
             for (int i = 0; i < contacts.length(); i++) {
                 String id = null;
@@ -124,7 +142,7 @@ public class MainActivity extends ActionBarActivity {
                     });
                 }
             }
-            instance.setPendingFriends(pendingContacts);
+            instance.setSosoFriends(pendingContacts);
 
         }
 

@@ -19,9 +19,12 @@ import android.widget.Toast;
 import com.parse.GetCallback;
 import com.parse.ParseException;
 import com.parse.ParseObject;
+import com.parse.ParsePush;
 import com.parse.ParseQuery;
 import com.parse.ParseUser;
 import com.parse.SaveCallback;
+
+import org.json.JSONObject;
 
 import java.security.cert.CertificateParsingException;
 import java.util.ArrayList;
@@ -36,6 +39,7 @@ public class AddFriends extends ActionBarActivity {
     private static ArrayList<String> contactObjectIds;
     private static ArrayList<Contact> allContacts;
     final SingletonContacts instance = SingletonContacts.getInstance();
+    final SingletonUser userInstance = SingletonUser.getInstance();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -83,6 +87,7 @@ public class AddFriends extends ActionBarActivity {
                             //We only want to grab the mobile phone number of a contact
                             if (type == ContactsContract.CommonDataKinds.Phone.TYPE_MOBILE) {
                                 phone = phoneCur.getString(phoneCur.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER));
+                                phone = phone.replaceAll("[^\\d.]", "");
                             }
                         }
                         phoneCur.close();
@@ -134,6 +139,7 @@ public class AddFriends extends ActionBarActivity {
             contact.put("phone", person.getPhone());
             contact.put("user", user); // could probably save this in singleton
             contact.put("id", person.getId());
+//            contact.put("email", person.getEmail());
             Log.e(TAG, "contact id: " + person.getId());
             contact.put("pending", true);   // pending So-So friend; should be false once accepted
             contact.saveInBackground(new SaveCallback() {
@@ -148,6 +154,21 @@ public class AddFriends extends ActionBarActivity {
                         ParseUser.getCurrentUser().add("contacts", contact.getObjectId());
                         ParseUser.getCurrentUser().saveInBackground();
 
+                        // CONTINUE
+//                        ParseQuery<ParseUser> query1 = ParseUser.getQuery();
+//                        query1.whereContains("phone", contact.get("phone").toString());
+//                        query1.getFirstInBackground(new GetCallback<ParseUser>() {
+//                            @Override
+//                            public void done(ParseUser parseUser, ParseException e) {
+//                                try {
+//                                    contact.put("email", parseUser.getEmail());
+//                                } catch (Exception e1) {
+//                                    e1.printStackTrace();
+//                                }
+//                            }
+//                        });
+
+
                         /// WORKING
                         // ideas, maybe I can save each time a person is created??? but is that a good idea??
 
@@ -159,21 +180,41 @@ public class AddFriends extends ActionBarActivity {
                         query.getFirstInBackground(new GetCallback<ParseObject>() {
                             @Override
                             public void done(final ParseObject parseObject, ParseException e) {
-                                if (parseObject != null) {
-                                    // User exists and has a ContactsObject
+                                try {
+                                    if (parseObject != null) {
+                                        // User exists and has a ContactsObject
 
-                                    Log.e(TAG, "Current contacts[]: " + ParseUser.getCurrentUser().get("contacts").toString());
-                                    parseObject.add("contacts", contact.getObjectId());
-                                    parseObject.saveInBackground(new SaveCallback() {
-                                        @Override
-                                        public void done(ParseException e) {
-                                            Log.e(TAG, "ContactsObject: " + parseObject.get("contacts").toString());
+                                        Log.e(TAG, "Current contacts[]: " + ParseUser.getCurrentUser().get("contacts").toString());
+                                        parseObject.add("contacts", contact.getObjectId());
+                                        parseObject.saveInBackground(new SaveCallback() {
+                                            @Override
+                                            public void done(ParseException e) {
+                                                Log.e(TAG, "ContactsObject: " + parseObject.get("contacts").toString());
 
-                                        }
-                                    });
-                                } else {
-                                    // Something went wrong
-                                    Log.e("Contacts", "Failed to retrieve contactsObject: " + e);
+                                            }
+                                        });
+
+                                        // Get contact's username/email address === doesn't currently work
+                                        // Need to get email for contact
+
+                                        // Send push notifications
+                                        ParseQuery pushQuery = userInstance.getCurrentInstallation().getQuery();
+                                        pushQuery.whereEqualTo("user", person.getEmail());
+                                        ParsePush push = new ParsePush();
+                                        push.setQuery(pushQuery);
+                                        push.setMessage(userInstance.getName() + " (" + userInstance.getPhone() + ") sent you a friend request.");
+//                                        JSONObject data = new JSONObject(
+//                                                "{\"alert\":\""+userInstance.getName()+"\",\"uri\":\"app://host/contacts\"}");
+//                                        push.setData(data);
+                                        push.sendInBackground();
+                                        Log.e(TAG, "sent to: " + person.getEmail());
+
+                                    } else {
+                                        // Something went wrong
+                                        Log.e("Contacts", "Failed to retrieve contactsObject: " + e);
+                                    }
+                                } catch (Exception err) {
+                                    err.printStackTrace();
                                 }
                             }
                         });
