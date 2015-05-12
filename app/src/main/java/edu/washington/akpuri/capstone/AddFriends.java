@@ -196,6 +196,7 @@ public class AddFriends extends ActionBarActivity {
 
                                         // Get contact's username/email address === doesn't currently work
                                         // Need to get email for contact
+                                        // Or use phone numbers instead
 
                                         // Send push notifications
                                         ParseQuery pushQuery = userInstance.getCurrentInstallation().getQuery();

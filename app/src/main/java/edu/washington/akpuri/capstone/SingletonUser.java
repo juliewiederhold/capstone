@@ -19,6 +19,7 @@ public class SingletonUser {
     private static String name;
     private static String phone;
     private static String username;
+    private static String email;
 
     //Empty Constructor, it's a singleton
     protected SingletonUser(){
@@ -42,6 +43,7 @@ public class SingletonUser {
             name = currentUser.get("firstname").toString() + " " + currentUser.get("lastname").toString();
             phone = currentUser.get("phone").toString();
             username = currentUser.getUsername().toString();
+            email = currentUser.getEmail().toString();
 
             currentInstallation = ParseInstallation.getCurrentInstallation();
             currentInstallation.saveInBackground();
@@ -80,6 +82,9 @@ public class SingletonUser {
     }
     public String getUsername() {
         return this.username;
+    }
+    public String getEmail() {
+        return this.email;
     }
 
 }
