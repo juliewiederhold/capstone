@@ -218,6 +218,9 @@ public class MainMap extends FragmentActivity implements
                 double latitude= addresses.get(0).getLatitude();
                 double longitude= addresses.get(0).getLongitude();
 
+               // double dx = (latitude - currentLatitude) * (latitude - currentLatitude);
+            //    double dy = (longitude - currentLongitude) * (longitude - currentLongitude);
+
                 if(currentLatitude == latitude && currentLongitude == longitude){
                     Toast toast = Toast.makeText(this, "In Safety Zone", Toast.LENGTH_SHORT);
                     toast.show();
@@ -232,7 +235,7 @@ public class MainMap extends FragmentActivity implements
         //mMap.addMarker(new MarkerOptions().position(new LatLng(currentLatitude, currentLongitude)).title("Current Location"));
         MarkerOptions options = new MarkerOptions()
                 .position(latLng)
-                .title("I am here!");
+                .title("I am here!"); // Have address appear here
         mMap.addMarker(options);
         // mMap.moveCamera(CameraUpdateFactory.newLatLng(latLng));
 
