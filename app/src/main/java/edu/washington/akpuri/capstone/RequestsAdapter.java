@@ -70,7 +70,7 @@ public class RequestsAdapter extends ArrayAdapter<Contact> {
             viewHolder.acceptRequest.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Log.e(TAG, person.getPhone());
+                    Log.e(TAG, "Accepting request from " + person.getName() + " " + person.getPhone());
                     ParseQuery<ParseUser> query = ParseUser.getQuery();
                     query.whereContains("phone", person.getPhone());
                     query.getFirstInBackground(new GetCallback<ParseUser>() {
@@ -91,9 +91,8 @@ public class RequestsAdapter extends ArrayAdapter<Contact> {
                                 Log.e(TAG, position + "");
 //                                remove(getItem(position));
                                 notifyDataSetChanged();
-                                // TO-DO
-                                // Add to pending contacts
-                                // TO-DO: Probably should be pending friends
+                                // TODO: Add to pending contacts
+                                // TODO: Probably should be pending friends
 //                                instance.addPendingContact(person);
                                 instance.addSosoFriend(person);
                                 // Create contact object for current user - Parse.com
@@ -190,6 +189,52 @@ public class RequestsAdapter extends ArrayAdapter<Contact> {
                     });
                 }
             });
+            viewHolder.rejectRequest.setOnClickListener(new View.OnClickListener(){
+                @Override
+                public void onClick(View v){
+                    Log.e(TAG, "Rejecting request from " + person.getName() + " " + person.getPhone());
+                    ParseQuery<ParseUser> query = ParseUser.getQuery();
+                    query.whereContains("phone", person.getPhone());
+                    query.getFirstInBackground(new GetCallback<ParseUser>() {
+                        @Override
+                        public void done(ParseUser parseUser, ParseException e) {
+                            try {
+                                person.setIsPending(false);
+                                // Remove from pending requests
+//                                instance.getPendingRequests().remove(person);
+                                pendingRequests.remove(person);
+                                // Change contact pending to false
+                                Log.e(TAG, position + "");
+//                                remove(getItem(position));
+                                notifyDataSetChanged();
+
+                            } catch (Exception err) {
+                                err.printStackTrace();
+                            }
+                        }
+                    });
+                    // TODO: Reject friend request
+                    // Get contact's contact object containing pending request
+                    Log.e(TAG, "Rejecting request from " + person.getEmail() + " " + person.getPhone());
+                    ParseQuery<ParseObject> query1 = ParseQuery.getQuery("contact");
+                    query1.whereEqualTo("user", person.getEmail());
+                    query1.whereEqualTo("phone", userInstance.getPhone());
+                    query1.getFirstInBackground(new GetCallback<ParseObject>() {
+                        @Override
+                        public void done(final ParseObject parseObject, ParseException e) {
+                            if (parseObject != null) {
+//                                parseObject.deleteEventually();
+                                parseObject.deleteInBackground();
+                                Log.e(TAG, "Should've deleted the contact object");
+                            } else {
+                                // Something went wrong
+                                Log.e(TAG, "Didn't delete the contact object");
+                            }
+                        }
+                    });
+                    // TODO: delete from person's ContactsObject[]
+                }
+            });
             view.setTag(viewHolder);
         } else {
             view = convertView;
@@ -198,6 +243,7 @@ public class RequestsAdapter extends ArrayAdapter<Contact> {
         holder.contactName.setText(person.getName());
         if (person.isPending()) {
             // TEMPORARY **** NICOLE: PROBABLY DON'T NEED THIS HERE
+            // TODO: Change the way we're marking pending contacts?
             holder.contactName.setText(holder.contactName.getText());
         }
         holder.contactNumber.setText(person.getPhone());

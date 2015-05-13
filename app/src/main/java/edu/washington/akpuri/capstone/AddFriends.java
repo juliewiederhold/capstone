@@ -110,8 +110,6 @@ public class AddFriends extends ActionBarActivity {
                 ListView contactListView = (ListView) findViewById(R.id.addFriendsList);
                 ListAdapter adapter = new ContactAdapter(this, R.id.friendListItem, instance.getAllContacts(), pendingContacts);
                 contactListView.setAdapter(adapter);
-
-
             }
         }
 

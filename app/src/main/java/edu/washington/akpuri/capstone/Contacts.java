@@ -139,7 +139,7 @@ public class Contacts extends ActionBarActivity {
         // Get all friend requests
         // To-do: Create a separate adapter for pending friend requests
         // Should have buttons for accepting and rejecting
-        //if (!instance.hasSavedRequests()) {
+        if (!instance.hasSavedRequests()) {
             ParseQuery<ParseObject> query = ParseQuery.getQuery("contact");
             query.whereEqualTo("phone", userInstance.getCurrentUser().get("phone"));
             query.whereEqualTo("pending", true);
@@ -177,7 +177,7 @@ public class Contacts extends ActionBarActivity {
                 }
             });
             instance.setHasSavedRequests(true);
-        //}
+        }
     }
 
     @Override
@@ -299,6 +299,7 @@ public class Contacts extends ActionBarActivity {
 //            }
 
             pendingContacts.clear();
+
             if (!instance.getPendingContacts().isEmpty()) {
                 instance.addSosoFriends(instance.getPendingContacts());
 //            instance.getPendingContacts().clear();

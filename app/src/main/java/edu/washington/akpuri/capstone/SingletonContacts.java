@@ -7,6 +7,7 @@ import com.parse.ParseObject;
 
 import java.lang.reflect.Array;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 /**
  * Created by Akash on 3/11/15
@@ -20,11 +21,12 @@ public class SingletonContacts {
     private static final String TAG = "SingletonContacts";
     private static SingletonContacts instance = null;
     private static ArrayList<Contact> allContacts;
-    private static ArrayList<Contact> pendingContacts;      // Temporarily hold phone contacts to add to Parse.com
-    private static ArrayList<Contact> sosoFriends;       // Friends/contacts currently on Parse.com
+    private static ArrayList<Contact> pendingContacts;          // Temporarily hold phone contacts to add to Parse.com
+    private static ArrayList<Contact> sosoFriends;              // Friends/contacts currently on Parse.com
     private static ArrayList<Contact> blockedContacts;
-    private static ArrayList<String> currentContacts;       // List of objectIds of user's contacts both on Parse.com and pending
+    private static ArrayList<String> currentContacts;           // List of objectIds of user's contacts both on Parse.com and pending
     private static ArrayList<Contact> allPendingRequests;
+    private static HashMap<String, ArrayList<Contact>> sosoGroups;    //
 
     private boolean imported;
     private boolean savedRequests;
@@ -38,10 +40,11 @@ public class SingletonContacts {
     public static SingletonContacts getInstance() {
         if (instance == null) {
             instance = new SingletonContacts();
-            allContacts = new ArrayList<Contact>();
-            pendingContacts = new ArrayList<Contact>();
+            allContacts = new ArrayList<>();
+            pendingContacts = new ArrayList<>();
             currentContacts = new ArrayList<>();
             allPendingRequests = new ArrayList<>();
+            sosoGroups = new HashMap<>();
         }
         return instance;
     }
@@ -142,5 +145,18 @@ public class SingletonContacts {
 
     public ArrayList<Contact> getPendingRequests(){
         return allPendingRequests;
+    }
+
+    public boolean addSosoGroup(String groupName, ArrayList<Contact> group) {
+        sosoGroups.put(groupName, group);
+        return true;
+    }
+
+    public ArrayList<Contact> getSosoGroup(String groupName) {
+        return sosoGroups.get(groupName);
+    }
+
+    public HashMap<String, ArrayList<Contact>> getSosoGroups() {
+        return sosoGroups;
     }
 }
