@@ -28,6 +28,7 @@ import com.parse.ParseQuery;
 import com.parse.ParseRelation;
 import com.parse.ParseUser;
 
+import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -253,6 +254,15 @@ public class Contacts extends ActionBarActivity {
 
             final View rootView = inflater.inflate(R.layout.fragment_friends, container, false);
 
+            Button contactsNext = (Button) container.findViewById(R.id.contactsNext);
+            contactsNext.setVisibility(View.VISIBLE);
+
+            Button addFriends = (Button) container.findViewById(R.id.addFriends);
+            addFriends.setVisibility(View.VISIBLE);
+
+            Button createGroup = (Button) container.findViewById(R.id.createGroup);
+            createGroup.setVisibility(View.GONE);
+
             ListView contactListView = (ListView) rootView.findViewById(R.id.friendListView);
             TextView noFriends = (TextView) rootView.findViewById(R.id.noFriends);
             if (!pendingContacts.isEmpty()) {
@@ -322,6 +332,17 @@ public class Contacts extends ActionBarActivity {
         public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
             final View rootView = inflater.inflate(R.layout.fragment_group, container, false);
 
+            Button contactsNext = (Button) container.findViewById(R.id.contactsNext);
+            contactsNext.setVisibility(View.GONE);
+
+            Button addFriends = (Button) container.findViewById(R.id.addFriends);
+            addFriends.setVisibility(View.GONE);
+
+            Button createGroup = (Button) container.findViewById(R.id.createGroup);
+            createGroup.setVisibility(View.VISIBLE);
+
+
+
             return rootView;
         }
     }
@@ -335,6 +356,15 @@ public class Contacts extends ActionBarActivity {
         public View onCreateView(LayoutInflater inflater, ViewGroup container,
                                  Bundle savedInstanceState) {
             final View rootView = inflater.inflate(R.layout.fragment_requests, container, false);
+
+            Button contactsNext = (Button) container.findViewById(R.id.contactsNext);
+            contactsNext.setVisibility(View.GONE);
+
+            Button addFriends = (Button) container.findViewById(R.id.addFriends);
+            addFriends.setVisibility(View.GONE);
+
+            Button createGroup = (Button) container.findViewById(R.id.createGroup);
+            createGroup.setVisibility(View.GONE);
 
 //            /// START CODE BLOCK
 //            // This code should be for friends who have already accepted the friend request
@@ -366,6 +396,7 @@ public class Contacts extends ActionBarActivity {
 
             final ListAdapter adapter = new RequestsAdapter(getActivity(), R.id.requestsListItem, instance.getPendingRequests());
             contactListView.setAdapter(adapter);
+
 
             return rootView;
         }

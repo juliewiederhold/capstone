@@ -133,13 +133,24 @@ public class AddFriends extends ActionBarActivity {
 
         for(int i=0; i < pending.size(); i++) {
             final Contact person = pending.get(i);
+
+            // Look up user on Parse.com
+            ParseQuery<ParseUser> queryA = ParseUser.getQuery();
+            queryA.whereContains("phone", person.getPhone());
+            queryA.getFirstInBackground(new GetCallback<ParseUser>() {
+                @Override
+                public void done(ParseUser parseUser, ParseException e) {
+                    person.setEmail(parseUser.getEmail());
+                }
+            });
+
             ////// Create contact ParseObject here
             final ParseObject contact = new ParseObject("contact");
             contact.put("name", person.getName());
             contact.put("phone", person.getPhone());
             contact.put("user", user); // could probably save this in singleton
             contact.put("id", person.getId());
-//            contact.put("email", person.getEmail());
+            contact.put("email", person.getEmail());
             Log.e(TAG, "contact id: " + person.getId());
             contact.put("pending", true);   // pending So-So friend; should be false once accepted
             contact.saveInBackground(new SaveCallback() {
@@ -204,8 +215,12 @@ public class AddFriends extends ActionBarActivity {
                                         ParsePush push = new ParsePush();
                                         push.setQuery(pushQuery);
                                         push.setMessage(userInstance.getName() + " (" + userInstance.getPhone() + ") sent you a friend request.");
-//                                        JSONObject data = new JSONObject(
-//                                                "{\"alert\":\""+userInstance.getName()+"\",\"uri\":\"app://host/contacts\"}");
+                                        //JSONObject data = new JSONObject(
+                                        //        "{\"alert\": \""+userInstance.getName()+"\", " +
+                                        //                "\"uri\": \"app://host/contacts\"}");
+
+                                        // json doesn't work but should be working -_-
+//                                        JSONObject data = new JSONObject("{\"alert\":userInstance.getName(), \"uri\": \"app://host/contacts\" }");
 //                                        push.setData(data);
                                         push.sendInBackground();
                                         Log.e(TAG, "sent to: " + person.getEmail());
