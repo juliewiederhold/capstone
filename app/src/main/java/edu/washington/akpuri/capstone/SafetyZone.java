@@ -59,4 +59,8 @@ public class SafetyZone {
         this.state = state;
     }
 
+    public String returnAddress(){
+        return address + " " + city + " " + state + " " + zip;
+    }
+
 }

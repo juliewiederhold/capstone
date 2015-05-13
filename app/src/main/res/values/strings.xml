@@ -27,6 +27,11 @@
     <string name="title_activity_start_night_out">Start Night Out</string>
     <string name="title_activity_night_out_safety_zones">Night Out Safety Zones</string>
     <string name="title_activity_night_out_quick_texts">Night Out Quick Texts</string>
+    <string name="title_activity_night_out_edit_blocked_contacts_list">Night Out Edit Blocked Contacts List</string>
+    <string name="title_activity_night_out_block_contacts">Night Out Block Contacts</string>
+    <string name="title_activity_main_map">Main Map</string>
+    <string name="title_activity_send_quick_text">Send Quick Text</string>
+    <string name="title_activity_night_out_app_number_blocking">Night Out App Number Blocking</string>
 
     <!-- Safety Zone Information -->
     <string name="address">Address</string>
@@ -74,12 +79,7 @@
     <string name="reset_password">Reset Password</string>
     <string name="app_name">So-So</string>
     <string name="logo_desc">So-So Logo</string>
-    <string name="title_activity_night_out_app_number_blocking">NightOutAppNumberBlocking</string>
     <string name="edit_settings">Edit Settings</string>
-    <string name="hello_world">Hello world!</string>
-    <string name="title_activity_night_out_edit_blocked_contacts_list">        NightOutEditBlockedContactsList</string>
-    <string name="title_activity_night_out_block_contacts">NightOutBlockContacts</string>
-    <string name="title_activity_main_map">MainMap</string>
-    <string name="title_activity_send_quick_text">SendQuickText</string>
+
 
 </resources>
