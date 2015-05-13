@@ -36,9 +36,11 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 
 public class MainMap extends FragmentActivity implements
         GoogleApiClient.ConnectionCallbacks,
@@ -66,6 +68,7 @@ public class MainMap extends FragmentActivity implements
         setUpMapIfNeeded();
 
         instance = SingletonNightOutSettings.getInstance();
+        mMap.setMyLocationEnabled(true);
 
         mGoogleApiClient = new GoogleApiClient.Builder(this)
                 .addConnectionCallbacks(this)
@@ -210,18 +213,38 @@ public class MainMap extends FragmentActivity implements
 
         List<SafetyZone> safetyZones = instance.getNightOutSafetyZones();
 
+        Geocoder gcd = new Geocoder(this, Locale.getDefault());
+        String locationName = "Unknown Location";
+        try {
+            List<Address> addressList = gcd.getFromLocation(currentLatitude, currentLongitude, 1);
+            if (addressList != null && addressList.size() > 0) {
+                Address address = addressList.get(0);
+                StringBuilder sb = new StringBuilder();
+                for (int i = 0; i < address.getMaxAddressLineIndex(); i++) {
+                    sb.append(address.getAddressLine(i)).append("\n");
+                }
+                sb.append(address.getLocality()).append("\n");
+                sb.append(address.getPostalCode()).append("\n");
+                sb.append(address.getCountryName());
+                locationName = sb.toString();
+            }
+        } catch (IOException e) {
+            Log.e(TAG, "Unable connect to Geocoder", e);
+        }
+
         Geocoder geocoder = new Geocoder(this);
         List<Address> addresses;
+
         try{
             addresses = geocoder.getFromLocationName(safetyZones.get(0).returnAddress(), 1);
+            //locationName = geocoder.getFromLocation(currentLatitude, currentLongitude, 1).get(0).getLocality();
             if(addresses.size() > 0) {
                 double latitude= addresses.get(0).getLatitude();
                 double longitude= addresses.get(0).getLongitude();
 
-               // double dx = (latitude - currentLatitude) * (latitude - currentLatitude);
-            //    double dy = (longitude - currentLongitude) * (longitude - currentLongitude);
+                double num = calculateDistance(currentLongitude, currentLatitude, longitude, latitude);
 
-                if(currentLatitude == latitude && currentLongitude == longitude){
+                if(num < 50){ // 50 is a guess
                     Toast toast = Toast.makeText(this, "In Safety Zone", Toast.LENGTH_SHORT);
                     toast.show();
                 }
@@ -235,7 +258,7 @@ public class MainMap extends FragmentActivity implements
         //mMap.addMarker(new MarkerOptions().position(new LatLng(currentLatitude, currentLongitude)).title("Current Location"));
         MarkerOptions options = new MarkerOptions()
                 .position(latLng)
-                .title("I am here!"); // Have address appear here
+                .title(locationName); // Have address appear here
         mMap.addMarker(options);
         // mMap.moveCamera(CameraUpdateFactory.newLatLng(latLng));
 
@@ -244,6 +267,18 @@ public class MainMap extends FragmentActivity implements
 
         mMap.moveCamera(center);
         mMap.animateCamera(zoom);
+    }
+
+    private double calculateDistance(double fromLong, double fromLat,
+                                     double toLong, double toLat) {
+        double d2r = Math.PI / 180;
+        double dLong = (toLong - fromLong) * d2r;
+        double dLat = (toLat - fromLat) * d2r;
+        double a = Math.pow(Math.sin(dLat / 2.0), 2) + Math.cos(fromLat * d2r)
+                * Math.cos(toLat * d2r) * Math.pow(Math.sin(dLong / 2.0), 2);
+        double c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+        double d = 6367000 * c;
+        return Math.round(d);
     }
 
     @Override

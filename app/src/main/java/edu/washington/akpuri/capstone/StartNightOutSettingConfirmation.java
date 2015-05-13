@@ -73,7 +73,7 @@ public class StartNightOutSettingConfirmation extends ActionBarActivity {
             @Override
             public void onClick(View v) {
                 LayoutInflater inflater = getLayoutInflater();
-
+/*
                 final View fragmentView = inflater.inflate(R.layout.fragment_set_duration, null);
                 AlertDialog.Builder builder = new AlertDialog.Builder(fragmentView.getContext());
 
@@ -123,7 +123,9 @@ public class StartNightOutSettingConfirmation extends ActionBarActivity {
                         });
 
                 builder.create();
-                builder.show();
+                builder.show(); */
+                Intent beginNightOut = new Intent(StartNightOutSettingConfirmation.this, MainMap.class);
+                startActivity(beginNightOut);
             }
         });
     }
