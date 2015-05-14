@@ -160,10 +160,11 @@ public class SignUpActivity extends ActionBarActivity {
         // other fields
         user.put("firstname", firstname);
         user.put("lastname", lastname);
-        user.put("phone", phone);
+        user.put("phone", phone.replaceAll("[^\\d]",""));
         user.put("setupdone", false);                       // if setupdone == true, go to MainActivity.class
                                                             // if setupdone == false, go to Welcome.class
         user.put("contacts", new ArrayList<>());
+        user.put("importContacts", false);
 
         final ParseObject contacts = new ParseObject("ContactsObject");
         contacts.put("user", email); // contacts.put("parent", email);

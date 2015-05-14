@@ -95,7 +95,7 @@ public class AddFriends extends ActionBarActivity {
                     //If a contact does not have a phone number stored or their phone number is shorter than
                     //a length of 7 (example: AT&T service numbers for things like checking data are only 4 characters long)
                     //
-                    Contact person = new Contact(name, phone, identity);
+                    Contact person = new Contact(name, phone.replaceAll("[^\\d]",""), identity);
                     if (phone.length() >= 7) {
                         //                    allContacts.add(person);
                         instance.addContact(person);
