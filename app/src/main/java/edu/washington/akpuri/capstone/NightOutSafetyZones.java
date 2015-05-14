@@ -31,6 +31,7 @@ import java.util.HashMap;
 public class NightOutSafetyZones extends ActionBarActivity {
     private static ArrayList<HashMap<String, String>> safetyZoneInformation = new ArrayList<>();
     private static SingletonNightOutSettings nightOutInstance;
+    private SingletonUser userInstance = SingletonUser.getInstance();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -189,6 +190,8 @@ public class NightOutSafetyZones extends ActionBarActivity {
     private void logout() {
         // Call the Parse log out method
         ParseUser.logOut();
+        ParseUser currentUser = ParseUser.getCurrentUser(); // this will now be null
+        userInstance.setCurrentUser(currentUser);
         // Start and intent for the dispatch activity
         // Below will start invalidate user's session and redirect to WelcomeActivity
         Intent intent = new Intent(this, DispatchActivity.class);

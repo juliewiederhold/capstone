@@ -27,6 +27,7 @@ import com.parse.ParseUser;
 public class SettingsActivity2 extends ActionBarActivity {
 
     private final static String TAG = "SettingsActivity";
+    private static SingletonUser userInstance;
 
     private EditText firstnameEditText;
     private EditText lastnameEditText;
@@ -49,7 +50,7 @@ public class SettingsActivity2 extends ActionBarActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_settings2);
-
+        userInstance = SingletonUser.getInstance();
 //        incorrectOldPassword = true;
 
         Intent intent = getIntent();
@@ -281,6 +282,8 @@ public class SettingsActivity2 extends ActionBarActivity {
     private void logout() {
         // Call the Parse log out method
         ParseUser.logOut();
+        ParseUser currentUser = ParseUser.getCurrentUser(); // this will now be null
+        userInstance.setCurrentUser(currentUser);
         // Start and intent for the dispatch activity
         // Below will start invalidate user's session and redirect to WelcomeActivity
         Intent intent = new Intent(SettingsActivity2.this, DispatchActivity.class);

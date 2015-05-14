@@ -185,6 +185,8 @@ public class MainActivity extends ActionBarActivity {
     private void logout() {
         // Call the Parse log out method
         ParseUser.logOut();
+        ParseUser currentUser = ParseUser.getCurrentUser(); // this will now be null
+        userInstance.setCurrentUser(currentUser);
         // Start and intent for the dispatch activity
         // Below will start invalidate user's session and redirect to WelcomeActivity
         Intent intent = new Intent(this, DispatchActivity.class);

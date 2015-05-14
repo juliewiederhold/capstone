@@ -69,6 +69,10 @@ public class SingletonUser {
         return this.currentUser;
     }
 
+    public void setCurrentUser(ParseUser newUser) {
+        currentUser = newUser;
+    }
+
     public ParseInstallation getCurrentInstallation () {
         return this.currentInstallation;
     }

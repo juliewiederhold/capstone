@@ -35,11 +35,13 @@ public class SettingsActivity extends ActionBarActivity {
     private TextView passwordTextView;
     private TextView emailTextView;
     private TextView phoneTextView;
+    private static SingletonUser userInstance;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_settings);
+        userInstance = SingletonUser.getInstance();
 
         Intent intent = getIntent();
         String previousActivity = intent.getStringExtra("activitySent");
@@ -132,6 +134,8 @@ public class SettingsActivity extends ActionBarActivity {
     private void logout() {
         // Call the Parse log out method
         ParseUser.logOut();
+        ParseUser currentUser = ParseUser.getCurrentUser(); // this will now be null
+        userInstance.setCurrentUser(currentUser);
         // Start and intent for the dispatch activity
         // Below will start invalidate user's session and redirect to WelcomeActivity
         Intent intent = new Intent(SettingsActivity.this, DispatchActivity.class);
