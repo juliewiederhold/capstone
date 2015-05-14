@@ -53,6 +53,7 @@ public class NightOutQuickTexts extends ActionBarActivity {
         saveButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                finish();
                 Intent next = new Intent(NightOutQuickTexts.this, StartNightOutSettingConfirmation.class);
                 startActivity(next);
             }

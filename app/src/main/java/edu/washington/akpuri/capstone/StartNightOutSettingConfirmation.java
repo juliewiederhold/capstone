@@ -92,9 +92,9 @@ public class StartNightOutSettingConfirmation extends ActionBarActivity {
 
                                 if(!hours.equals("") && !minutes.equals("")){
 
-                                    Intent intent = getIntent();
+                                   // Intent intent = getIntent();
                                     finish();
-                                    startActivity(intent);
+                                   // startActivity(intent);
 
                                     instance = SingletonNightOutSettings.getInstance();
                                     instance.setDurationHours(Integer.parseInt(hours));
@@ -124,6 +124,7 @@ public class StartNightOutSettingConfirmation extends ActionBarActivity {
 
                 builder.create();
                 builder.show(); */
+                finish();
                 Intent beginNightOut = new Intent(StartNightOutSettingConfirmation.this, MainMap.class);
                 startActivity(beginNightOut);
             }

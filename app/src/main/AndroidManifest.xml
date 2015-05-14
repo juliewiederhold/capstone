@@ -201,8 +201,7 @@
         </activity>
         <activity
             android:name=".MainMap"
-            android:label="@string/title_activity_main_map"
-            android:noHistory="true" >
+            android:label="@string/title_activity_main_map">
         </activity>
         <activity
             android:name=".SendQuickText"

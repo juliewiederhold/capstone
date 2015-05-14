@@ -1,5 +1,7 @@
 package edu.washington.akpuri.capstone;
 import android.app.AlertDialog;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -7,11 +9,13 @@ import android.content.IntentSender;
 import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
+import android.media.Image;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v4.app.NotificationCompat;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -35,6 +39,13 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.parse.GetCallback;
+import com.parse.ParseException;
+import com.parse.ParseObject;
+import com.parse.ParsePush;
+import com.parse.ParseQuery;
+import com.parse.ParseUser;
+import com.parse.SaveCallback;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -48,7 +59,10 @@ public class MainMap extends FragmentActivity implements
         LocationListener {
 
     public static final String TAG = MainMap.class.getSimpleName();
+    final SingletonContacts contactInstance = SingletonContacts.getInstance();
     public static SingletonNightOutSettings instance;
+    private static ArrayList<Contact> friendsInNightOutGroup = new ArrayList<Contact>();
+    final SingletonUser userInstance = SingletonUser.getInstance();
 
     /*
      * Define a request code to send to Google Play services
@@ -69,6 +83,7 @@ public class MainMap extends FragmentActivity implements
 
         instance = SingletonNightOutSettings.getInstance();
         mMap.setMyLocationEnabled(true);
+        friendsInNightOutGroup.add(new Contact("Julie", "4082096381", 1));
 
         mGoogleApiClient = new GoogleApiClient.Builder(this)
                 .addConnectionCallbacks(this)
@@ -88,6 +103,66 @@ public class MainMap extends FragmentActivity implements
             public void onClick(View v) {
                 Intent text = new Intent(MainMap.this, SendQuickText.class);
                 startActivity(text);
+            }
+        });
+
+        ImageButton alertFriends = (ImageButton) findViewById(R.id.alert_friends);
+        alertFriends.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                final String user = ParseUser.getCurrentUser().getString("email");
+
+                for(int i=0; i < friendsInNightOutGroup.size(); i++) {
+                    final Contact person = friendsInNightOutGroup.get(i);
+
+                    ////// Create contact ParseObject here
+                    final ParseObject contact = new ParseObject("contact");
+                    contact.put("name", person.getName());
+                    contact.put("phone", person.getPhone());
+                    contact.put("user", user); // could probably save this in singleton
+                    contact.put("id", person.getId());
+                    contact.put("email", person.getEmail());
+                    Log.e(TAG, "contact id: " + person.getId());
+                    contact.put("pending", true);   // pending So-So friend; should be false once accepted
+                    contact.saveInBackground(new SaveCallback() {
+                        @Override
+                        public void done(ParseException e) {
+                            if (e != null) {
+                                Log.e(TAG, "Error saving contactsId: " + e);
+                            } else {
+
+
+                                ParseQuery<ParseObject> query = ParseQuery.getQuery("ContactsObject");
+                                query.whereEqualTo("user", user);
+                                query.getFirstInBackground(new GetCallback<ParseObject>() {
+                                    @Override
+                                    public void done(final ParseObject parseObject, ParseException e) {
+                                        try {
+                                            if (parseObject != null) {
+
+                                                // Send push notifications
+                                                ParseQuery pushQuery = userInstance.getCurrentInstallation().getQuery();
+                                                pushQuery.whereEqualTo("user", person.getEmail());
+                                                ParsePush push = new ParsePush();
+                                                push.setQuery(pushQuery);
+                                                push.setMessage(userInstance.getName() + " (" + userInstance.getPhone() + ") would like you to find her. Please go assist her NOW.");
+
+                                                push.sendInBackground();
+                                                Log.e(TAG, "sent to: " + person.getEmail());
+
+                                            } else {
+                                                // Something went wrong
+                                                Log.e("Contacts", "Failed to retrieve contactsObject: " + e);
+                                            }
+                                        } catch (Exception err) {
+                                            err.printStackTrace();
+                                        }
+                                    }
+                                });
+                            }
+                        }
+                    });
+                }
             }
         });
 
@@ -113,9 +188,7 @@ public class MainMap extends FragmentActivity implements
 
                                 if (answer == 1088 || !answerText.getText().toString().equals("")) {
 
-                                    Intent intent = getIntent();
-                                    finish();
-                                    startActivity(intent);
+                                    finish(); // Makes it so you can't go back to this activity
                                     instance.restartInstance();
 
                                     Intent endNightOut = new Intent(MainMap.this, MainActivity.class);
@@ -235,31 +308,34 @@ public class MainMap extends FragmentActivity implements
         Geocoder geocoder = new Geocoder(this);
         List<Address> addresses;
 
-        try{
-            addresses = geocoder.getFromLocationName(safetyZones.get(0).returnAddress(), 1);
-            //locationName = geocoder.getFromLocation(currentLatitude, currentLongitude, 1).get(0).getLocality();
-            if(addresses.size() > 0) {
-                double latitude= addresses.get(0).getLatitude();
-                double longitude= addresses.get(0).getLongitude();
+        for(int i = 0; i < safetyZones.size(); i++){
+            try{
+                addresses = geocoder.getFromLocationName(safetyZones.get(i).returnAddress(), 1);
+                //locationName = geocoder.getFromLocation(currentLatitude, currentLongitude, 1).get(0).getLocality();
+                if(addresses.size() > 0) {
+                    double latitude= addresses.get(0).getLatitude();
+                    double longitude= addresses.get(0).getLongitude();
 
-                double num = calculateDistance(currentLongitude, currentLatitude, longitude, latitude);
+                    double num = calculateDistance(currentLongitude, currentLatitude, longitude, latitude);
 
-                if(num < 50){ // 50 is a guess
-                    Toast toast = Toast.makeText(this, "In Safety Zone", Toast.LENGTH_SHORT);
-                    toast.show();
+                    if(num < 50){ // 50 is a guess
+                        Toast toast = Toast.makeText(this, "In Safety Zone", Toast.LENGTH_SHORT);
+                        toast.show();
+                    }
                 }
+            } catch (IOException e){
+                Log.e(TAG, "Unable connect to Geocoder", e);
             }
-        } catch (Exception E){
-
         }
+
 
         LatLng latLng = new LatLng(currentLatitude, currentLongitude);
 
         //mMap.addMarker(new MarkerOptions().position(new LatLng(currentLatitude, currentLongitude)).title("Current Location"));
-        MarkerOptions options = new MarkerOptions()
+      /*  MarkerOptions options = new MarkerOptions() WILL USE ONCE WE ADD PEOPLE TO THE MAP
                 .position(latLng)
-                .title(locationName); // Have address appear here
-        mMap.addMarker(options);
+                .title(locationName);
+        mMap.addMarker(options);*/
         // mMap.moveCamera(CameraUpdateFactory.newLatLng(latLng));
 
         CameraUpdate center = CameraUpdateFactory.newLatLng(new LatLng(currentLatitude, currentLongitude));

@@ -57,6 +57,7 @@ public class SafetyZonePage extends ActionBarActivity {
             saveButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+                    finish();
                     Intent next = new Intent(SafetyZonePage.this, EditDefaultSettings.class);
                     startActivity(next);
                 }
