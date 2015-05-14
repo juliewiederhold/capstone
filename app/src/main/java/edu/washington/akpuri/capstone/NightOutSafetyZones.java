@@ -56,6 +56,7 @@ public class NightOutSafetyZones extends ActionBarActivity {
         saveButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                finish();
                 Intent next = new Intent(NightOutSafetyZones.this, StartNightOutSettingConfirmation.class);
                 startActivity(next);
             }

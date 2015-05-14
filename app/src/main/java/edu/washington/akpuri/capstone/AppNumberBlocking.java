@@ -94,6 +94,7 @@ public class AppNumberBlocking extends ActionBarActivity {
             saveButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+                    finish();
                     Intent next = new Intent(AppNumberBlocking.this, EditDefaultSettings.class);
                     startActivity(next);
                 }

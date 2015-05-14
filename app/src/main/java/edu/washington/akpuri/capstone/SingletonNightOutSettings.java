@@ -37,6 +37,8 @@ public class SingletonNightOutSettings {
             nightOutSafetyZones = new ArrayList<>();
             nightOutBlockedApps = new ArrayList<>();
             nightOutBlockedContacts = new ArrayList<>();
+            nightOutSafetyZones.add(new SafetyZone("home", "Mary Gates Hall, University of Washington", "Seattle", 98105, "WA"));
+            nightOutSafetyZones.add(new SafetyZone("home 2", "4746 20th Ave NE", "Seattle", 98105, "WA"));
 
             durationHours = 0;
             durationMinutes = 0;
@@ -46,7 +48,7 @@ public class SingletonNightOutSettings {
 
         ArrayList<SafetyZone> tempSafetyZones = userInstance.getExistingSafetyZones();
         // tempSafetyZones.add(new SafetyZone("home", "4746 18th Ave NE", "Seattle", 98105, "WA"));
-        tempSafetyZones.add(new SafetyZone("home", "Mary Gates Hall, University of Washington", "Seattle", 98105, "WA"));
+
         for(int i = 0; i < tempSafetyZones.size(); i++){
             if(!nightOutSafetyZones.contains(tempSafetyZones.get(i)))
                 nightOutSafetyZones.add(tempSafetyZones.get(i));

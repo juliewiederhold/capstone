@@ -91,6 +91,7 @@ public class NightOutAppNumberBlocking extends ActionBarActivity {
         saveButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                finish();
                 Intent next = new Intent(NightOutAppNumberBlocking.this, StartNightOutSettingConfirmation.class);
                 startActivity(next);
             }
