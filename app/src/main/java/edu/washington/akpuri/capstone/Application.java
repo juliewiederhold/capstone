@@ -1,5 +1,6 @@
 package edu.washington.akpuri.capstone;
 
+import android.app.Notification;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.util.Log;
@@ -8,6 +9,7 @@ import com.parse.Parse;
 import com.parse.ParseException;
 import com.parse.ParseObject;
 import com.parse.ParsePush;
+import com.parse.PushService;
 import com.parse.SaveCallback;
 
 /**
@@ -57,6 +59,10 @@ public class Application extends android.app.Application {
                 }
             }
         });
+
+        // TODO
+        // https://www.parse.com/questions/push-notification-is-not-fully-displayed-on-android-devices
+//        PushService.setDefaultPushCallback(this, Notification.class);
 
         // Testing push notifications
         push();

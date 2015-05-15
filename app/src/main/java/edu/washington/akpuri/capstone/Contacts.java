@@ -178,6 +178,10 @@ public class Contacts extends ActionBarActivity {
             });
             instance.setHasSavedRequests(true);
         }
+
+        // https://parse.com/questions/how-do-i-get-the-json-from-a-push-notification-in-android-when-the-activity-is-opened-by-clicking-on-the-notification
+        Intent intent = getIntent();
+        Log.e(TAG, intent.getExtras().toString());
     }
 
     @Override
