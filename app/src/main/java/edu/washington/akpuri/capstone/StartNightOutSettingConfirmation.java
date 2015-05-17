@@ -6,6 +6,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
+import android.text.format.Time;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -73,9 +74,25 @@ public class StartNightOutSettingConfirmation extends ActionBarActivity {
             @Override
             public void onClick(View v) {
                 LayoutInflater inflater = getLayoutInflater();
-/*
+
                 final View fragmentView = inflater.inflate(R.layout.fragment_set_duration, null);
                 AlertDialog.Builder builder = new AlertDialog.Builder(fragmentView.getContext());
+
+              /*  String hours = hoursText.getText().toString();
+                String minutes = minutesText.getText().toString();
+
+                if(!hours.equals("") && !minutes.equals("")){
+                    int hr = Integer.parseInt(hours);
+                    int min = Integer.parseInt(minutes);
+
+                    Time today = new Time(Time.getCurrentTimezone());
+                    today.setToNow();
+
+                    min = today.minute + min;
+                    hr = today.hour + hr;
+
+                    timeNightOutWillEnd.setText("Your Night Out will end at " + hr + " " + min);
+                }*/
 
                 // Inflate and set the layout for the dialog
                 // Pass null as the parent view because its going in the dialog layout
@@ -84,8 +101,9 @@ public class StartNightOutSettingConfirmation extends ActionBarActivity {
                         .setPositiveButton("Begin Night Out", new DialogInterface.OnClickListener(){
                             @Override
                             public void onClick(DialogInterface dialog, int id) {
-                                EditText hoursText = (EditText) fragmentView.findViewById(R.id.duration_hours);
-                                EditText minutesText = (EditText) fragmentView.findViewById(R.id.duration_minutes);
+                                final EditText hoursText = (EditText) fragmentView.findViewById(R.id.duration_hours);
+                                final EditText minutesText = (EditText) fragmentView.findViewById(R.id.duration_minutes);
+                               // TextView timeNightOutWillEnd = (TextView) findViewById(R.id.time_night_will_end);
 
                                 String hours = hoursText.getText().toString();
                                 String minutes = minutesText.getText().toString();
@@ -123,12 +141,16 @@ public class StartNightOutSettingConfirmation extends ActionBarActivity {
                         });
 
                 builder.create();
-                builder.show(); */
-                finish();
+                builder.show();
+              /*  finish();
                 Intent beginNightOut = new Intent(StartNightOutSettingConfirmation.this, MainMap.class);
-                startActivity(beginNightOut);
+                startActivity(beginNightOut);*/
             }
         });
+    }
+
+    private void indicateTimeNightOutWillEnd(String hours, String minutes){
+
     }
 
     private void initList(){

@@ -10,7 +10,7 @@
         android:text="Set Duration"
         android:id="@+id/textView12"
         android:layout_gravity="center_horizontal"
-        android:layout_marginTop="150dp" />
+        android:layout_marginTop="120dp" />
 
     <ImageView
         android:layout_width="100dp"
@@ -32,5 +32,13 @@
         android:layout_height="50dp"
         android:hint="Minutes: "
         android:inputType="number" />
+
+  <!-- <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:id="@+id/time_night_will_end"
+        android:layout_gravity="center_horizontal"
+        android:text="hello" />-->
 
 </LinearLayout>

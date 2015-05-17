@@ -52,6 +52,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
+import android.os.Handler;
 
 public class MainMap extends FragmentActivity implements
         GoogleApiClient.ConnectionCallbacks,
@@ -165,6 +166,39 @@ public class MainMap extends FragmentActivity implements
                 }
             }
         });
+
+      //  int hourInMilli = instance.getDurationHours() * 3600000;
+      //  int minutesInMilli = instance.getDurationMinutes() * 60000;
+        int totalTime = (instance.getDurationHours() * 3600000) + (instance.getDurationMinutes() * 60000);
+
+        Handler mHandler = new Handler();
+        mHandler.postDelayed(new Runnable() {
+
+            @Override
+            public void run() {
+                LayoutInflater inflater = getLayoutInflater();
+
+                final View fragmentView = inflater.inflate(R.layout.fragment_night_out_ends, null);
+                AlertDialog.Builder builder = new AlertDialog.Builder(fragmentView.getContext());
+
+                builder.setView(fragmentView)
+                        // Add action buttons
+                        .setPositiveButton("Okay", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int id) {
+                            finish(); // Makes it so you can't go back to this activity
+
+                            Intent endNightOut = new Intent(MainMap.this, MainActivity.class);
+                            startActivity(endNightOut);
+
+                            }
+                        });
+
+                builder.create();
+                builder.show();
+            }
+
+        }, totalTime);
 
         ImageButton exit = (ImageButton) findViewById(R.id.exit_night_out);
         exit.setOnClickListener(new View.OnClickListener() {

@@ -102,4 +102,7 @@ public class SingletonNightOutSettings {
 
     public void setDurationHours(int hours){this.durationHours = hours;}
 
+    public int getDurationMinutes(){return this.durationMinutes;}
+
+    public int getDurationHours(){return this.durationHours;}
 }
