@@ -22,124 +22,126 @@
         android:layout_alignParentStart="true" />
     <!-- User info -->
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:layout_alignTop="@+id/image_icon"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true">
-
-        <!-- First name -->
-        <TextView
-            android:id="@+id/firstname_textview"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/prompt_firstname"
-            android:paddingLeft="100dp" />
-        <EditText
-            android:id="@+id/firstname_edit_text"
-            android:layout_width="250dp"
-            android:layout_height="wrap_content"
-            android:inputType="textPersonName|textNoSuggestions"
-            android:maxLines="1"
-            android:singleLine="true"
-            android:layout_marginLeft="100dp" />
-
-        <!-- Last name -->
-        <TextView
-            android:id="@+id/lastname_textview"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/prompt_lastname"
-            android:layout_marginLeft="100dp" />
-        <EditText
-            android:id="@+id/lastname_edit_text"
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:inputType="textPersonName|textNoSuggestions"
-            android:maxLines="1"
-            android:singleLine="true"
-            android:layout_marginLeft="100dp" />
+            android:orientation="vertical"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentBottom="true">
 
-        <!-- Email -->
-        <TextView
-            android:id="@+id/email_textview"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/prompt_email"/>
-        <EditText
-            android:id="@+id/email_edit_text"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:inputType="textEmailAddress|textNoSuggestions"
-            android:maxLines="1"
-            android:singleLine="true" />
+            <!-- First name -->
+            <TextView
+                android:id="@+id/firstname_textview"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/prompt_firstname"
+                android:paddingLeft="100dp" />
+            <EditText
+                android:id="@+id/firstname_edit_text"
+                android:layout_width="250dp"
+                android:layout_height="wrap_content"
+                android:inputType="textPersonName|textNoSuggestions"
+                android:maxLines="1"
+                android:singleLine="true"
+                android:layout_marginLeft="100dp" />
 
-        <!-- Password -->
-        <TextView
-            android:id="@+id/old_password_textview"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/prompt_old_password"/>
-        <EditText
-            android:id="@+id/old_password_edit_text"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:inputType="textPassword"
-            android:password="true"
-            android:maxLines="1"
-            android:singleLine="true" />
-        <TextView
-            android:id="@+id/new_password1_textview"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/prompt_new_password"/>
-        <EditText
-            android:id="@+id/new_password1_edit_text"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:inputType="textPassword"
-            android:password="true"
-            android:maxLines="1"
-            android:singleLine="true" />
-        <TextView
-            android:id="@+id/new_password2_textview"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/prompt_new_password"/>
-        <EditText
-            android:id="@+id/new_password2_edit_text"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:inputType="textPassword"
-            android:password="true"
-            android:maxLines="1"
-            android:singleLine="true" />
+            <!-- Last name -->
+            <TextView
+                android:id="@+id/lastname_textview"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/prompt_lastname"
+                android:layout_marginLeft="100dp" />
+            <EditText
+                android:id="@+id/lastname_edit_text"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="textPersonName|textNoSuggestions"
+                android:maxLines="1"
+                android:singleLine="true"
+                android:layout_marginLeft="100dp" />
 
-        <!-- Phone number -->
-        <TextView
-            android:id="@+id/phone_textview"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/prompt_phone"/>
-        <EditText
-            android:id="@+id/phone_edit_text"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:inputType="phone"
-            android:maxLines="1"
-            android:singleLine="true"
-            />
+            <!-- Email -->
+            <TextView
+                android:id="@+id/email_textview"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/prompt_email"/>
+            <EditText
+                android:id="@+id/email_edit_text"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="textEmailAddress|textNoSuggestions"
+                android:maxLines="1"
+                android:singleLine="true" />
 
-        <Button
-            android:id="@+id/save_changes_button"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/save_changes" />
+            <!-- Password -->
+            <TextView
+                android:id="@+id/old_password_textview"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/prompt_old_password"/>
+            <EditText
+                android:id="@+id/old_password_edit_text"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="textPassword"
+                android:password="true"
+                android:maxLines="1"
+                android:singleLine="true" />
+            <TextView
+                android:id="@+id/new_password1_textview"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/prompt_new_password"/>
+            <EditText
+                android:id="@+id/new_password1_edit_text"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="textPassword"
+                android:password="true"
+                android:maxLines="1"
+                android:singleLine="true" />
+            <TextView
+                android:id="@+id/new_password2_textview"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/prompt_new_password"/>
+            <EditText
+                android:id="@+id/new_password2_edit_text"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="textPassword"
+                android:password="true"
+                android:maxLines="1"
+                android:singleLine="true" />
+
+            <!-- Phone number -->
+            <TextView
+                android:id="@+id/phone_textview"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/prompt_phone"/>
+            <EditText
+                android:id="@+id/phone_edit_text"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="phone"
+                android:maxLines="1"
+                android:singleLine="true"
+                />
+
+            <Button
+                android:id="@+id/save_changes_button"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/save_changes" />
 
 
-    </LinearLayout>
+        </LinearLayout>
+
 
     <!--<Button-->
         <!--android:id="@+id/logout_button"-->

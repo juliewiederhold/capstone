@@ -267,6 +267,7 @@ public class SettingsActivity2 extends ActionBarActivity {
                     dialog.dismiss();
                 }
             }.start();
+
             Intent intent = new Intent(SettingsActivity2.this, SettingsActivity.class);
             startActivity(intent);
         }
