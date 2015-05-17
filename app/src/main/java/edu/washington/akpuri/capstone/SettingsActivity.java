@@ -3,6 +3,11 @@ package edu.washington.akpuri.capstone;
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.drawable.Drawable;
+import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.support.v7.app.ActionBarActivity;
@@ -12,10 +17,15 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.parse.ParseUser;
+
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStream;
 
 
 /**
@@ -43,8 +53,9 @@ public class SettingsActivity extends ActionBarActivity {
         setContentView(R.layout.activity_settings);
         userInstance = SingletonUser.getInstance();
 
-        Intent intent = getIntent();
-        String previousActivity = intent.getStringExtra("activitySent");
+        ImageView profilePicture = (ImageView) findViewById(R.id.image_icon);
+        Drawable picture = userInstance.getProfilePicture();
+        profilePicture.setImageDrawable(picture);
 
         Log.e(TAG, "SettingsActivity fired");
 
@@ -91,7 +102,7 @@ public class SettingsActivity extends ActionBarActivity {
         }
 
         // Set up the log out button click handler
-        Button logoutButton = (Button) findViewById(R.id.logout_button);
+     /*   Button logoutButton = (Button) findViewById(R.id.logout_button);
         logoutButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 // Call the Parse log out method
@@ -102,8 +113,10 @@ public class SettingsActivity extends ActionBarActivity {
                 intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
                 startActivity(intent);
             }
-        });
+        });*/
     }
+
+
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {

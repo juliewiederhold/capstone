@@ -29,15 +29,6 @@ public class EditDefaultSettings extends ActionBarActivity {
         edit_app_num_blocking.setImageResource(R.drawable.ic_dnd_forwardslash_black_48dp);
         edit_quick_texts.setImageResource(R.drawable.ic_messenger_black_48dp);
 
-        Button back = (Button) findViewById(R.id.back_to_main);
-        back.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(EditDefaultSettings.this, MainActivity.class);
-                startActivity(intent);
-            }
-        });
-
         edit_profile.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

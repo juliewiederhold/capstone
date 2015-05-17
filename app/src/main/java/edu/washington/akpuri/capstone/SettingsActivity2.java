@@ -3,6 +3,12 @@ package edu.washington.akpuri.capstone;
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
+import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.support.v7.app.ActionBarActivity;
@@ -12,6 +18,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -19,6 +26,10 @@ import com.parse.LogInCallback;
 import com.parse.Parse;
 import com.parse.ParseException;
 import com.parse.ParseUser;
+
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStream;
 
 
 /**
@@ -53,8 +64,27 @@ public class SettingsActivity2 extends ActionBarActivity {
         userInstance = SingletonUser.getInstance();
 //        incorrectOldPassword = true;
 
-        Intent intent = getIntent();
-        String previousActivity = intent.getStringExtra("activitySent");
+      //  Intent intent = getIntent();
+     //   String previousActivity = intent.getStringExtra("activitySent");
+
+
+        ImageView profilePicture = (ImageView) findViewById(R.id.image_icon);
+        Drawable picture = userInstance.getProfilePicture();
+        profilePicture.setImageDrawable(picture);
+        profilePicture.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View view) {
+                Intent getIntent = new Intent(Intent.ACTION_GET_CONTENT);
+                getIntent.setType("image/*");
+
+                Intent pickIntent = new Intent(Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+                pickIntent.setType("image/*");
+
+                Intent chooserIntent = Intent.createChooser(getIntent, "Select Image");
+                chooserIntent.putExtra(Intent.EXTRA_INITIAL_INTENTS, new Intent[] {pickIntent});
+
+                startActivityForResult(chooserIntent, 1);
+            }
+        });
 
         Log.e(TAG, "SettingsActivity2 fired");
 
@@ -113,6 +143,28 @@ public class SettingsActivity2 extends ActionBarActivity {
 //                startActivity(intent);
 //            }
 //        });
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data){
+        Uri imageUri = data.getData();
+        InputStream imageStream = null;
+        try {
+            imageStream = getContentResolver().openInputStream(imageUri);
+            ImageView imageView = (ImageView) findViewById(R.id.image_icon);
+            imageView.setImageBitmap(BitmapFactory.decodeStream(imageStream));
+            userInstance.setProfilePicture(imageView.getDrawable());
+        } catch (FileNotFoundException e) {
+            // Handle the error
+        } finally {
+            if (imageStream != null) {
+                try {
+                    imageStream.close();
+                } catch (IOException e) {
+                    // Ignore the exception
+                }
+            }
+        }
     }
 
     private void saveChanges() {

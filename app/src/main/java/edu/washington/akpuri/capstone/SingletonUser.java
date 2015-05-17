@@ -1,5 +1,10 @@
 package edu.washington.akpuri.capstone;
 
+import android.graphics.Bitmap;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
+import android.widget.ImageView;
+
 import com.parse.ParseInstallation;
 import com.parse.ParseUser;
 
@@ -20,6 +25,7 @@ public class SingletonUser {
     private static String phone;
     private static String username;
     private static String email;
+    private static Drawable profilePicture;
 
     //Empty Constructor, it's a singleton
     protected SingletonUser(){
@@ -91,4 +97,7 @@ public class SingletonUser {
         return this.email;
     }
 
+    public void setProfilePicture(Drawable pic) {this.profilePicture = pic;}
+
+    public Drawable getProfilePicture() {return this.profilePicture;}
 }

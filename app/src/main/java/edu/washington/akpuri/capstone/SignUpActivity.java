@@ -3,6 +3,10 @@ package edu.washington.akpuri.capstone;
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.graphics.BitmapFactory;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
@@ -23,12 +27,17 @@ import com.parse.ParseUser;
 import com.parse.SaveCallback;
 import com.parse.SignUpCallback;
 
+
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 
 
 public class SignUpActivity extends ActionBarActivity {
 
     private final static String TAG = "SignUpActivity";
+    private static SingletonUser instance;
 
     private EditText firstnameEditText;
     private EditText lastnameEditText;
@@ -44,6 +53,8 @@ public class SignUpActivity extends ActionBarActivity {
         setContentView(R.layout.activity_sign_up);
 
         Log.e(TAG, "SigUpActivity fired");
+
+        instance = SingletonUser.getInstance();
 
         // Set up the signup form.
         firstnameEditText = (EditText) findViewById(R.id.firstname_edit_text);
@@ -69,7 +80,16 @@ public class SignUpActivity extends ActionBarActivity {
         image.setImageResource(R.drawable.picholdericon);
         image.setOnClickListener(new View.OnClickListener() {
             public void onClick(View view) {
+                Intent getIntent = new Intent(Intent.ACTION_GET_CONTENT);
+                getIntent.setType("image/*");
 
+                Intent pickIntent = new Intent(Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+                pickIntent.setType("image/*");
+
+                Intent chooserIntent = Intent.createChooser(getIntent, "Select Image");
+                chooserIntent.putExtra(Intent.EXTRA_INITIAL_INTENTS, new Intent[] {pickIntent});
+
+                startActivityForResult(chooserIntent, 1);
             }
         });
 
@@ -81,6 +101,29 @@ public class SignUpActivity extends ActionBarActivity {
             }
         });
 
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data){
+        Uri imageUri = data.getData();
+        InputStream imageStream = null;
+        try {
+            imageStream = getContentResolver().openInputStream(imageUri);
+            ImageView imageView = (ImageView) findViewById(R.id.image_icon);
+            imageView.setImageBitmap(BitmapFactory.decodeStream(imageStream));
+            // instance.setProfilePicture(BitmapFactory.decodeStream(imageStream));
+            instance.setProfilePicture(imageView.getDrawable());
+        } catch (FileNotFoundException e) {
+            // Handle the error
+        } finally {
+            if (imageStream != null) {
+                try {
+                    imageStream.close();
+                } catch (IOException e) {
+                    // Ignore the exception
+                }
+            }
+        }
     }
 
     private void signup() {

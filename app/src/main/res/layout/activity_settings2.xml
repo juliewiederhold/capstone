@@ -8,41 +8,59 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="hello.jcw27.washington.edu.so_so.SettingsActivity" >
 
-
+    <ImageView
+        android:id="@+id/image_icon"
+        android:layout_width="90dp"
+        android:layout_height="90dp"
+        android:scaleType="fitXY"
+        android:src="@drawable/picholdericon"
+        android:contentDescription="Profile Picture"
+        android:adjustViewBounds="true"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true" />
     <!-- User info -->
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:layout_alignTop="@+id/image_icon"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true">
 
         <!-- First name -->
         <TextView
             android:id="@+id/firstname_textview"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/prompt_firstname"/>
+            android:text="@string/prompt_firstname"
+            android:paddingLeft="100dp" />
         <EditText
             android:id="@+id/firstname_edit_text"
-            android:layout_width="match_parent"
+            android:layout_width="250dp"
             android:layout_height="wrap_content"
             android:inputType="textPersonName|textNoSuggestions"
             android:maxLines="1"
-            android:singleLine="true" />
+            android:singleLine="true"
+            android:layout_marginLeft="100dp" />
 
         <!-- Last name -->
         <TextView
             android:id="@+id/lastname_textview"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/prompt_lastname"/>
+            android:text="@string/prompt_lastname"
+            android:layout_marginLeft="100dp" />
         <EditText
             android:id="@+id/lastname_edit_text"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:inputType="textPersonName|textNoSuggestions"
             android:maxLines="1"
-            android:singleLine="true" />
+            android:singleLine="true"
+            android:layout_marginLeft="100dp" />
 
         <!-- Email -->
         <TextView

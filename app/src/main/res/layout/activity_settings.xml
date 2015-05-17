@@ -8,13 +8,26 @@ android:paddingRight="@dimen/activity_horizontal_margin"
 android:paddingTop="@dimen/activity_vertical_margin"
 tools:context="hello.jcw27.washington.edu.so_so.SettingsActivity" >
 
-
+    <ImageView
+        android:id="@+id/image_icon"
+        android:layout_width="90dp"
+        android:layout_height="90dp"
+        android:scaleType="fitXY"
+        android:adjustViewBounds="true"
+        android:src="@drawable/picholdericon"
+        android:layout_centerHorizontal="true"
+        android:contentDescription="Profile Picture"
+        android:layout_alignParentTop="true" />
     <!-- User info -->
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_marginTop="103dp">
 
         <!-- First name -->
         <TextView
@@ -87,10 +100,9 @@ tools:context="hello.jcw27.washington.edu.so_so.SettingsActivity" >
             android:layout_height="wrap_content"
             android:text="@string/edit_settings" />
 
-
     </LinearLayout>
 
-    <Button
+  <!--  <Button
         android:id="@+id/logout_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -99,6 +111,6 @@ tools:context="hello.jcw27.washington.edu.so_so.SettingsActivity" >
         android:layout_alignParentRight="true"
         android:layout_alignParentStart="true"
         android:layout_alignParentEnd="true"
-        android:text="@string/logout_full" />
+        android:text="@string/logout_full" /> -->
 
 </RelativeLayout>

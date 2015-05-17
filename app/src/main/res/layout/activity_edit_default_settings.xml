@@ -118,14 +118,4 @@
         android:layout_alignLeft="@+id/edit_quick_texts_button"
         android:layout_alignStart="@+id/edit_quick_texts_button" />
 
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Back"
-        android:id="@+id/back_to_main"
-        android:layout_below="@+id/textView3"
-        android:layout_alignLeft="@+id/edit_app_number_blocking"
-        android:layout_alignStart="@+id/edit_app_number_blocking" />
-
-
 </RelativeLayout>
