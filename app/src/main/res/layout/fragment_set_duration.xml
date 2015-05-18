@@ -19,19 +19,33 @@
         android:src="@drawable/picholdericon"
         android:layout_gravity="center_horizontal" />
 
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:text="Hours:"
+        android:id="@+id/textView18" />
+
     <EditText
         android:id="@+id/duration_hours"
         android:layout_width="match_parent"
         android:layout_height="50dp"
-        android:hint="Hours: "
-        android:inputType="number" />
+        android:inputType="number"
+        android:layout_marginTop="0dp" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:text="Minutes:"
+        android:id="@+id/textView19" />
 
     <EditText
         android:id="@+id/duration_minutes"
         android:layout_width="match_parent"
         android:layout_height="50dp"
-        android:hint="Minutes: "
-        android:inputType="number" />
+        android:inputType="number"
+        android:layout_marginTop="0dp" />
 
   <!-- <TextView
         android:layout_width="wrap_content"

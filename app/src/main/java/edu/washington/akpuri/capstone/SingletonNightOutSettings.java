@@ -19,6 +19,7 @@ public class SingletonNightOutSettings {
     private static ArrayList<Contact> nightOutBlockedContacts;
     private static int durationMinutes;
     private static int durationHours;
+    private static boolean hasSetOffAlert;
 
     //Empty Constructor, it's a singleton
     protected SingletonNightOutSettings(){
@@ -42,6 +43,7 @@ public class SingletonNightOutSettings {
 
             durationHours = 0;
             durationMinutes = 0;
+        //    hasSetOffAlert = false;
 
              initializeBlockedApps();
         }
@@ -105,4 +107,12 @@ public class SingletonNightOutSettings {
     public int getDurationMinutes(){return this.durationMinutes;}
 
     public int getDurationHours(){return this.durationHours;}
+
+    public static boolean isHasSetOffAlert() {
+        return hasSetOffAlert;
+    }
+
+    public static void setHasSetOffAlert(boolean hasSetOffAlert) {
+        SingletonNightOutSettings.hasSetOffAlert = hasSetOffAlert;
+    }
 }

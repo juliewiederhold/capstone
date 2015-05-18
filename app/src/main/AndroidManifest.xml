@@ -205,7 +205,8 @@
         </activity>
         <activity
             android:name=".SendQuickText"
-            android:label="@string/title_activity_send_quick_text" >
+            android:label="@string/title_activity_send_quick_text"
+            android:windowSoftInputMode="adjustPan">>
         </activity>
 
         <!-- For push notifications -->

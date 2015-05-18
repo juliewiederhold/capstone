@@ -111,9 +111,10 @@ public class MainMap extends FragmentActivity implements
         });
 
         ImageButton alertFriends = (ImageButton) findViewById(R.id.alert_friends);
-        alertFriends.setOnClickListener(new View.OnClickListener() {
+        alertFriends.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
-            public void onClick(View v) {
+            public boolean onLongClick(View v) {
+
                 final String user = ParseUser.getCurrentUser().getString("email");
 
                 for(int i=0; i < friendsInNightOutGroup.size(); i++) {
@@ -134,6 +135,12 @@ public class MainMap extends FragmentActivity implements
                                     push.setQuery(pushQuery);
                                     push.setMessage(userInstance.getName() + " would like you to find her. Please go assist her NOW.");
 
+                                    Context context = getApplicationContext();
+                                    CharSequence text = "Your friends have been alerted";
+                                    int duration = Toast.LENGTH_SHORT;
+                                    Toast toast = Toast.makeText(context, text, duration);
+                                    toast.show();
+
                                     push.sendInBackground();
                                     Log.e(TAG, "sent to: " + person.getEmail());
 
@@ -146,13 +153,12 @@ public class MainMap extends FragmentActivity implements
                             }
                         }
                     });
-
                 }
+
+                return true;
             }
         });
 
-      //  int hourInMilli = instance.getDurationHours() * 3600000;
-      //  int minutesInMilli = instance.getDurationMinutes() * 60000;
         int totalTime = (instance.getDurationHours() * 3600000) + (instance.getDurationMinutes() * 60000);
 
         Handler mHandler = new Handler();
