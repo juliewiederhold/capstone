@@ -84,7 +84,10 @@ public class MainMap extends FragmentActivity implements
 
         instance = SingletonNightOutSettings.getInstance();
         mMap.setMyLocationEnabled(true);
-        friendsInNightOutGroup.add(new Contact("Julie", "4082096381", 1));
+
+        Contact temp = new Contact("Julie", "4082096381", 1);
+        temp.setEmail("f@f.com");
+        friendsInNightOutGroup.add(temp);
 
         mGoogleApiClient = new GoogleApiClient.Builder(this)
                 .addConnectionCallbacks(this)
@@ -116,53 +119,34 @@ public class MainMap extends FragmentActivity implements
                 for(int i=0; i < friendsInNightOutGroup.size(); i++) {
                     final Contact person = friendsInNightOutGroup.get(i);
 
-                    ////// Create contact ParseObject here
-                    final ParseObject contact = new ParseObject("contact");
-                    contact.put("name", person.getName());
-                    contact.put("phone", person.getPhone());
-                    contact.put("user", user); // could probably save this in singleton
-                    contact.put("id", person.getId());
-                    contact.put("email", person.getEmail());
-                    Log.e(TAG, "contact id: " + person.getId());
-                    contact.put("pending", true);   // pending So-So friend; should be false once accepted
-                    contact.saveInBackground(new SaveCallback() {
+                    ParseQuery<ParseObject> query = ParseQuery.getQuery("ContactsObject");
+                    query.whereEqualTo("user", user);
+                    query.getFirstInBackground(new GetCallback<ParseObject>() {
                         @Override
-                        public void done(ParseException e) {
-                            if (e != null) {
-                                Log.e(TAG, "Error saving contactsId: " + e);
-                            } else {
+                        public void done(final ParseObject parseObject, ParseException e) {
+                            try {
+                                if (parseObject != null) {
 
+                                    // Send push notifications
+                                    ParseQuery pushQuery = userInstance.getCurrentInstallation().getQuery();
+                                    pushQuery.whereEqualTo("user", person.getEmail());
+                                    ParsePush push = new ParsePush();
+                                    push.setQuery(pushQuery);
+                                    push.setMessage(userInstance.getName() + " would like you to find her. Please go assist her NOW.");
 
-                                ParseQuery<ParseObject> query = ParseQuery.getQuery("ContactsObject");
-                                query.whereEqualTo("user", user);
-                                query.getFirstInBackground(new GetCallback<ParseObject>() {
-                                    @Override
-                                    public void done(final ParseObject parseObject, ParseException e) {
-                                        try {
-                                            if (parseObject != null) {
+                                    push.sendInBackground();
+                                    Log.e(TAG, "sent to: " + person.getEmail());
 
-                                                // Send push notifications
-                                                ParseQuery pushQuery = userInstance.getCurrentInstallation().getQuery();
-                                                pushQuery.whereEqualTo("user", person.getEmail());
-                                                ParsePush push = new ParsePush();
-                                                push.setQuery(pushQuery);
-                                                push.setMessage(userInstance.getName() + " (" + userInstance.getPhone() + ") would like you to find her. Please go assist her NOW.");
-
-                                                push.sendInBackground();
-                                                Log.e(TAG, "sent to: " + person.getEmail());
-
-                                            } else {
-                                                // Something went wrong
-                                                Log.e("Contacts", "Failed to retrieve contactsObject: " + e);
-                                            }
-                                        } catch (Exception err) {
-                                            err.printStackTrace();
-                                        }
-                                    }
-                                });
+                                } else {
+                                    // Something went wrong
+                                    Log.e("Contacts", "Failed to retrieve contactsObject: " + e);
+                                }
+                            } catch (Exception err) {
+                                err.printStackTrace();
                             }
                         }
                     });
+
                 }
             }
         });
