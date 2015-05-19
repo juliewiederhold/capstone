@@ -41,7 +41,7 @@ public class Contacts extends ActionBarActivity {
     private static boolean allowContactRetrieval;
     private android.support.v7.app.ActionBar actionBar;
     private static SingletonContacts instance;
-    private SingletonUser userInstance;
+    private static SingletonUser userInstance;
     private int counter;
 
     @Override
@@ -52,7 +52,7 @@ public class Contacts extends ActionBarActivity {
 
         instance = SingletonContacts.getInstance();
         userInstance = SingletonUser.getInstance();
-        pendingContacts = new ArrayList<Contact>();
+        pendingContacts = new ArrayList<>();
         allowContactRetrieval = userInstance.getAllowContactRetrieval();
 
         //Get the actionbar
@@ -141,7 +141,7 @@ public class Contacts extends ActionBarActivity {
         // Should have buttons for accepting and rejecting
         if (!instance.hasSavedRequests()) {
             ParseQuery<ParseObject> query = ParseQuery.getQuery("contact");
-            query.whereEqualTo("phone", userInstance.getCurrentUser().get("phone"));
+            query.whereEqualTo("phone", userInstance.getPhone());
             query.whereEqualTo("pending", true);
             query.findInBackground(new FindCallback<ParseObject>() {
                 @Override
