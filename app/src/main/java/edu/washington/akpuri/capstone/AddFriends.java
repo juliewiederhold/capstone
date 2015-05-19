@@ -236,16 +236,20 @@ public class AddFriends extends ActionBarActivity {
 //                                                }
 //                                            }
 //                                        });
-                                        // TODO doesn't work atm :/
+                                        // Todo: change message and try to open request fragment if possible (via JS cloud code?)
                                         String message = "hello there";
                                         HashMap<String, Object> params = new HashMap<String, Object>();
                                         params.put("recipientId", person.getObjectId());
+                                        params.put("recipientEmail", person.getEmail());
                                         params.put("message", message);
                                         ParseCloud.callFunctionInBackground("sendPushToUser", params, new FunctionCallback<String>() {
                                             public void done(String success, ParseException e) {
                                                 if (e == null) {
                                                     // Push sent successfully
-                                                    Log.e(TAG, "Push sent");
+                                                    Log.e(TAG, success);
+                                                }
+                                                else {
+                                                    Log.e(TAG, e.toString());
                                                 }
                                             }
                                         });
