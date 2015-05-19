@@ -16,7 +16,10 @@ import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.Toast;
 
+import com.parse.FunctionCallback;
 import com.parse.GetCallback;
+import com.parse.Parse;
+import com.parse.ParseCloud;
 import com.parse.ParseException;
 import com.parse.ParseObject;
 import com.parse.ParsePush;
@@ -28,6 +31,8 @@ import org.json.JSONObject;
 
 import java.security.cert.CertificateParsingException;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 
 public class AddFriends extends ActionBarActivity {
@@ -222,6 +227,28 @@ public class AddFriends extends ActionBarActivity {
 //                                        push.setData(data);
                                         push.sendInBackground();
                                         Log.e(TAG, "sent to: " + person.getEmail());
+
+//                                        ParseCloud.callFunctionInBackground("test", null, new FunctionCallback<Map<String, Object>>() {
+//                                            @Override
+//                                            public void done(Map<String, Object> stringObjectMap, ParseException e) {
+//                                                if (e == null) {
+//                                                    Toast.makeText(getApplicationContext(), stringObjectMap.get("answer").toString(), Toast.LENGTH_LONG).show();
+//                                                }
+//                                            }
+//                                        });
+                                        // TODO doesn't work atm :/
+                                        String message = "hello there";
+                                        HashMap<String, Object> params = new HashMap<String, Object>();
+                                        params.put("recipientId", person.getObjectId());
+                                        params.put("message", message);
+                                        ParseCloud.callFunctionInBackground("sendPushToUser", params, new FunctionCallback<String>() {
+                                            public void done(String success, ParseException e) {
+                                                if (e == null) {
+                                                    // Push sent successfully
+                                                    Log.e(TAG, "Push sent");
+                                                }
+                                            }
+                                        });
 
                                     } else {
                                         // Something went wrong

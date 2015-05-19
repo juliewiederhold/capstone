@@ -46,10 +46,13 @@ public class SingletonUser {
             allDefaultSettings.add("Quick Texts");
 
             currentUser = ParseUser.getCurrentUser();
-            name = currentUser.get("firstname").toString() + " " + currentUser.get("lastname").toString();
-            phone = currentUser.get("phone").toString();
-            username = currentUser.getUsername().toString();
-            email = currentUser.getEmail().toString();
+
+            if (currentUser != null) {
+                name = currentUser.get("firstname").toString() + " " + currentUser.get("lastname").toString();
+                phone = currentUser.get("phone").toString();
+                username = currentUser.getUsername().toString();
+                email = currentUser.getEmail().toString();
+            }
 
             currentInstallation = ParseInstallation.getCurrentInstallation();
             currentInstallation.saveInBackground();
