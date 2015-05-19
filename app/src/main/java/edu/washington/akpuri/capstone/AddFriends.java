@@ -237,7 +237,7 @@ public class AddFriends extends ActionBarActivity {
 //                                            }
 //                                        });
                                         // Todo: change message and try to open request fragment if possible (via JS cloud code?)
-                                        String message = "hello there";
+                                        String message = userInstance.getName() + " (" + userInstance.getPhone() + ") sent you a friend request.";
                                         HashMap<String, Object> params = new HashMap<String, Object>();
                                         params.put("recipientId", person.getObjectId());
                                         params.put("recipientEmail", person.getEmail());
