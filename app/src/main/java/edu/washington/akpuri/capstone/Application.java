@@ -38,6 +38,7 @@ public class Application extends android.app.Application {
         // Enable Local Datastore.
         Parse.enableLocalDatastore(this);
 
+        // Initialize the Parse SDK
         Parse.initialize(this, "Ip7MwttReawlDBFXZqAtfCu0AxI1H73kxF49aBW9", "8iLDRvHPSehyMHUrew3NGISpY4XVOk9CLEJzesh7");
 
 //        ParseObject testObject = new ParseObject("TestObject");
@@ -62,10 +63,13 @@ public class Application extends android.app.Application {
 
         // TODO
         // https://www.parse.com/questions/push-notification-is-not-fully-displayed-on-android-devices
-//        PushService.setDefaultPushCallback(this, Notification.class);
+        PushService.setDefaultPushCallback(this, Contacts.class);
 
         // Testing push notifications
         push();
+
+        // Specify Activity to handle all pushes by default
+//        PushService.setDefaultPushCallback(this, PushReceiver.class);
 
 
     }

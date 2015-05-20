@@ -88,7 +88,8 @@
             </intent-filter>
         </receiver>
 
-        <uses-library android:name="com.google.android.maps" />
+        <uses-library android:name="com.google.android.maps"
+            android:required="false"/>
 
         <activity
             android:name=".DispatchActivity"
@@ -225,6 +226,13 @@
                 <action android:name="com.parse.push.intent.RECEIVE" />
                 <action android:name="com.parse.push.intent.DELETE" />
                 <action android:name="com.parse.push.intent.OPEN" />
+            </intent-filter>
+        </receiver>
+        <receiver android:name="edu.washington.akpuri.capstone.ParseBroadcastReceiver"
+            android:exported="false"
+            android:enabled="true">
+            <intent-filter>
+                <action android:name="edu.washington.akpuri.capstone.MESSAGE" />
             </intent-filter>
         </receiver>
         <!--<receiver

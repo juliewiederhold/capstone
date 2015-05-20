@@ -213,20 +213,20 @@ public class AddFriends extends ActionBarActivity {
                                         // Or use phone numbers instead
 
                                         // Send push notifications
-                                        ParseQuery pushQuery = userInstance.getCurrentInstallation().getQuery();
-                                        pushQuery.whereEqualTo("user", person.getEmail());
-                                        ParsePush push = new ParsePush();
-                                        push.setQuery(pushQuery);
-                                        push.setMessage(userInstance.getName() + " (" + userInstance.getPhone() + ") sent you a friend request.");
-                                        //JSONObject data = new JSONObject(
-                                        //        "{\"alert\": \""+userInstance.getName()+"\", " +
-                                        //                "\"uri\": \"app://host/contacts\"}");
-
-                                        // json doesn't work but should be working -_-
-//                                        JSONObject data = new JSONObject("{\"alert\":userInstance.getName(), \"uri\": \"app://host/contacts\" }");
-//                                        push.setData(data);
-                                        push.sendInBackground();
-                                        Log.e(TAG, "sent to: " + person.getEmail());
+//                                        ParseQuery pushQuery = userInstance.getCurrentInstallation().getQuery();
+//                                        pushQuery.whereEqualTo("user", person.getEmail());
+//                                        ParsePush push = new ParsePush();
+//                                        push.setQuery(pushQuery);
+//                                        push.setMessage(userInstance.getName() + " (" + userInstance.getPhone() + ") sent you a friend request.");
+//                                        //JSONObject data = new JSONObject(
+//                                        //        "{\"alert\": \""+userInstance.getName()+"\", " +
+//                                        //                "\"uri\": \"app://host/contacts\"}");
+//
+//                                        // json doesn't work but should be working -_-
+////                                        JSONObject data = new JSONObject("{\"alert\":userInstance.getName(), \"uri\": \"app://host/contacts\" }");
+////                                        push.setData(data);
+//                                        push.sendInBackground();
+//                                        Log.e(TAG, "sent to: " + person.getEmail());
 
 //                                        ParseCloud.callFunctionInBackground("test", null, new FunctionCallback<Map<String, Object>>() {
 //                                            @Override
@@ -242,6 +242,7 @@ public class AddFriends extends ActionBarActivity {
                                         params.put("recipientId", person.getObjectId());
                                         params.put("recipientEmail", person.getEmail());
                                         params.put("message", message);
+                                        params.put("uri", "app://host/contacts");
                                         ParseCloud.callFunctionInBackground("sendPushToUser", params, new FunctionCallback<String>() {
                                             public void done(String success, ParseException e) {
                                                 if (e == null) {
