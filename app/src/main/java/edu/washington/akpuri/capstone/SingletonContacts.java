@@ -81,6 +81,10 @@ public class SingletonContacts {
         allContacts.add(contact);
     }
 
+    // Return contact
+    public Contact getContact(Contact contact) {
+        return allContacts.get(allContacts.indexOf(contact));
+    }
     public void removeContact(Contact contact){
         allContacts.remove(contact);
     }

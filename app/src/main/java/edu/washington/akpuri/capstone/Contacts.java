@@ -137,9 +137,8 @@ public class Contacts extends ActionBarActivity {
 //        Log.i(TAG, " onCreate Pending Contacts " + pendingContacts.toString());
 
         // Get all friend requests
-        // To-do: Create a separate adapter for pending friend requests
-        // Should have buttons for accepting and rejecting
         if (!instance.hasSavedRequests()) {
+            Log.e(TAG, "Adding friend requests");
             ParseQuery<ParseObject> query = ParseQuery.getQuery("contact");
             query.whereEqualTo("phone", userInstance.getPhone());
             query.whereEqualTo("pending", true);

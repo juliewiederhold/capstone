@@ -88,11 +88,15 @@ public class FriendAdapter extends ArrayAdapter<Contact> {
                             new DialogInterface.OnClickListener() {
                                 @Override
                                 public void onClick(DialogInterface dialog, int which) {
+
                                     // Remove Contact from list & update list
                                     Log.e(TAG, " BEFORE Pending Friends " + instance.getSosoFriends().toString());
                                     instance.getSosoFriends().remove(data);
+
                                     // Add deleted So-So friend back to Contacts list
-                                    instance.getAllContacts().add(data);
+                                    if (instance.getContact(data).hasBeenAdded()) {
+                                        instance.getAllContacts().add(data);
+                                    }
                                     Log.e(TAG, " AFTER Pending Friends " + instance.getSosoFriends().toString());
 
                                     remove(getItem(position));  // Remove from list

@@ -100,7 +100,13 @@ public class ContactAdapter extends ArrayAdapter<Contact> {
                                                 DNE = true;
 
                                                 pendingList.add(person);
-                                                instance.removeContact(person);
+
+                                                // Remove from contacts list
+                                                if (!instance.getContact(person).hasBeenAdded()) {
+                                                    // I don't think I should remove the contact; just set hasBeenAdded to true
+//                                                    instance.removeContact(person);
+                                                    instance.getContact(person).setHasBeenAdded(true);
+                                                }
 
                                                 // CREATES CONTACT OBJECT RIGHT AWAY
                                                 // SHOULD WAIT TILL USER HITS SEND FRIEND REQUEST

@@ -101,6 +101,7 @@ public class AddFriends extends ActionBarActivity {
                     //a length of 7 (example: AT&T service numbers for things like checking data are only 4 characters long)
                     //
                     Contact person = new Contact(name, phone.replaceAll("[^\\d]",""), identity);
+                    person.setHasBeenAdded(false);
                     if (phone.length() >= 7) {
                         //                    allContacts.add(person);
                         instance.addContact(person);
