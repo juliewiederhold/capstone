@@ -235,6 +235,11 @@
                 <action android:name="edu.washington.akpuri.capstone.MESSAGE" />
             </intent-filter>
         </receiver>
+        <receiver android:name="edu.washington.akpuri.capstone.AlertService">
+            <intent-filter>
+                <action android:name="AlertService"/>
+            </intent-filter>
+        </receiver>
         <!--<receiver
             android:name="com.parse.GcmBroadcastReceiver"
             android:permission="com.google.android.c2dm.permission.SEND" >

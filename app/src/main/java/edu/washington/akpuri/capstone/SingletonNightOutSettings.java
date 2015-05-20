@@ -43,7 +43,7 @@ public class SingletonNightOutSettings {
 
             durationHours = 0;
             durationMinutes = 0;
-        //    hasSetOffAlert = false;
+            hasSetOffAlert = false;
 
              initializeBlockedApps();
         }

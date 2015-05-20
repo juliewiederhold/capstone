@@ -1,4 +1,5 @@
 package edu.washington.akpuri.capstone;
+import android.app.AlarmManager;
 import android.app.AlertDialog;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
@@ -62,7 +63,9 @@ public class MainMap extends FragmentActivity implements
     public static final String TAG = MainMap.class.getSimpleName();
     final SingletonContacts contactInstance = SingletonContacts.getInstance();
     public static SingletonNightOutSettings instance;
-    private static ArrayList<Contact> friendsInNightOutGroup = new ArrayList<Contact>();
+    private AlarmManager alarmManager;
+    private PendingIntent pendingIntent;
+
     final SingletonUser userInstance = SingletonUser.getInstance();
 
     /*
@@ -85,9 +88,7 @@ public class MainMap extends FragmentActivity implements
         instance = SingletonNightOutSettings.getInstance();
         mMap.setMyLocationEnabled(true);
 
-        Contact temp = new Contact("Julie", "4082096381", 1);
-        temp.setEmail("f@f.com");
-        friendsInNightOutGroup.add(temp);
+
 
         mGoogleApiClient = new GoogleApiClient.Builder(this)
                 .addConnectionCallbacks(this)
@@ -114,46 +115,26 @@ public class MainMap extends FragmentActivity implements
         alertFriends.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View v) {
+                instance.setHasSetOffAlert(!instance.isHasSetOffAlert());
 
-                final String user = ParseUser.getCurrentUser().getString("email");
+                alarmManager = (AlarmManager) getApplicationContext().getSystemService(ALARM_SERVICE);
+                long when = System.currentTimeMillis();         // notification time
+                Intent intent = new Intent(MainMap.this, AlertService.class);
+                pendingIntent = PendingIntent.getBroadcast(MainMap.this, 0, intent, 0);
 
-                for(int i=0; i < friendsInNightOutGroup.size(); i++) {
-                    final Contact person = friendsInNightOutGroup.get(i);
+                if(instance.isHasSetOffAlert()){
+                    alarmManager.setRepeating(AlarmManager.RTC, when, (AlarmManager.INTERVAL_FIFTEEN_MINUTES / 15), pendingIntent);
 
-                    ParseQuery<ParseObject> query = ParseQuery.getQuery("ContactsObject");
-                    query.whereEqualTo("user", user);
-                    query.getFirstInBackground(new GetCallback<ParseObject>() {
-                        @Override
-                        public void done(final ParseObject parseObject, ParseException e) {
-                            try {
-                                if (parseObject != null) {
-
-                                    // Send push notifications
-                                    ParseQuery pushQuery = userInstance.getCurrentInstallation().getQuery();
-                                    pushQuery.whereEqualTo("user", person.getEmail());
-                                    ParsePush push = new ParsePush();
-                                    push.setQuery(pushQuery);
-                                    push.setMessage(userInstance.getName() + " would like you to find her. Please go assist her NOW.");
-
-                                    Context context = getApplicationContext();
-                                    CharSequence text = "Your friends have been alerted";
-                                    int duration = Toast.LENGTH_SHORT;
-                                    Toast toast = Toast.makeText(context, text, duration);
-                                    toast.show();
-
-                                    push.sendInBackground();
-                                    Log.e(TAG, "sent to: " + person.getEmail());
-
-                                } else {
-                                    // Something went wrong
-                                    Log.e("Contacts", "Failed to retrieve contactsObject: " + e);
-                                }
-                            } catch (Exception err) {
-                                err.printStackTrace();
-                            }
-                        }
-                    });
+                    Context context = getApplicationContext();
+                    CharSequence text = "Your friends have been alerted";
+                    int duration = Toast.LENGTH_SHORT;
+                    Toast toast = Toast.makeText(context, text, duration);
+                    toast.show();
+                } else {
+                    alarmManager.cancel(pendingIntent);
                 }
+
+
 
                 return true;
             }
@@ -176,6 +157,10 @@ public class MainMap extends FragmentActivity implements
                         .setPositiveButton("Okay", new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int id) {
+                            if(instance.isHasSetOffAlert()){
+                                alarmManager.cancel(pendingIntent);
+                            }
+
                             finish(); // Makes it so you can't go back to this activity
 
                             Intent endNightOut = new Intent(MainMap.this, MainActivity.class);
