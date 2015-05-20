@@ -77,6 +77,7 @@ public class RequestsAdapter extends ArrayAdapter<Contact> {
                     query.getFirstInBackground(new GetCallback<ParseUser>() {
                         @Override
                         public void done(ParseUser parseUser, ParseException e) {
+
                             if ( parseUser != null) {
                                 try {
                                     person.setIsPending(false);

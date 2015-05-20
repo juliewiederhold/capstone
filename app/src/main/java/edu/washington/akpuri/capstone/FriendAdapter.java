@@ -75,6 +75,8 @@ public class FriendAdapter extends ArrayAdapter<Contact> {
                 public void onClick(View v) {
                     Log.e(TAG, data.getName() + " " + position + " clicked");
 
+                    Log.e(TAG, "has been added?: " + data.hasBeenAdded());
+
                     AlertDialog.Builder alert = new AlertDialog.Builder(context);
                     alert.setMessage("Do you want to delete " + data.getName() + "?");
                     alert.setNegativeButton("Cancel",
@@ -88,16 +90,13 @@ public class FriendAdapter extends ArrayAdapter<Contact> {
                             new DialogInterface.OnClickListener() {
                                 @Override
                                 public void onClick(DialogInterface dialog, int which) {
-
                                     // Remove Contact from list & update list
-                                    Log.e(TAG, " BEFORE Pending Friends " + instance.getSosoFriends().toString());
                                     instance.getSosoFriends().remove(data);
 
                                     // Add deleted So-So friend back to Contacts list
-                                    if (instance.getContact(data).hasBeenAdded()) {
+                                    if (!data.hasBeenAdded()) {
                                         instance.getAllContacts().add(data);
                                     }
-                                    Log.e(TAG, " AFTER Pending Friends " + instance.getSosoFriends().toString());
 
                                     remove(getItem(position));  // Remove from list
                                     notifyDataSetChanged();
@@ -119,7 +118,6 @@ public class FriendAdapter extends ArrayAdapter<Contact> {
                                                     public void done(final ParseObject parseObject, ParseException e) {
                                                         if (parseObject != null) {
                                                             Log.e(TAG, "Contact exists. Delete!");
-
                                                             String objectId = parseObject.getObjectId();
                                                             Log.e(TAG, "from parse: " + objectId);
                                                             Log.e(TAG, "from data obj: " + data.getObjectId());

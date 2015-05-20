@@ -40,8 +40,8 @@ public class Contacts extends ActionBarActivity {
     private static ArrayList<Contact> pendingContacts;
     private static boolean allowContactRetrieval;
     private android.support.v7.app.ActionBar actionBar;
-    private static SingletonContacts instance;
-    private static SingletonUser userInstance;
+    private static SingletonContacts instance = SingletonContacts.getInstance();;
+    private static SingletonUser userInstance = SingletonUser.getInstance();
     private int counter;
 
     @Override
@@ -49,9 +49,6 @@ public class Contacts extends ActionBarActivity {
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.activity_contacts);
-
-        instance = SingletonContacts.getInstance();
-        userInstance = SingletonUser.getInstance();
         pendingContacts = new ArrayList<>();
         allowContactRetrieval = userInstance.getAllowContactRetrieval();
 
@@ -179,7 +176,6 @@ public class Contacts extends ActionBarActivity {
         }
 
         // https://parse.com/questions/how-do-i-get-the-json-from-a-push-notification-in-android-when-the-activity-is-opened-by-clicking-on-the-notification
-
     }
 
     @Override
@@ -289,7 +285,6 @@ public class Contacts extends ActionBarActivity {
             // Hits this but not the contacts.java onresume
             Log.e(TAG, "Frag pending friends: " + instance.getSosoFriends().toString());
             Log.e(TAG, "Frag pending contacts: " + instance.getPendingContacts().toString());
-            Log.e(TAG, "Frag pending requests: " + instance.getPendingRequests().toString());
 
 //            if (!instance.getPendingContacts().isEmpty()) {
 //                pendingContacts.addAll(instance.getPendingContacts());
@@ -404,6 +399,24 @@ public class Contacts extends ActionBarActivity {
 
 
             return rootView;
+        }
+
+        @Override
+        public void onResume() {
+            super.onResume();
+
+            Log.e(TAG, "Frag pending requests: " + instance.getPendingRequests().toString());
+
+            ListView contactListView = (ListView) getView().findViewById(R.id.pendingFriendListView);
+            TextView noPendingFriends = (TextView) getView().findViewById(R.id.noPendingFriends);
+            if (!instance.getPendingRequests().isEmpty()) {
+                noPendingFriends.setVisibility(View.GONE);
+            } else {
+                noPendingFriends.setVisibility(View.VISIBLE);
+            }
+
+            final ListAdapter adapter = new RequestsAdapter(getActivity(), R.id.requestsListItem, instance.getPendingRequests());
+            contactListView.setAdapter(adapter);
         }
 
 

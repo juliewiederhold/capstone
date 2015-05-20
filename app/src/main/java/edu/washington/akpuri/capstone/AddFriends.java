@@ -43,8 +43,8 @@ public class AddFriends extends ActionBarActivity {
     private static ArrayList<ParseObject> pendingParseContacts;
     private static ArrayList<String> contactObjectIds;
     private static ArrayList<Contact> allContacts;
-    final SingletonContacts instance = SingletonContacts.getInstance();
-    final SingletonUser userInstance = SingletonUser.getInstance();
+    private static SingletonContacts instance = SingletonContacts.getInstance();
+    private static SingletonUser userInstance = SingletonUser.getInstance();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -119,6 +119,8 @@ public class AddFriends extends ActionBarActivity {
             }
         }
 
+        Log.e(TAG, "Contacts:" + instance.getAllContacts().toString());
+
         Button sendRequest = (Button) findViewById(R.id.sendFriendRequest);
         sendRequest.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -144,7 +146,9 @@ public class AddFriends extends ActionBarActivity {
             queryA.getFirstInBackground(new GetCallback<ParseUser>() {
                 @Override
                 public void done(ParseUser parseUser, ParseException e) {
-                    person.setEmail(parseUser.getEmail());
+                    if (parseUser != null) {
+                        person.setEmail(parseUser.getEmail());
+                    }
                 }
             });
 

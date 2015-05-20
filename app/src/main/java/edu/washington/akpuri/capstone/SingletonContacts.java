@@ -8,6 +8,7 @@ import com.parse.ParseObject;
 import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedHashSet;
 
 /**
  * Created by Akash on 3/11/15
@@ -27,7 +28,7 @@ public class SingletonContacts {
     private static ArrayList<String> currentContacts;           // List of objectIds of user's contacts both on Parse.com and pending
     private static ArrayList<Contact> allPendingRequests;
     private static HashMap<String, ArrayList<Contact>> sosoGroups;    //
-
+    private static LinkedHashSet<Contact> contacts;
     private boolean imported;
     private boolean savedRequests;
 
@@ -45,6 +46,7 @@ public class SingletonContacts {
             currentContacts = new ArrayList<>();
             allPendingRequests = new ArrayList<>();
             sosoGroups = new HashMap<>();
+            contacts = new LinkedHashSet<>();
         }
         return instance;
     }
@@ -70,6 +72,8 @@ public class SingletonContacts {
     }
 
     public ArrayList<Contact> getAllContacts() {
+        System.out.println(contacts);
+//        allContacts = new ArrayList<>(contacts);
         return allContacts;
     }
 
@@ -79,12 +83,9 @@ public class SingletonContacts {
 
     public void addContact(Contact contact) {
         allContacts.add(contact);
+        contacts.add(contact);
     }
 
-    // Return contact
-    public Contact getContact(Contact contact) {
-        return allContacts.get(allContacts.indexOf(contact));
-    }
     public void removeContact(Contact contact){
         allContacts.remove(contact);
     }
