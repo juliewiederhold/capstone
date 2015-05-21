@@ -80,6 +80,8 @@
     <string name="app_name">So-So</string>
     <string name="logo_desc">So-So Logo</string>
     <string name="edit_settings">Edit Settings</string>
+    <string name="action_group">Groups</string>
+    <string name="title_activity_night_out_group">Night Out Group</string>
 
 
 </resources>

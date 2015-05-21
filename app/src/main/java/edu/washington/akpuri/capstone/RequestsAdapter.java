@@ -222,7 +222,8 @@ public class RequestsAdapter extends ArrayAdapter<Contact> {
                         }
                     });
                     // TODO: Reject friend request
-                    // Get contact's contact object containing pending request
+
+                    // Get contact's contact object containing pending request & delete it
                     Log.e(TAG, "Rejecting request from " + person.getEmail() + " " + person.getPhone());
                     ParseQuery<ParseObject> query1 = ParseQuery.getQuery("contact");
                     query1.whereEqualTo("user", person.getEmail());
@@ -240,7 +241,29 @@ public class RequestsAdapter extends ArrayAdapter<Contact> {
                             }
                         }
                     });
-                    // TODO: delete from person's ContactsObject[]
+
+                    // Delete from person's ContactsObject[]
+                    ParseQuery<ParseObject> query2 = ParseQuery.getQuery("ContactsObject");
+                    query2.whereEqualTo("user", userInstance.getCurrentUser().getUsername());
+                    query2.getFirstInBackground(new GetCallback<ParseObject>() {
+                        @Override
+                        public void done(final ParseObject parseObject, ParseException e) {
+                            if (parseObject != null) {
+                                // User exists and has a ContactsObject
+                                parseObject.remove(person.getObjectId());
+                                parseObject.saveInBackground(new SaveCallback() {
+                                    @Override
+                                    public void done(ParseException e) {
+                                        // Log.e(TAG, "ContactsObject: " + parseObject.get("contacts").toString());
+                                    }
+                                });
+                            } else {
+                                // Something went wrong
+                                Log.e("Contacts", "Failed to retrieve contactsObject: " + e);
+                            }
+                        }
+                    });
+
                 }
             });
             view.setTag(viewHolder);

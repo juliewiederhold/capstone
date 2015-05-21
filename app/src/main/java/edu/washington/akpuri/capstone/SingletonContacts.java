@@ -72,8 +72,8 @@ public class SingletonContacts {
     }
 
     public ArrayList<Contact> getAllContacts() {
-        System.out.println(contacts);
-//        allContacts = new ArrayList<>(contacts);
+        //System.out.println(contacts);
+        allContacts = new ArrayList<>(contacts);
         return allContacts;
     }
 
@@ -88,6 +88,7 @@ public class SingletonContacts {
 
     public void removeContact(Contact contact){
         allContacts.remove(contact);
+        contacts.remove(contact);
     }
 
     public void setBlockedContacts(ArrayList<Contact> contacts) {

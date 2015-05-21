@@ -197,6 +197,10 @@
             android:label="@string/title_activity_night_out_edit_blocked_contacts_list" >
         </activity>
         <activity
+            android:name=".NightOutGroup"
+            android:label="@string/title_activity_night_out_group" >
+        </activity>
+        <activity
             android:name=".NightOutBlockContacts"
             android:label="@string/title_activity_night_out_block_contacts" >
         </activity>

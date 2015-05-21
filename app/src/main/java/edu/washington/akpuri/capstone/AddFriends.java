@@ -139,6 +139,8 @@ public class AddFriends extends ActionBarActivity {
 
         for(int i=0; i < pending.size(); i++) {
             final Contact person = pending.get(i);
+            // Remove contact from phone contact list
+            instance.removeContact(person);
 
             // Look up user on Parse.com
             ParseQuery<ParseUser> queryA = ParseUser.getQuery();

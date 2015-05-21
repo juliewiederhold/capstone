@@ -176,6 +176,11 @@ public class MainActivity extends ActionBarActivity {
                 intent3.putExtra("activitySent","MainActivity");
                 this.startActivity(intent3);
                 break;
+            case R.id.action_group:
+                Intent intent4 = new Intent(this, NightOutGroup.class);
+                intent4.putExtra("activitySent","MainActivity");
+                this.startActivity(intent4);
+                break;
             default:
                 return super.onOptionsItemSelected(item);
         }
