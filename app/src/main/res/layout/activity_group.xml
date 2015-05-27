@@ -4,7 +4,7 @@
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
     android:paddingBottom="@dimen/activity_vertical_margin"
-    tools:context="edu.washington.akpuri.capstone.NightOutGroup">
+    tools:context="edu.washington.akpuri.capstone.Group">
 
     <TextView android:text="Invite Friends to a Group" android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -17,17 +17,17 @@
     <Button
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:text="Send Night Out Group Request"
-        android:id="@+id/sendNightOutGroupRequest"
+        android:text="Send Group Request"
+        android:id="@+id/sendGroupRequest"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true" />
 
     <ListView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/addFriendsToNighOutGroupList"
+        android:id="@+id/addFriendsToGroupList"
         android:layout_centerHorizontal="true"
         android:layout_below="@+id/contactListHeader"
-        android:layout_above="@+id/sendNightOutGroupRequest" />
+        android:layout_above="@+id/sendGroupRequest" />
 
 </RelativeLayout>

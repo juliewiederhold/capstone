@@ -13,7 +13,18 @@ import android.widget.ListView;
 import android.widget.Toast;
 
 
+import com.parse.FunctionCallback;
+import com.parse.ParseCloud;
+import com.parse.ParseException;
+import com.parse.ParsePush;
+
+import org.json.JSONArray;
+import org.json.JSONObject;
+
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Map;
 
 /**
  * Create night out group
@@ -28,9 +39,22 @@ public class NightOutGroup extends ActionBarActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-//        setContentView(R.layout.activity_night_out_group);
-        setContentView(R.layout.activity_add_friends);
+        setContentView(R.layout.activity_night_out_group);
 
+        Intent intent = getIntent();
+        Bundle extras = intent.getExtras();
+        if (extras != null) {
+            String jsonData = extras.getString("com.parse.Data");
+            try {
+                // TODO CONTINUE
+                JSONObject jsonObject = new JSONObject(jsonData);
+//                Log.e(TAG, jsonObject.get("alert") + "");
+//                Log.e(TAG, "long msg: " + data.getString(0));
+            } catch (Exception err) {
+                err.printStackTrace();
+            }
+
+        }
 
         contactsInstance = SingletonContacts.getInstance();
         userInstance = SingletonUser.getInstance();
@@ -38,35 +62,59 @@ public class NightOutGroup extends ActionBarActivity {
 
         Log.e(TAG, contactsInstance.getSosoFriends().toString());
 
-        // TODO
-        // NOT WORKING
-//        ListView friendsListView = (ListView) findViewById(R.id.addFriendsToGroupList);
-////        ListAdapter adapter = new NightOutGroupAdapter(this, R.id.friendListItem, contactsInstance.getAllContacts(), contactsInstance.getSosoFriends());
-//        ListAdapter adapter = new ContactAdapter(this, R.id.friendListItem, contactsInstance.getAllContacts(), contactsInstance.getSosoFriends());
-//        friendsListView.setAdapter(adapter);
-
-
-        ListView contactListView = (ListView) findViewById(R.id.addFriendsList);
-        ListAdapter adapter = new NightOutGroupAdapter(this, R.id.friendListItem, contactsInstance.getAllContacts(), contactsInstance.getSosoFriends());
+        ListView contactListView = (ListView) findViewById(R.id.addFriendsToNighOutGroupList);
+        ListAdapter adapter = new NightOutGroupAdapter(this, R.id.friendListItem, contactsInstance.getSosoFriends());
         contactListView.setAdapter(adapter);
 
-//        Button sendRequest = (Button) findViewById(R.id.sendGroupRequest);
-        Button sendRequest = (Button) findViewById(R.id.sendFriendRequest);
+        // Send Night Out Group request to individuals
+        Button sendRequest = (Button) findViewById(R.id.sendNightOutGroupRequest);
         sendRequest.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast mes = Toast.makeText(getApplicationContext(), "Group Request Sent", Toast.LENGTH_LONG);
+                // Send requests
+                Log.e(TAG, "Listing group members: " +groupInstance.getMembers().toString());
+                sendRequests();
+                Toast mes = Toast.makeText(getApplicationContext(), "Night Out Group Request Sent", Toast.LENGTH_LONG);
                 mes.show();
                 finish();
             }
         });
     }
 
+    // TODO need: groupname
+    private void sendRequests(){
+        String message = userInstance.getName() + " (" + userInstance.getPhone() + ") sent you a night out request.";
+        String longmessage = "Group members: " + groupInstance.getMembersAsString();
+        Iterator<Map.Entry<String, Contact>> iterator = groupInstance.getGroupContact().entrySet().iterator();
+        while(iterator.hasNext()) {
+            Map.Entry<String, Contact> entry = iterator.next();
+            HashMap<String, Object> params = new HashMap<String, Object>();
+            params.put("recipientId", entry.getValue().getObjectId());
+            params.put("recipientEmail", entry.getValue().getEmail());
+            params.put("message", message);
+            params.put("longmessage", longmessage);
+            params.put("uri", "app://host/nightoutgroup");
+            ParseCloud.callFunctionInBackground("sendPushToGroup", params, new FunctionCallback<String>() {
+                public void done(String success, ParseException e) {
+                    if (e == null) {
+                        // Push sent successfully
+                        Log.e(TAG, success);
+                    } else {
+                        Log.e(TAG, e.toString());
+                    }
+                }
+            });
+        }
+    }
+
+    // TODO: Code to be used once a person accepts the group request:
+    // ParsePush.subscribeInBackground(userInstance.getUsername());
+
     @Override
     public void onResume() {
         super.onResume();
-        ListView contactListView = (ListView) findViewById(R.id.addFriendsList);
-        ListAdapter adapter = new NightOutGroupAdapter(this, R.id.friendListItem, contactsInstance.getAllContacts(), contactsInstance.getSosoFriends());
+        ListView contactListView = (ListView) findViewById(R.id.addFriendsToNighOutGroupList);
+        ListAdapter adapter = new NightOutGroupAdapter(this, R.id.friendListItem, contactsInstance.getSosoFriends());
         contactListView.setAdapter(adapter);
     }
 

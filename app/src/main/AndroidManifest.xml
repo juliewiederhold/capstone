@@ -141,6 +141,16 @@
             </intent-filter>
         </activity>
         <activity
+            android:name=".NightOutGroup"
+            android:label="@string/title_activity_night_out_group" >
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW"/>
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                <data android:scheme="app" android:host="host" android:path="/nightoutgroup" />
+            </intent-filter>
+        </activity>
+        <activity
             android:name=".CreateAccount"
             android:label="@string/app_name" >
         </activity>
@@ -195,10 +205,6 @@
         <activity
             android:name=".NightOutEditBlockedContactsList"
             android:label="@string/title_activity_night_out_edit_blocked_contacts_list" >
-        </activity>
-        <activity
-            android:name=".NightOutGroup"
-            android:label="@string/title_activity_night_out_group" >
         </activity>
         <activity
             android:name=".NightOutBlockContacts"
