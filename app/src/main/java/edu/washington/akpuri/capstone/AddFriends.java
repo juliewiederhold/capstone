@@ -56,9 +56,6 @@ public class AddFriends extends ActionBarActivity {
         contactObjectIds = new ArrayList<String>();
         pendingParseContacts = new ArrayList<>();
 
-        // Get intent that called the activity
-        Intent intent = getIntent();
-        String caller = intent.getStringExtra("caller");
 
         if (!instance.hasImported()) {
 

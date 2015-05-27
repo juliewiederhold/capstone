@@ -22,6 +22,8 @@ import java.util.ArrayList;
 
 /**
  * Created by iguest on 5/20/15.
+ *
+ * REPLACE contacts with sosofriends????
  */
 public class NightOutGroupAdapter extends ArrayAdapter<Contact> {
 
@@ -32,7 +34,7 @@ public class NightOutGroupAdapter extends ArrayAdapter<Contact> {
     private static SingletonNightOutGroup groupInstance;
 
     public NightOutGroupAdapter(Context context, int resource, ArrayList<Contact> contacts, ArrayList sosoFriends){
-        super(context, resource, contacts);
+        super(context, resource, sosoFriends);
         this.context = context;
         this.sosoFriends = sosoFriends;
         this.contacts = contacts;

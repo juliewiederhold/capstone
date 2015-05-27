@@ -32,7 +32,7 @@ public class GroupAdapter extends ArrayAdapter<Contact> {
     private final Context context;
     private final ArrayList<Contact> friendsList;   // temporarily store pending So-So friends
     private final SingletonContacts instance;
-    private final static String TAG = "ContactAdapter";
+    private final static String TAG = "GroupAdapter";
     private Boolean DNE = false;
 
     public GroupAdapter(Context context, int resource, ArrayList<Contact> contacts, ArrayList<Contact> friendsList) {

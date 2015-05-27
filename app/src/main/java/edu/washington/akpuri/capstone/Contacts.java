@@ -329,6 +329,11 @@ public class Contacts extends ActionBarActivity {
         public GroupsFragment(){}
 
         @Override
+        public void onCreate(Bundle savedInstanceState) {
+            super.onCreate(savedInstanceState);
+        }
+
+        @Override
         public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
             final View rootView = inflater.inflate(R.layout.fragment_group, container, false);
 
@@ -341,7 +346,10 @@ public class Contacts extends ActionBarActivity {
             Button createGroup = (Button) container.findViewById(R.id.createGroup);
             createGroup.setVisibility(View.VISIBLE);
 
-
+//            Log.e(TAG, instance.getPendingRequests().toString())
+//            ListView contactListView = (ListView) getView().findViewById(R.id.addFriendsList);
+//            ListAdapter adapter = new ContactAdapter(getActivity(), R.id.friendListItem, instance.getAllContacts(), instance.getPendingRequests());
+//            contactListView.setAdapter(adapter);
 
             return rootView;
         }

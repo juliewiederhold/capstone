@@ -28,11 +28,9 @@ public class NightOutGroup extends ActionBarActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_night_out_group);
+//        setContentView(R.layout.activity_night_out_group);
+        setContentView(R.layout.activity_add_friends);
 
-        // Get intent that called the activity
-        Intent intent = getIntent();
-        String caller = intent.getStringExtra("caller");
 
         contactsInstance = SingletonContacts.getInstance();
         userInstance = SingletonUser.getInstance();
@@ -42,13 +40,18 @@ public class NightOutGroup extends ActionBarActivity {
 
         // TODO
         // NOT WORKING
-        ListView friendsListView = (ListView) findViewById(R.id.addFriendsToGroupList);
-//        ListAdapter adapter = new NightOutGroupAdapter(this, R.id.friendListItem, contactsInstance.getAllContacts(), contactsInstance.getSosoFriends());
-        ListAdapter adapter = new ContactAdapter(this, R.id.friendListItem, contactsInstance.getAllContacts(), contactsInstance.getSosoFriends());
-        friendsListView.setAdapter(adapter);
+//        ListView friendsListView = (ListView) findViewById(R.id.addFriendsToGroupList);
+////        ListAdapter adapter = new NightOutGroupAdapter(this, R.id.friendListItem, contactsInstance.getAllContacts(), contactsInstance.getSosoFriends());
+//        ListAdapter adapter = new ContactAdapter(this, R.id.friendListItem, contactsInstance.getAllContacts(), contactsInstance.getSosoFriends());
+//        friendsListView.setAdapter(adapter);
 
 
-        Button sendRequest = (Button) findViewById(R.id.sendGroupRequest);
+        ListView contactListView = (ListView) findViewById(R.id.addFriendsList);
+        ListAdapter adapter = new NightOutGroupAdapter(this, R.id.friendListItem, contactsInstance.getAllContacts(), contactsInstance.getSosoFriends());
+        contactListView.setAdapter(adapter);
+
+//        Button sendRequest = (Button) findViewById(R.id.sendGroupRequest);
+        Button sendRequest = (Button) findViewById(R.id.sendFriendRequest);
         sendRequest.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -62,6 +65,9 @@ public class NightOutGroup extends ActionBarActivity {
     @Override
     public void onResume() {
         super.onResume();
+        ListView contactListView = (ListView) findViewById(R.id.addFriendsList);
+        ListAdapter adapter = new NightOutGroupAdapter(this, R.id.friendListItem, contactsInstance.getAllContacts(), contactsInstance.getSosoFriends());
+        contactListView.setAdapter(adapter);
     }
 
     @Override
