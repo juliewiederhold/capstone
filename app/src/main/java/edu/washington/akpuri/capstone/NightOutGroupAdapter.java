@@ -39,9 +39,14 @@ public class NightOutGroupAdapter extends ArrayAdapter<Contact> {
         super(context, resource, sosoFriends);
         this.context = context;
         this.sosoFriends = sosoFriends;
-        this.groupInstance = SingletonNightOutGroup.getInstance();
         this.contactsInstance = SingletonContacts.getInstance();
         this.userInstance = SingletonUser.getInstance();
+        this.groupInstance = SingletonNightOutGroup.getInstance();
+        if (this.groupInstance.getGroupName() == "") {
+            String groupname = userInstance.getName().substring(0, 3) + userInstance.getPhone();
+            this.groupInstance.createGroup(groupname, userInstance.getContactObject());
+        }
+
     }
 
     private static class ViewHolder {
@@ -76,9 +81,6 @@ public class NightOutGroupAdapter extends ArrayAdapter<Contact> {
                                 Log.e(TAG, getPosition(person) + "");
                                 person.setSelected(buttonView.isChecked());
                                 if (person.isSelected()) {
-                                    // Add to group
-                                    groupInstance.addMemberContact(person);
-
                                     // Look up user on Parse.com
                                     ParseQuery<ParseUser> queryA = ParseUser.getQuery();
                                     queryA.whereContains("phone", person.getPhone());
@@ -88,7 +90,8 @@ public class NightOutGroupAdapter extends ArrayAdapter<Contact> {
                                             if (parseUser != null) {
                                                 person.setEmail(parseUser.getEmail());
                                                 // Add to group
-                                                groupInstance.addMemberParse(person, parseUser);
+                                                groupInstance.addMember(person, parseUser);
+                                                Log.e(TAG, "Member: " + person.getPhone());
                                             }
                                         }
                                     });

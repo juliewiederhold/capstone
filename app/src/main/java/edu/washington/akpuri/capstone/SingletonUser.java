@@ -26,6 +26,7 @@ public class SingletonUser {
     private static String username;
     private static String email;
     private static Drawable profilePicture;
+    private static Contact userContact;
 
     //Empty Constructor, it's a singleton
     protected SingletonUser(){
@@ -52,6 +53,8 @@ public class SingletonUser {
                 phone = currentUser.get("phone").toString();
                 username = currentUser.getUsername().toString();
                 email = currentUser.getEmail().toString();
+                userContact = new Contact(name, phone, 0);
+                userContact.setEmail(email);
             }
 
             currentInstallation = ParseInstallation.getCurrentInstallation();
@@ -86,6 +89,9 @@ public class SingletonUser {
         return this.currentInstallation;
     }
 
+    public Contact getContactObject() {
+        return userContact;
+    }
     public String getName() {
         return this.name;
     }
