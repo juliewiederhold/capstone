@@ -72,6 +72,9 @@
             android:value="AIzaSyAVgP_BqXlPUcm3c8C2S10eU66bznDIvPg" />
 
         <service android:name="com.parse.PushService" />
+        <service
+            android:name=".CallBlocker"
+            android:exported="false"/>
 
         <receiver
             android:name="com.parse.GcmBroadcastReceiver"
