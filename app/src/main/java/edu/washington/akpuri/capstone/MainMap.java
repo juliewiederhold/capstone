@@ -123,7 +123,7 @@ public class MainMap extends FragmentActivity implements
                 pendingIntent = PendingIntent.getBroadcast(MainMap.this, 0, intent, 0);
 
                 if(instance.isHasSetOffAlert()){
-                    alarmManager.setRepeating(AlarmManager.RTC, when, (AlarmManager.INTERVAL_FIFTEEN_MINUTES / 15), pendingIntent);
+                    alarmManager.setRepeating(AlarmManager.RTC, when, (AlarmManager.INTERVAL_FIFTEEN_MINUTES / 30), pendingIntent);
 
                     Context context = getApplicationContext();
                     CharSequence text = "Your friends have been alerted";
@@ -147,6 +147,9 @@ public class MainMap extends FragmentActivity implements
 
             @Override
             public void run() {
+                if(instance.isHasSetOffAlert()){
+                    alarmManager.cancel(pendingIntent);
+                }
                 LayoutInflater inflater = getLayoutInflater();
 
                 final View fragmentView = inflater.inflate(R.layout.fragment_night_out_ends, null);
@@ -157,9 +160,7 @@ public class MainMap extends FragmentActivity implements
                         .setPositiveButton("Okay", new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int id) {
-                            if(instance.isHasSetOffAlert()){
-                                alarmManager.cancel(pendingIntent);
-                            }
+
 
                             finish(); // Makes it so you can't go back to this activity
 
@@ -199,6 +200,10 @@ public class MainMap extends FragmentActivity implements
 
                                     finish(); // Makes it so you can't go back to this activity
                                     instance.restartInstance();
+
+                                    if(instance.isHasSetOffAlert()){
+                                        alarmManager.cancel(pendingIntent);
+                                    }
 
                                     Intent endNightOut = new Intent(MainMap.this, MainActivity.class);
                                     startActivity(endNightOut);

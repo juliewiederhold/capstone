@@ -41,7 +41,8 @@ public class AlertService extends BroadcastReceiver{
     public void onReceive(Context context, Intent intent) {
         Contact temp = new Contact("Julie", "4082096381", 1);
         temp.setEmail("f@f.com");
-        friendsInNightOutGroup.add(temp);
+        if(friendsInNightOutGroup.size() < 1)
+            friendsInNightOutGroup.add(temp);
         userInstance = SingletonUser.getInstance();
 
         final String user = ParseUser.getCurrentUser().getString("email");
