@@ -136,6 +136,10 @@ public class AddFriends extends ActionBarActivity {
 
         for(int i=0; i < pending.size(); i++) {
             final Contact person = pending.get(i);
+            // Set flag that person has been added (aka sent friend request)
+            person.setHasBeenAdded(true);
+
+
             // Remove contact from phone contact list
             instance.removeContact(person);
 

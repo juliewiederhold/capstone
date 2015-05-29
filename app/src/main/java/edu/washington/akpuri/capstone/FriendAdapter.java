@@ -98,7 +98,8 @@ public class FriendAdapter extends ArrayAdapter<Contact> {
                                         instance.getAllContacts().add(data);
                                     }
 
-                                    remove(getItem(position));  // Remove from list
+                                    // Remove from list
+                                    remove(getItem(position));
                                     notifyDataSetChanged();
 
                                     // Remove from Parse
@@ -187,7 +188,7 @@ public class FriendAdapter extends ArrayAdapter<Contact> {
                                     });
 
                                     // End remove from Parse
-                                    Toast mes = Toast.makeText(context, "Friend Requests Sent", Toast.LENGTH_LONG);
+                                    Toast mes = Toast.makeText(context, "Friend/s deleted", Toast.LENGTH_LONG);
                                     mes.show();
                                 }
                             });

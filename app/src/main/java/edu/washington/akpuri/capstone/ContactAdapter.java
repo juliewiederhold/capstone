@@ -61,24 +61,29 @@ public class ContactAdapter extends ArrayAdapter<Contact> {
             LayoutInflater inflater = LayoutInflater.from(getContext());
             view = inflater.inflate(R.layout.friend_list_item, parent, false);
 
+//            viewHolder.contactName.setBackgroundColor(666);
+//            viewHolder.contactName.setTextColor(333);
+
             final ViewHolder viewHolder = new ViewHolder();
             viewHolder.contactName = (TextView) view.findViewById(R.id.appName);
             viewHolder.contactNumber = (TextView) view.findViewById(R.id.contactNumber);
             viewHolder.contactIcon = (ImageView) view.findViewById(R.id.appIcon);
             viewHolder.checkbox = (CheckBox) view.findViewById(R.id.appBlock);
+            viewHolder.checkbox.setChecked(false);
             // NEED TO UNCHECKKKKK HOW?
-            viewHolder.checkbox
-                    .setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            viewHolder.checkbox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
 
                         @Override
-                        public void onCheckedChanged(CompoundButton buttonView,
-                                                     boolean isChecked) {
-
+                        public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                             Log.e(TAG, isChecked + "");
+
+                            // Get the position of the checkbox
                             final Contact person = (Contact) viewHolder.checkbox.getTag();
-                            if (isChecked) {
+                            // Set the value of the checkbox to maintain its state
+                            person.setSelected(buttonView.isChecked());
+                            if (buttonView.isChecked()) {
                                 Log.e(TAG, getPosition(person) + "");
-                                person.setSelected(buttonView.isChecked());
+//                                person.setSelected(buttonView.isChecked());
                                 if (person.isSelected()) {
                                     // Add to pending list
     //                                pendingList.add(person);
@@ -94,6 +99,7 @@ public class ContactAdapter extends ArrayAdapter<Contact> {
                                                 // Shouldn't need 2 lines below if have a clean install
                                                 Log.e(TAG, person.getName());
 //                                                instance.getAllContacts().remove(person);
+
                                                 instance.removeContact(person);
                                                 notifyDataSetChanged();
                                                 //
@@ -115,8 +121,8 @@ public class ContactAdapter extends ArrayAdapter<Contact> {
                                     });
                                 } else {
                                     // Remove from pending list
-                                    Log.e(TAG, "remove " + person.getName());
-                                    pendingList.remove(person);
+//                                    Log.e(TAG, "remove " + person.getName());
+//                                    pendingList.remove(person);
 
                                 }
                             } else {
@@ -144,7 +150,7 @@ public class ContactAdapter extends ArrayAdapter<Contact> {
         holder.contactNumber.setText(list.get(position).getPhone());
         // ImageView?
 //        holder.checkbox.setChecked(list.get(position).isSelected());
-        holder.checkbox.setChecked(false);
+//        holder.checkbox.setChecked(false);
 
         return view;
     }

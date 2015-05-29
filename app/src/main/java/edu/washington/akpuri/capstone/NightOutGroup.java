@@ -22,9 +22,11 @@ import com.parse.FunctionCallback;
 import com.parse.GetCallback;
 import com.parse.ParseCloud;
 import com.parse.ParseException;
+import com.parse.ParseObject;
 import com.parse.ParsePush;
 import com.parse.ParseQuery;
 import com.parse.ParseUser;
+import com.parse.SaveCallback;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -55,6 +57,10 @@ public class NightOutGroup extends ActionBarActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_night_out_group);
 
+        contactsInstance = SingletonContacts.getInstance();
+        userInstance = SingletonUser.getInstance();
+        groupInstance = SingletonNightOutGroup.getInstance();
+
         Intent intent = getIntent();
         Bundle extras = intent.getExtras();
         String jsonData = extras.getString("com.parse.Data");
@@ -66,12 +72,26 @@ public class NightOutGroup extends ActionBarActivity
                 Log.e(TAG, "Creator: " + creator);
                 members = jsonObject.getString("members");
                 theMembers = new ArrayList<>(Arrays.asList(members.split(",")));
-//                membernames = jsonObject.getString("membernames");  // Group members' names
-//                groupMemberNames = membernames.split(",");
-//                memberphones = jsonObject.getString("memberphones");  // Group members' phone numbers
-//                groupMemberPhones = memberphones.split(",");
                 groupname = jsonObject.getString("groupname");      // Group name
+                Log.e(TAG, "groupname: " + groupname);
                 Log.e(TAG, "Members: " + members.toString());
+                ParseQuery<ParseUser> query1 = ParseUser.getQuery();
+                query1.whereContains("phone", creator);
+                query1.getFirstInBackground(new GetCallback<ParseUser>() {
+                    @Override
+                    public void done(ParseUser parseUser, ParseException e) {
+                        try {
+                            theCreator = new Contact(parseUser.get("firstname").toString() + " " + parseUser.get("lastname").toString(),
+                                    parseUser.get("phone").toString(), 0);
+//                            Integer.parseInt(parseUser.getObjectId()));
+                            theCreator.setEmail(parseUser.getUsername());
+                            // Create group object
+
+                        } catch (Exception e1) {
+                            e1.printStackTrace();
+                        }
+                    }
+                });
                 createDialog();
 
             } catch (JSONException err) {
@@ -80,11 +100,7 @@ public class NightOutGroup extends ActionBarActivity
 
         }
 
-        contactsInstance = SingletonContacts.getInstance();
-        userInstance = SingletonUser.getInstance();
-        groupInstance = SingletonNightOutGroup.getInstance();
-
-        Log.e(TAG, contactsInstance.getSosoFriends().toString());
+//        Log.e(TAG, contactsInstance.getSosoFriends().toString());
 
         ListView contactListView = (ListView) findViewById(R.id.addFriendsToNighOutGroupList);
         ListAdapter adapter = new NightOutGroupAdapter(this, R.id.friendListItem, contactsInstance.getSosoFriends());
@@ -95,8 +111,9 @@ public class NightOutGroup extends ActionBarActivity
         sendRequest.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // Send requests
                 Log.e(TAG, "Listing group members: " +groupInstance.getMembers().toString());
+                // Create group locally for group creator and on Parse for everyone
+                // Send requests
                 sendRequests();
                 Toast mes = Toast.makeText(getApplicationContext(), "Night Out Group Request Sent", Toast.LENGTH_LONG);
                 mes.show();
@@ -106,15 +123,15 @@ public class NightOutGroup extends ActionBarActivity
     }
 
     /**
-     * PUSH NOTIFICATIONS WILL ONLY BE SENT TO USERS WHO ARE LOGGED IN IF WE DO DIALOG ALERTS.
+     * IMPORTANT: PUSH NOTIFICATIONS WILL ONLY BE SENT TO USERS WHO ARE LOGGED IN IF WE DO DIALOG ALERTS.
      */
-    // TODO need: groupname
+    // Will only be used if creating a group and sending requests
     private void sendRequests(){
         // Create Group As Creator
+        createGroupAsCreator();
+        createGroupOnParse();
+        Log.e(TAG, "Members: " + groupInstance.getMembersAsString());
         String message = userInstance.getName() + " (" + userInstance.getPhone() + ") sent you a night out request.";
-//        String membernames = groupInstance.getMembersName();
-//        String memberphones = groupInstance.getMembersPhone();
-//        Iterator iterator = groupInstance.getGroupContact().entrySet().iterator();
         Iterator<Map.Entry<String, Contact>> iterator = groupInstance.getGroupContact().entrySet().iterator();
         while(iterator.hasNext()) {
             Map.Entry<String, Contact> entry = (Map.Entry) iterator.next();
@@ -125,9 +142,8 @@ public class NightOutGroup extends ActionBarActivity
             params.put("recipientEmail", entry.getValue().getEmail());
             params.put("message", message);
             params.put("groupname", groupInstance.getGroupName());    // Group name temporarily the creator's phone number
+            Log.e(TAG, groupInstance.getMembersAsString());
             params.put("members", groupInstance.getMembersAsString());
-//            params.put("membernames", membernames);
-//            params.put("memberphones", memberphones);
             params.put("uri", "app://host/nightoutgroup");
 //            params.put("uri", "app://host/mainactivity");
             ParseCloud.callFunctionInBackground("sendPushToGroup", params, new FunctionCallback<String>() {
@@ -144,9 +160,98 @@ public class NightOutGroup extends ActionBarActivity
         }
     }
 
+    // Creates the group as a creator
+    public void createGroupAsCreator() {
+        // Create group name
+        String groupname = userInstance.getName().substring(0, 3) + userInstance.getPhone();
+        // Create NightOutGroup
+        groupInstance.createGroup(groupname, userInstance.getContactObject());
+        // Todo Add self as member BELOW DOESN'T SEEM TO WORK
+        groupInstance.addMember(userInstance.getContactObject(), userInstance.getCurrentUser());
+        Log.e(TAG, "Added owner, members: " + groupInstance.getMembersAsString());
+    }
+
+    private void createGroupOnParse() {
+        // Create NightOutGroup object on Parse.com
+        final ParseObject groupObject = new ParseObject("NightOutGroup");
+        groupObject.put("groupName", groupInstance.getGroupName());
+        groupObject.put("groupCreator",userInstance.getCurrentUser());
+        groupObject.put("groupMemberIds", groupInstance.getMemberIds()); // Group member IDs except for creator
+        groupObject.saveInBackground(new SaveCallback() {
+            @Override
+            public void done(ParseException e) {
+                if (e == null) {
+                    Log.e(TAG, "Group should've been created");
+                } else {
+
+                    Log.e(TAG, "Error creating the group. Code: " + e.getCode());
+                }
+            }
+        });
+    }
+
+    // Creates the group as a member and adds members to it
+    public void createGroup(Contact theCreator) {
+        groupInstance.createGroup(groupname, theCreator);
+//        if (groupInstance.getGroupName() == "") {
+////            String groupname = userInstance.getName().substring(0, 3) + userInstance.getPhone();
+//            groupInstance.createGroup(groupname, theCreator);
+//        }
+        for (String phone : groupMemberPhones) {
+            addMember(phone);
+        }
+    }
+
+    // Destroys group and returns true if successfully destroyed, or false if not
+    private boolean destroyGroup() {
+        try {
+            groupInstance.clearGroup();
+            return true;
+        } catch (Exception e) {
+            Log.e(TAG, e.getMessage());
+            return false;
+        }
+    }
+
+    // Adds a member to the group
+    private void addMember(String phone) {
+        ParseQuery<ParseUser> query = ParseUser.getQuery();
+        query.whereContains("phone", phone);
+        query.getFirstInBackground(new GetCallback<ParseUser>() {
+            @Override
+            public void done(ParseUser parseUser, ParseException e) {
+                if (parseUser != null) {
+                    // Create Contact object
+                    Contact person = new Contact(parseUser.get("firstname").toString() + " " + parseUser.get("lastname").toString(),
+                            parseUser.get("phone").toString(), 0);
+//                            Integer.parseInt(parseUser.getObjectId()));
+                    person.setEmail(parseUser.getUsername());
+                    // Add to group
+                    groupInstance.addMember(person, parseUser);
+                }
+            }
+        });
+    }
+
+    // Should be used when night out is over (from group creator's account)
+    private void deleteGroupFromParse(){
+        // Delete NightOutGroup Object from Parse.com
+        ParseQuery<ParseObject> query = ParseQuery.getQuery("NightOutGroup");
+        query.whereEqualTo("groupName", groupInstance.getGroupName());
+        query.getFirstInBackground(new GetCallback<ParseObject>() {
+            @Override
+            public void done(ParseObject parseObject, ParseException e) {
+                if (parseObject != null) {
+                    Log.e(TAG, parseObject.get("groupName") + " found and will be deleted.");
+                    parseObject.deleteInBackground();
+                } else {
+                    Log.e(TAG, "Group could not be found on Parse.com.");
+                }
+            }
+        });
+    }
 
     private void createDialog(){
-//        DialogFragment newFragment = new NighOutGroupDialogFragment();
         ArrayList<String> groupMembers = new ArrayList<>();
         groupMemberNames = new ArrayList<>();
         groupMemberPhones = new ArrayList<>();
@@ -197,12 +302,12 @@ public class NightOutGroup extends ActionBarActivity
 
     @Override
     public void onDialogPositiveClick(DialogFragment dialog) {
-        // User touched +
+        // User touched Accept
         // Subscribe to channel, which is the group name, which is the group creator's phone number
         Log.e(TAG, "Group name: " + groupname);
         ParsePush.subscribeInBackground(groupname);
         // Create group
-        createGroup();
+        createGroup(theCreator);
     }
 
     // TODO: Remove from group for every member!!
@@ -210,80 +315,53 @@ public class NightOutGroup extends ActionBarActivity
     public void onDialogNegativeClick(DialogFragment dialog) {
         // User touched - button
         // Send notification to group creator that user rejected request
-        String message = userInstance.getName() + " (" + userInstance.getPhone() + ") rejected the invite.";
-        HashMap<String, Object> params = new HashMap<String, Object>();
-        params.put("recipientId", theCreator.getObjectId());
-        params.put("recipientEmail", theCreator.getEmail());
-        params.put("message", message);
-        params.put("uri", "app://host/mainactivity");
-        ParseCloud.callFunctionInBackground("sendPushToUser", params, new FunctionCallback<String>() {
-            public void done(String success, ParseException e) {
-                if (e == null) {
-                    // Push sent successfully
-                    Log.e(TAG, success);
-                }
-                else {
-                    Log.e(TAG, e.toString());
-                }
-            }
-        });
+//        String message = userInstance.getName() + " (" + userInstance.getPhone() + ") rejected the invite.";
+//        HashMap<String, Object> params = new HashMap<String, Object>();
+//        params.put("recipientId", theCreator.getObjectId());
+//        params.put("recipientEmail", theCreator.getEmail());
+//        params.put("message", message);
+//        params.put("uri", "app://host/mainactivity");
+//        ParseCloud.callFunctionInBackground("sendPushToUser", params, new FunctionCallback<String>() {
+//            public void done(String success, ParseException e) {
+//                if (e == null) {
+//                    // Push sent successfully
+//                    Log.e(TAG, success);
+//                }
+//                else {
+//                    Log.e(TAG, e.toString());
+//                }
+//            }
+//        });
+        deleteMemberFromGroup(userInstance.getCurrentUser().getObjectId());
     }
 
-    // Creates the group and adds members to it
-    public void createGroup() {
-        ParseQuery<ParseUser> query1 = ParseUser.getQuery();
-        query1.whereContains("phone", creator);
-        query1.getFirstInBackground(new GetCallback<ParseUser>() {
+    private void deleteMemberFromGroup(final String memberId){
+        Log.e(TAG, "Deleting " + memberId + " from the group " + groupInstance.getGroupName());
+        ParseQuery<ParseObject> query = ParseQuery.getQuery("NightOutGroup");
+        query.whereEqualTo("groupName", groupInstance.getGroupName());
+        query.getFirstInBackground(new GetCallback<ParseObject>() {
             @Override
-            public void done(ParseUser parseUser, ParseException e) {
-                try {
-                    theCreator = new Contact(parseUser.get("firstname").toString() + " " + parseUser.get("lastname").toString(),
-                            parseUser.get("phone").toString(), 0);
-//                            Integer.parseInt(parseUser.getObjectId()));
-                    theCreator.setEmail(parseUser.getUsername());
-                    // Create group object
-                    groupInstance.createGroup(groupname, theCreator);
-                    for (String phone : groupMemberPhones) {
-                        addMember(phone);
-                    }
-                } catch (Exception e1) {
-                    e1.printStackTrace();
+            public void done(ParseObject parseObject, ParseException e) {
+                if (parseObject != null) {
+                    Log.e(TAG, parseObject.get("groupName") + " found and " + userInstance.getName() + " will be deleted.");
+                    ArrayList<String> newMemberIds = groupInstance.getMemberIds();
+                    newMemberIds.remove(memberId);
+                    parseObject.put("groupMemberIds", newMemberIds);
+                    parseObject.saveInBackground(new SaveCallback() {
+                        @Override
+                        public void done(ParseException e) {
+                            if (e == null) {
+                                Log.e(TAG, "New group member IDs saved.");
+                            }
+                        }
+                    });
+                } else {
+                    Log.e(TAG, "Group could not be found on Parse.com.");
                 }
             }
         });
     }
 
-    // Destroys group and returns true if successfully destroyed, or false if not
-    private boolean destroyGroup() {
-        try {
-            groupInstance.clearGroup();
-            return true;
-        } catch (Exception e) {
-            Log.e(TAG, e.getMessage());
-            return false;
-        }
-    }
-
-    // Adds a member to the group
-    private void addMember(String phone) {
-        ParseQuery<ParseUser> query = ParseUser.getQuery();
-        query.whereContains("phone", phone);
-        query.getFirstInBackground(new GetCallback<ParseUser>() {
-            @Override
-            public void done(ParseUser parseUser, ParseException e) {
-                if (parseUser != null) {
-                    // Create Contact object
-                    Contact person = new Contact(parseUser.get("firstname").toString() + " " + parseUser.get("lastname").toString(),
-                            parseUser.get("phone").toString(), 0);
-//                            Integer.parseInt(parseUser.getObjectId()));
-                    person.setEmail(parseUser.getUsername());
-                    // Add to group
-                    groupInstance.addMember(person, parseUser);
-                }
-            }
-        });
-
-    }
 
     private void subscribe() {
         ParsePush.subscribeInBackground(groupname);

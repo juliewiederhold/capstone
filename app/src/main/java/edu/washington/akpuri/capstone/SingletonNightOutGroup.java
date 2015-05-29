@@ -1,5 +1,7 @@
 package edu.washington.akpuri.capstone;
 
+import android.util.Log;
+
 import com.parse.ParseUser;
 
 import java.util.ArrayList;
@@ -20,6 +22,8 @@ public class SingletonNightOutGroup {
     private static Contact starter;
     private static ParseUser currentUser;
     private static ArrayList<String> groupMembers, groupMembersName;
+    private static ArrayList<String> memberIds;
+    private static boolean hasBeenCreated;
 
     protected SingletonNightOutGroup() {
         // Empty
@@ -33,6 +37,8 @@ public class SingletonNightOutGroup {
             groupMembers = new ArrayList<>();
             groupMembersName = new ArrayList<>();
             groupName = "";
+            memberIds = new ArrayList<>();
+            hasBeenCreated = false;
         }
         return instance;
     }
@@ -43,6 +49,7 @@ public class SingletonNightOutGroup {
         this.currentUser = SingletonUser.getInstance().getCurrentUser();
         this.groupContact.put(starter.getPhone(), starter);
         this.groupParse.put(starter.getPhone(), currentUser);
+        this.hasBeenCreated = true;
         return "Created group: " + groupName;
     }
 
@@ -57,7 +64,13 @@ public class SingletonNightOutGroup {
     public String addMember(Contact contact, ParseUser user) {
         groupContact.put(contact.getPhone(), contact);
         groupParse.put(contact.getPhone(), user);
+        memberIds.add(user.getObjectId());
+        Log.e(TAG, "Added " + user.getObjectId());
         return "Added: " + contact.getEmail();
+    }
+
+    public ArrayList<String> getMemberIds(){
+        return memberIds;
     }
 
     // Remove member from group

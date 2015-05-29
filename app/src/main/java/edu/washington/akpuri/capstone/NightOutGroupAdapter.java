@@ -42,10 +42,6 @@ public class NightOutGroupAdapter extends ArrayAdapter<Contact> {
         this.contactsInstance = SingletonContacts.getInstance();
         this.userInstance = SingletonUser.getInstance();
         this.groupInstance = SingletonNightOutGroup.getInstance();
-        if (this.groupInstance.getGroupName() == "") {
-            String groupname = userInstance.getName().substring(0, 3) + userInstance.getPhone();
-            this.groupInstance.createGroup(groupname, userInstance.getContactObject());
-        }
 
     }
 
@@ -76,10 +72,11 @@ public class NightOutGroupAdapter extends ArrayAdapter<Contact> {
                         public void onCheckedChanged(CompoundButton buttonView,
                                                      boolean isChecked) {
                             final Contact person = (Contact) viewHolder.checkbox.getTag();
+                            person.setSelected(buttonView.isChecked());
                             // If checked, add to NightOutGroup
-                            if (isChecked) {
+                            if (buttonView.isChecked()) {
                                 Log.e(TAG, getPosition(person) + "");
-                                person.setSelected(buttonView.isChecked());
+
                                 if (person.isSelected()) {
                                     // Look up user on Parse.com
                                     ParseQuery<ParseUser> queryA = ParseUser.getQuery();
@@ -118,7 +115,7 @@ public class NightOutGroupAdapter extends ArrayAdapter<Contact> {
         holder.contactNumber.setText(sosoFriends.get(position).getPhone());
         // ImageView?
 //        holder.checkbox.setChecked(list.get(position).isSelected());
-        holder.checkbox.setChecked(false);
+//        holder.checkbox.setChecked(false);
 
         return view;
     }
