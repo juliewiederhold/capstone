@@ -118,6 +118,9 @@ public class StartNightOutSettingConfirmation extends ActionBarActivity {
                                     instance.setDurationHours(Integer.parseInt(hours));
                                     instance.setDurationMinutes(Integer.parseInt(minutes));
 
+                                    Intent callBlocker = new Intent(StartNightOutSettingConfirmation.this, CallBlocker.class);
+                                    startService(callBlocker);
+
                                     Intent beginNightOut = new Intent(StartNightOutSettingConfirmation.this, MainMap.class);
                                     startActivity(beginNightOut);
 

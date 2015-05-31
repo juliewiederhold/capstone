@@ -1,6 +1,7 @@
 package edu.washington.akpuri.capstone;
 
 import android.app.IntentService;
+import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.util.Log;
@@ -21,5 +22,12 @@ public class CallBlocker extends IntentService {
         //Gets data from the incoming Intent
 
         // Do work here based on contents from Intent
+        Intent intent = new Intent(CallBlocker.this, CustomPhoneStateListener.class);
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(CallBlocker.this, 0, intent, 0);
+        try {
+            pendingIntent.send(CallBlocker.this, 0, intent);
+        } catch (PendingIntent.CanceledException e) {
+            e.printStackTrace();
+        }
     }
 }
