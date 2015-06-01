@@ -70,15 +70,19 @@ public class AppNumberBlocking extends ActionBarActivity {
         });
 
         Button editBlockedContacts = (Button) findViewById(R.id.editBlockedContacts);
-        editBlockedContacts.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if(contactsInstance.getBlockedContacts() != null && contactsInstance.getBlockedContacts().size() > 0){
-                    Intent editBlockedFriends = new Intent(AppNumberBlocking.this, EditBlockedContactsList.class);
-                    startActivity(editBlockedFriends);
+        if(contactsInstance.getBlockedContacts().size() < 1){
+            editBlockedContacts.setVisibility(View.INVISIBLE);
+        } else {
+            editBlockedContacts.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if(contactsInstance.getBlockedContacts() != null && contactsInstance.getBlockedContacts().size() > 0){
+                        Intent editBlockedFriends = new Intent(AppNumberBlocking.this, EditBlockedContactsList.class);
+                        startActivity(editBlockedFriends);
+                    }
                 }
-            }
-        });
+            });
+        }
 
         if(contactsInstance.getBlockedContacts() != null){
             ListView blockedNumberListView = (ListView) findViewById(R.id.blockedContacts);
