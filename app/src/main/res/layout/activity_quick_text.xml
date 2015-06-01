@@ -3,15 +3,6 @@
     android:layout_width="match_parent" android:layout_height="match_parent"
     tools:context="edu.washington.akpuri.capstone.QuickText" tools:ignore="MergeRootFrame" >
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceLarge"
-        android:text="Quick Text"
-        android:id="@+id/quickTextHeader"
-        android:layout_gravity="center_horizontal|top"
-        android:layout_marginTop="25dp" />
-
     <FrameLayout
         android:layout_width="fill_parent"
         android:layout_height="392dp"
