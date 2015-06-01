@@ -32,7 +32,7 @@ public class EditDefaultSettings extends ActionBarActivity {
         edit_profile.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent next = new Intent(EditDefaultSettings.this, SettingsActivity.class);
+                Intent next = new Intent(EditDefaultSettings.this, SettingsActivity2.class);
                 startActivity(next);
             }
         });
