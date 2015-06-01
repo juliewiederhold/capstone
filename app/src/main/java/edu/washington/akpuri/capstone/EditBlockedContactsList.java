@@ -39,7 +39,7 @@ public class EditBlockedContactsList extends ActionBarActivity {
         contactListView.setAdapter(adapter);
 
         Button sendRequest = (Button) findViewById(R.id.sendFriendRequest);
-        sendRequest.setText("Save Changes");
+        sendRequest.setText("Remove from Blocked Contacts");
         sendRequest.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
