@@ -67,7 +67,7 @@
 
     <!-- Welcome Screen -->
     <string name="welcome">Welcome</string>
-    <string name="welcome_message">To get started, lets setup your Default Settings! </string>
+    <string name="welcome_message">To get started, lets set up your Default Settings! </string>
 
     <!-- Start Night Out -->
     <string name="confirm_default_settings">Confirm Night Out Settings</string>
