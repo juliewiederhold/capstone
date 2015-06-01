@@ -104,9 +104,16 @@ public class MainMap extends FragmentActivity implements
                 .setFastestInterval(1 * 1000); // 1 second, in milliseconds
 
         ImageButton friend1 = (ImageButton) findViewById(R.id.friend1);
-        ImageButton friend2 = (ImageButton) findViewById(R.id.friend1);
-        ImageButton friend3 = (ImageButton) findViewById(R.id.friend1);
-        ImageButton friend4 = (ImageButton) findViewById(R.id.friend1);
+        ImageButton friend2 = (ImageButton) findViewById(R.id.friend2);
+        ImageButton friend3 = (ImageButton) findViewById(R.id.friend3);
+        ImageButton friend4 = (ImageButton) findViewById(R.id.friend4);
+
+        friend1.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+            }
+        });
 
 
         ImageButton quickText = (ImageButton) findViewById(R.id.message_friends);
