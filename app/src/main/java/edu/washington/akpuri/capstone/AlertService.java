@@ -47,35 +47,35 @@ public class AlertService extends BroadcastReceiver{
 
         final String user = ParseUser.getCurrentUser().getString("email");
         for(int i=0; i < friendsInNightOutGroup.size(); i++) {
-            final Contact person = friendsInNightOutGroup.get(i);
+                final Contact person = friendsInNightOutGroup.get(i);
 
-            ParseQuery<ParseObject> query = ParseQuery.getQuery("ContactsObject");
-            query.whereEqualTo("user", user);
-            query.getFirstInBackground(new GetCallback<ParseObject>() {
-                @Override
-                public void done(final ParseObject parseObject, ParseException e) {
-                    try {
-                        if (parseObject != null) {
+                ParseQuery<ParseObject> query = ParseQuery.getQuery("ContactsObject");
+                query.whereEqualTo("user", user);
+                query.getFirstInBackground(new GetCallback<ParseObject>() {
+                    @Override
+                    public void done(final ParseObject parseObject, ParseException e) {
+                        try {
+                            if (parseObject != null) {
 
-                            // Send push notifications
-                            ParseQuery pushQuery = userInstance.getCurrentInstallation().getQuery();
-                            pushQuery.whereEqualTo("user", person.getEmail());
-                            ParsePush push = new ParsePush();
-                            push.setQuery(pushQuery);
-                            push.setMessage(userInstance.getName() + " would like you to find her. Please go assist her NOW.");
+                                // Send push notifications
+                                ParseQuery pushQuery = userInstance.getCurrentInstallation().getQuery();
+                                pushQuery.whereEqualTo("user", person.getEmail());
+                                ParsePush push = new ParsePush();
+                                push.setQuery(pushQuery);
+                                push.setMessage(userInstance.getName() + " would like you to find her. Please go assist her NOW.");
 
-                            push.sendInBackground();
-                            Log.e(TAG, "sent to: " + person.getEmail());
+                                push.sendInBackground();
+                                Log.e(TAG, "sent to: " + person.getEmail());
 
-                        } else {
-                            // Something went wrong
-                            Log.e("Contacts", "Failed to retrieve contactsObject: " + e);
+                            } else {
+                                // Something went wrong
+                                Log.e("Contacts", "Failed to retrieve contactsObject: " + e);
+                            }
+                        } catch (Exception err) {
+                            err.printStackTrace();
                         }
-                    } catch (Exception err) {
-                        err.printStackTrace();
                     }
-                }
-            });
+                });
         }
     }
 

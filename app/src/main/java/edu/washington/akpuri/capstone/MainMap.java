@@ -309,7 +309,7 @@ public class MainMap extends FragmentActivity implements
     private void handleNewLocation(Location location) {
         Log.d(TAG, location.toString());
 
-        double currentLatitude = location.getLatitude();
+        final double currentLatitude = location.getLatitude();
         double currentLongitude = location.getLongitude();
 
         List<SafetyZone> safetyZones = instance.getNightOutSafetyZones();
@@ -371,6 +371,21 @@ public class MainMap extends FragmentActivity implements
 
         mMap.moveCamera(center);
         mMap.animateCamera(zoom);
+
+   //todo
+        Handler mHandler = new Handler();
+        mHandler.postDelayed(new Runnable() {
+
+            @Override
+            public void run() {
+                // Send currentLatitude and currentLongitude to Parse for this user
+                // Pull the location of each Night Out Group Member
+
+                
+
+            }
+
+        }, 60000);
     }
 
     private double calculateDistance(double fromLong, double fromLat,
