@@ -27,7 +27,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceMedium"
-        android:text="Apps to Block during a Night Out"
+        android:text="Blocked Apps"
         android:id="@+id/textView5"
         android:layout_below="@+id/textView4"
         android:layout_alignParentLeft="true"
@@ -40,7 +40,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceMedium"
-        android:text="Numbers to block during a Night Out"
+        android:text="Blocked Contacts"
         android:id="@+id/textView6"
         android:textSize="20dp"
         android:textColor="#ff000000"
@@ -58,12 +58,12 @@
 
     <Button
         android:layout_width="100dp"
-        android:layout_height="wrap_content"
-        android:text="Add From Contacts"
+        android:layout_height="40dp"
+        android:text="Add"
         android:id="@+id/addFromContacts"
         android:layout_alignTop="@+id/editBlockedContacts"
-        android:layout_toRightOf="@+id/next"
-        android:layout_toEndOf="@+id/next" />
+        android:layout_alignRight="@+id/blockedContacts"
+        android:layout_alignEnd="@+id/blockedContacts" />
 
     <ListView
         android:layout_width="wrap_content"
@@ -85,8 +85,8 @@
 
     <Button
         android:layout_width="100dp"
-        android:layout_height="wrap_content"
-        android:text="Edit Blocked Contacts"
+        android:layout_height="40dp"
+        android:text="Remove"
         android:id="@+id/editBlockedContacts"
         android:layout_above="@+id/next"
         android:layout_alignParentLeft="true"
