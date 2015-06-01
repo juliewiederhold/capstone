@@ -3,23 +3,6 @@
     android:layout_width="match_parent" android:layout_height="match_parent"
     tools:context="edu.washington.akpuri.capstone.SafetyZonePage" tools:ignore="MergeRootFrame" >
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceLarge"
-        android:text="Safety Zones"
-        android:id="@+id/textView"
-        android:layout_alignParentTop="true"
-        android:layout_alignBottom="@+id/addZone"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:layout_toLeftOf="@+id/addZone"
-        android:layout_toStartOf="@+id/addZone"
-        android:textSize="28dp"
-        android:layout_marginTop="25dp"
-        android:layout_marginLeft="115dp"
-        android:layout_gravity="left|top" />
-
     <!--<EditText
         android:id="@+id/safety_zone_name"
         android:layout_width="fill_parent"
