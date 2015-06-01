@@ -19,7 +19,7 @@ public class WelcomeActivity extends ActionBarActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_welcome2);
+        setContentView(R.layout.activity_welcome);
 
         Log.e(TAG, "WelcomeActivity fired");
 
