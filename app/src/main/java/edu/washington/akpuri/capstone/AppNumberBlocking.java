@@ -127,7 +127,7 @@ public class AppNumberBlocking extends ActionBarActivity {
         ListView view = (ListView) findViewById(R.id.appContainer);
         view.setAdapter(adapter);
 
-        view.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+    /*    view.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             public void onItemClick(AdapterView<?> parent, View view,
                                     int position, long id) {
                 // When clicked, show a toast with the TextView text
@@ -137,7 +137,7 @@ public class AppNumberBlocking extends ActionBarActivity {
                         "Clicked on Row: " + item.getName(),
                         Toast.LENGTH_LONG).show();
             }
-        });
+        });*/
     }
 
 
