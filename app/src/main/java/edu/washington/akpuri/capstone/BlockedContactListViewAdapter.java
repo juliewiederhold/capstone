@@ -1,6 +1,7 @@
 package edu.washington.akpuri.capstone;
 
 import android.content.Context;
+import android.graphics.drawable.Drawable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,6 +16,7 @@ import java.util.ArrayList;
  */
 public class BlockedContactListViewAdapter extends ArrayAdapter<Contact> {
     private final ArrayList<Contact> blockedContacts;
+    private static SingletonUser userInstance = SingletonUser.getInstance();
 
     public BlockedContactListViewAdapter(Context context, int resource,  ArrayList<Contact> blockedContacts) {
         super(context, resource, blockedContacts);
@@ -47,6 +49,10 @@ public class BlockedContactListViewAdapter extends ArrayAdapter<Contact> {
         ViewHolder holder = (ViewHolder) view.getTag();
         holder.contactName.setText(blockedContacts.get(position).getName());
         holder.contactNumber.setText(blockedContacts.get(position).getPhone());
+
+        Drawable picture = userInstance.getProfilePicture();
+        if(picture != null)
+            holder.contactIcon.setImageDrawable(picture);
 
         return view;
     }

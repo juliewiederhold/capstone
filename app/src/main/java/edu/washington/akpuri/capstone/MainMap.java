@@ -65,6 +65,7 @@ public class MainMap extends FragmentActivity implements
     public static SingletonNightOutSettings instance;
     private AlarmManager alarmManager;
     private PendingIntent pendingIntent;
+    private static SingletonNightOutGroup nightOutGroup;
 
     final SingletonUser userInstance = SingletonUser.getInstance();
 
@@ -86,9 +87,9 @@ public class MainMap extends FragmentActivity implements
         setUpMapIfNeeded();
 
         instance = SingletonNightOutSettings.getInstance();
+        nightOutGroup = SingletonNightOutGroup.getInstance();
+
         mMap.setMyLocationEnabled(true);
-
-
 
         mGoogleApiClient = new GoogleApiClient.Builder(this)
                 .addConnectionCallbacks(this)
@@ -101,6 +102,12 @@ public class MainMap extends FragmentActivity implements
                 .setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY)
                 .setInterval(10 * 1000)        // 10 seconds, in milliseconds
                 .setFastestInterval(1 * 1000); // 1 second, in milliseconds
+
+        ImageButton friend1 = (ImageButton) findViewById(R.id.friend1);
+        ImageButton friend2 = (ImageButton) findViewById(R.id.friend1);
+        ImageButton friend3 = (ImageButton) findViewById(R.id.friend1);
+        ImageButton friend4 = (ImageButton) findViewById(R.id.friend1);
+
 
         ImageButton quickText = (ImageButton) findViewById(R.id.message_friends);
         quickText.setOnClickListener(new View.OnClickListener() {
