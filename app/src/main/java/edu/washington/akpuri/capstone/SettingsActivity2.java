@@ -269,7 +269,8 @@ public class SettingsActivity2 extends ActionBarActivity {
                 }
             }.start();
 
-            Intent intent = new Intent(SettingsActivity2.this, SettingsActivity.class);
+            finish();
+            Intent intent = new Intent(SettingsActivity2.this, EditDefaultSettings.class);
             startActivity(intent);
         }
 
