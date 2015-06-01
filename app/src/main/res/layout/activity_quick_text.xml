@@ -7,7 +7,6 @@
         android:layout_width="fill_parent"
         android:layout_height="392dp"
         android:layout_gravity="center_horizontal|top"
-        android:layout_marginTop="60dp"
         android:id="@+id/quickTextContainer">
 
         <TextView
@@ -27,15 +26,14 @@
         android:text="@string/next"
         android:id="@+id/next"
         android:layout_gravity="center_horizontal|bottom"
-        android:layout_marginBottom="20dp"
-        android:layout_marginRight="50dp" />
+        android:layout_marginBottom="20dp" />
 
     <Button
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Add New Quick Text"
+        android:layout_height="35dp"
+        android:text="Add Quick Text"
         android:id="@+id/addNewQuickText"
         android:layout_gravity="right|bottom"
-        android:layout_marginBottom="20dp"
-        android:layout_marginRight="10dp" />
+        android:layout_marginBottom="70dp"
+        android:layout_marginRight="20dp" />
 </FrameLayout>
