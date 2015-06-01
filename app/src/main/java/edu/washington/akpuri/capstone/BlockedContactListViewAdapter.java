@@ -50,10 +50,6 @@ public class BlockedContactListViewAdapter extends ArrayAdapter<Contact> {
         holder.contactName.setText(blockedContacts.get(position).getName());
         holder.contactNumber.setText(blockedContacts.get(position).getPhone());
 
-        Drawable picture = userInstance.getProfilePicture();
-        if(picture != null)
-            holder.contactIcon.setImageDrawable(picture);
-
         return view;
     }
 }

@@ -1,6 +1,7 @@
 package edu.washington.akpuri.capstone;
 
 import android.content.Context;
+import android.graphics.drawable.Drawable;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -148,6 +149,7 @@ public class ContactAdapter extends ArrayAdapter<Contact> {
         ViewHolder holder = (ViewHolder) view.getTag();
         holder.contactName.setText(list.get(position).getName());
         holder.contactNumber.setText(list.get(position).getPhone());
+
         // ImageView?
 //        holder.checkbox.setChecked(list.get(position).isSelected());
 //        holder.checkbox.setChecked(false);

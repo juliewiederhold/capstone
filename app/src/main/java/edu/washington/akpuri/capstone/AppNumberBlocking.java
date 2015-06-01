@@ -119,7 +119,7 @@ public class AppNumberBlocking extends ActionBarActivity {
     private void displayListView(){
         if(appInstance.getAllApps().size() == 0){
             appInstance.addAppToAllApps(new App("Facebook"));
-            appInstance.addAppToAllApps(new App("SnapChat"));
+            appInstance.addAppToAllApps(new App("Snapchat"));
             appInstance.addAppToAllApps(new App("Twitter"));
         }
 
@@ -131,9 +131,10 @@ public class AppNumberBlocking extends ActionBarActivity {
             public void onItemClick(AdapterView<?> parent, View view,
                                     int position, long id) {
                 // When clicked, show a toast with the TextView text
-                String item = (String) parent.getItemAtPosition(position);
+                App item = (App) parent.getItemAtPosition(position);
+
                 Toast.makeText(getApplicationContext(),
-                        "Clicked on Row: " + item,
+                        "Clicked on Row: " + item.getName(),
                         Toast.LENGTH_LONG).show();
             }
         });
