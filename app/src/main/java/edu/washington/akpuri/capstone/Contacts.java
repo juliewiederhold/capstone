@@ -40,17 +40,22 @@ public class Contacts extends ActionBarActivity {
     private static ArrayList<Contact> pendingContacts;
     private static boolean allowContactRetrieval;
     private android.support.v7.app.ActionBar actionBar;
-    private static SingletonContacts instance = SingletonContacts.getInstance();;
-    private static SingletonUser userInstance = SingletonUser.getInstance();
+    private static SingletonContacts instance;
+    private static SingletonUser userInstance;
     private int counter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        userInstance = SingletonUser.getInstance();
+        instance = SingletonContacts.getInstance();
+
         setContentView(R.layout.activity_contacts);
         pendingContacts = new ArrayList<>();
         allowContactRetrieval = userInstance.getAllowContactRetrieval();
+
+
 
         //Get the actionbar
         // setup action bar for tabs

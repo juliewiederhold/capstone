@@ -47,7 +47,9 @@
 
     <!-- Quick Text Information -->
     <string name="quickTextMessage">Enter Message</string>
-    <string name="no_quick_text_description">You currently have no Quick Text. Add messages you want to be able to quickly send to your friends when you go out. Why waste time texting when we can quickly message everyone for you!</string>
+    <string name="no_quick_text_description">You currently have no Quick Texts. Add messages you want to be able to quickly send to your group when you go out.</string>
+    <string name="quickTextInstructions">These are your current quick text messages. Edit, add, or delete any quick text messages you want. You can send quick text messages
+        to your group without having to type them each time!</string>
 
     <!-- App/Number Blocking Information -->
     <string name="appNumberBlock">Add apps and contacts you want to block during your night out!</string>

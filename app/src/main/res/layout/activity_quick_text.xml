@@ -5,19 +5,12 @@
 
     <FrameLayout
         android:layout_width="fill_parent"
-        android:layout_height="392dp"
+        android:layout_height="322dp"
         android:layout_gravity="center_horizontal|top"
-        android:id="@+id/quickTextContainer">
+        android:id="@+id/quickTextContainer"
+        android:layout_marginTop="100dp"
+        android:padding="6dp">
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textAppearance="?android:attr/textAppearanceMedium"
-            android:text="@string/no_quick_text_description"
-            android:id="@+id/emptyQuickTextMessage"
-            android:layout_gravity="center"
-            android:layout_marginLeft="10dp"
-            android:layout_marginRight="10dp" />
     </FrameLayout>
 
     <Button
@@ -36,4 +29,15 @@
         android:layout_gravity="right|bottom"
         android:layout_marginBottom="70dp"
         android:layout_marginRight="20dp" />
+
+    <TextView
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:text="@string/quickTextInstructions"
+        android:id="@+id/quickTextInstructions"
+        android:layout_gravity="center_horizontal|top"
+        android:padding="6dp"
+        android:layout_marginBottom="115dp" />
+
 </FrameLayout>

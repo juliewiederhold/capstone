@@ -88,7 +88,7 @@
             android:textAppearance="?android:attr/textAppearanceMedium"
             android:text="@string/no_safety_zone_description"
             android:id="@+id/safetyZoneDescription"
-            android:layout_gravity="center"
+            android:layout_gravity="center_horizontal|top"
             android:layout_centerVertical="true"
             android:layout_alignParentLeft="true"
             android:layout_alignParentStart="true" />

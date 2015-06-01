@@ -56,10 +56,10 @@ public class QuickText extends ActionBarActivity {
             quickTextInstance.setIsFirstViewOfQuickTexts(false);
         }
 
-        if(quickTextInstance.getAllQuickTexts().size() > 0){
-            TextView empty = (TextView) findViewById(R.id.emptyQuickTextMessage);
-            empty.setText("");
-        }
+//        if(quickTextInstance.getAllQuickTexts().size() > 0){
+//            TextView empty = (TextView) findViewById(R.id.emptyQuickTextMessage);
+//            empty.setText("");
+//        }
 
         if (savedInstanceState == null) {
             getSupportFragmentManager().beginTransaction()
