@@ -27,7 +27,7 @@
     <string name="progress_login">Logging you in&#8230;</string>
     <string name="progress_signup">Signing you up&#8230;</string>
     <string name="progress_reset">Resetting your password&#8230;</string>
-    <string name="signup">Sign up</string>
+    <string name="signup">Create New Account</string>
     <string name="forgot_password"><u>Forgot password?</u></string>
     <string name="progress_saving">Saving changes&#8230;</string>
 
