@@ -12,9 +12,10 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceLarge"
-        android:text="Current Friends"
+        android:text="Friends list"
         android:id="@+id/textView2"
-        android:layout_centerHorizontal="true" />
+        android:layout_centerHorizontal="true"
+        android:textSize="28dp" />
 
 
     <ListView
@@ -29,7 +30,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceLarge"
-        android:text="You currently do not have any friends within So-So"
+        android:text="@string/contact_group_message_when_contacts_empty"
         android:id="@+id/noFriends"
         android:layout_alignTop="@+id/friendListView"
         android:layout_alignParentRight="true"
