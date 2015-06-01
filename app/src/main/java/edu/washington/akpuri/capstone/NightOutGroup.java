@@ -118,6 +118,9 @@ public class NightOutGroup extends ActionBarActivity
                 Toast mes = Toast.makeText(getApplicationContext(), "Night Out Group Request Sent", Toast.LENGTH_LONG);
                 mes.show();
                 finish();
+
+                Intent nightOutSetUp = new Intent(NightOutGroup.this, StartNightOutSettingConfirmation.class);
+                startActivity(nightOutSetUp);
             }
         });
     }

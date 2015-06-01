@@ -50,9 +50,8 @@ public class SafetyZonePage extends ActionBarActivity {
                     .add(R.id.current_safety_zones, new CurrentSafetyZone())
                     .commit();
         }
-
+        Button saveButton = (Button) findViewById(R.id.next);
         if(userInstance.getHasGoneThroughInitialSetUp()){
-            Button saveButton = (Button) findViewById(R.id.next);
             saveButton.setText("Done");
             saveButton.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -63,8 +62,7 @@ public class SafetyZonePage extends ActionBarActivity {
                 }
             });
         } else {
-            Button nextButton = (Button) findViewById(R.id.next);
-            nextButton.setOnClickListener(new View.OnClickListener() {
+            saveButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     Intent next = new Intent(SafetyZonePage.this, AppNumberBlocking.class);

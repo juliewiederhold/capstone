@@ -31,22 +31,26 @@ import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Map;
 
 
 public class SendQuickText extends ActionBarActivity {
     private static ArrayList<HashMap<String, String>> quickTextInformation = new ArrayList<>();
     private static SingletonNightOutSettings instance;
     private static String messageToBeSent;
-    private static TextView messageNumber;
+    private static SingletonNightOutGroup groupInstance;
+    private static SingletonUser userInstance;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_send_quick_text);
-        messageNumber=(TextView) findViewById(R.id.messageNumber);
 
         instance = SingletonNightOutSettings.getInstance();
+        groupInstance = SingletonNightOutGroup.getInstance();
+        userInstance = SingletonUser.getInstance();
 
         initList();
         if(instance.getNightOutQuickTexts().size() > 0){
@@ -95,32 +99,44 @@ public class SendQuickText extends ActionBarActivity {
 
     public void sendMesage(View v){
         //String _messageNumber = messageNumber.getText().toString();
-        String _messageNumber = "4082096381";
+
+        HashMap<String, Contact> contacts = groupInstance.getGroupContact();
+        ArrayList<String> contactNumbers = new ArrayList<>();
+
+        Iterator<Map.Entry<String, Contact>> iterator = contacts.entrySet().iterator();
+        while(iterator.hasNext()) {
+            Map.Entry<String, Contact> entry = iterator.next();
+            if(!entry.getKey().equals(userInstance.getPhone())) // do not send text message to self
+                contactNumbers.add(entry.getKey());
+        }
 
         String sent = "SMS_SENT";
 
-        PendingIntent sentPI = PendingIntent.getBroadcast(this, 0,
-                new Intent(sent), 0);
+        PendingIntent sentPI = PendingIntent.getBroadcast(this, 0, new Intent(sent), 0);
 
-        //---when the SMS has been sent---
-        registerReceiver(new BroadcastReceiver(){
-            @Override
-            public void onReceive(Context arg0, Intent arg1) {
-                if(getResultCode() == Activity.RESULT_OK)
-                {
-                    Toast.makeText(getBaseContext(), "SMS sent",
-                            Toast.LENGTH_SHORT).show();
+        for(int i = 0; i < contactNumbers.size(); i++){
+            //---when the SMS has been sent---
+            registerReceiver(new BroadcastReceiver(){
+                @Override
+                public void onReceive(Context arg0, Intent arg1) {
+                    if(getResultCode() == Activity.RESULT_OK)
+                    {
+                        Toast.makeText(getBaseContext(), "SMS sent",
+                                Toast.LENGTH_SHORT).show();
+                    }
+                    else
+                    {
+                        Toast.makeText(getBaseContext(), "SMS could not sent",
+                                Toast.LENGTH_SHORT).show();
+                    }
                 }
-                else
-                {
-                    Toast.makeText(getBaseContext(), "SMS could not sent",
-                            Toast.LENGTH_SHORT).show();
-                }
-            }
-        }, new IntentFilter(sent));
+            }, new IntentFilter(sent));
 
-        SmsManager sms = SmsManager.getDefault();
-        sms.sendTextMessage(_messageNumber, null, messageToBeSent, sentPI, null);
+            SmsManager sms = SmsManager.getDefault();
+            sms.sendTextMessage(contactNumbers.get(i), null, messageToBeSent, sentPI, null);
+        }
+
+
     }
 
     private static void initList(){

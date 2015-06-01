@@ -80,14 +80,27 @@ public class Contacts extends ActionBarActivity {
         actionBar.addTab(third);
 
         Button next = (Button) findViewById(R.id.contactsNext);
-        next.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Log.e(TAG, "contactsNext button pressed");
-                Intent safeZones = new Intent(Contacts.this, SafetyZonePage.class);
-                startActivity(safeZones);
-            }
-        });
+        if(userInstance.getHasGoneThroughInitialSetUp()){
+            next.setText("Done");
+            next.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Log.e(TAG, "contactsNext button pressed");
+                    Intent safeZones = new Intent(Contacts.this, EditDefaultSettings.class);
+                    startActivity(safeZones);
+                }
+            });
+        } else {
+            next.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Log.e(TAG, "contactsNext button pressed");
+                    Intent safeZones = new Intent(Contacts.this, SafetyZonePage.class);
+                    startActivity(safeZones);
+                }
+            });
+        }
+
 
         Button addContacts = (Button) findViewById(R.id.addFriends);
         addContacts.setOnClickListener(new View.OnClickListener() {
@@ -101,7 +114,7 @@ public class Contacts extends ActionBarActivity {
                         public void onClick(DialogInterface dialog, int id) {
                             allowContactRetrieval = true;
                             userInstance.setAllowContactRetrieval(true);
-                            userInstance.getCurrentUser().put("importContacts", true);
+                            userInstance.getCurrentUser().put("importContacts", true);              // NICOLE: current user = null and we are unsure why
                             Intent addFriends = new Intent(Contacts.this, AddFriends.class);
                             addFriends.putExtra("caller", "Contacts");
                             startActivity(addFriends);
