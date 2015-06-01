@@ -54,14 +54,24 @@ public class SingletonNightOutGroup {
         return "Created group: " + groupName;
     }
 
+    /**
+     * @return Contact object for each member of the group
+     */
     public HashMap<String, Contact> getGroupContact() {
         return (HashMap) groupContact;
     }
+
+    /**
+     *
+     * @return ParseUser object of each member of the group
+     */
     public HashMap<String, ParseUser> getGroupParse() {
         return (HashMap) groupParse;
     }
 
-    // Add group member using phone # as key and contact object and ParseUser object as value
+    /**
+     * Add group member using phone # as key and contact object and ParseUser object as value
+     */
     public String addMember(Contact contact, ParseUser user) {
         groupContact.put(contact.getPhone(), contact);
         groupParse.put(contact.getPhone(), user);
@@ -70,15 +80,34 @@ public class SingletonNightOutGroup {
         return "Added: " + contact.getEmail();
     }
 
+    /**
+     *
+     * @return ParseUser object IDs for each member of the group
+     */
     public ArrayList<String> getMemberIds(){
         return memberIds;
     }
 
-    // Remove member from group
+    /**
+     * // Remove member from group
+     * @param contact
+     * @return
+     */
     public String removeMember(Contact contact) {
         groupContact.remove(contact.getPhone());
         groupParse.remove(contact.getPhone());
         return "Removed: " + contact.getEmail();
+    }
+
+    // TODO temporarily a string. Need to google how (should be in MainMap.java)
+    public void saveLocation(String location) {
+        // Save location for individuals
+
+    }
+    // TODO temporarily void
+    public void getLocations() {
+        // Get locations for each member in the night out group
+
     }
 
     public String getGroupName(){

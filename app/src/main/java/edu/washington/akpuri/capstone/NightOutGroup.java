@@ -40,6 +40,7 @@ import java.util.Map;
 
 /**
  * Create night out group
+ * TODO: save location for each member on Parse (MainMap.java)
  */
 public class NightOutGroup extends ActionBarActivity
                             implements NighOutGroupDialogFragment.NighOutGroupDialogListener {
@@ -196,10 +197,6 @@ public class NightOutGroup extends ActionBarActivity
     // Creates the group as a member and adds members to it
     public void createGroup(Contact theCreator) {
         groupInstance.createGroup(groupname, theCreator);
-//        if (groupInstance.getGroupName() == "") {
-////            String groupname = userInstance.getName().substring(0, 3) + userInstance.getPhone();
-//            groupInstance.createGroup(groupname, theCreator);
-//        }
         for (String phone : groupMemberPhones) {
             addMember(phone);
         }
@@ -306,10 +303,11 @@ public class NightOutGroup extends ActionBarActivity
     @Override
     public void onDialogPositiveClick(DialogFragment dialog) {
         // User touched Accept
-        // Subscribe to channel, which is the group name, which is the group creator's phone number
+        // Subscribe to Parse channel, which is the group name, which is the group creator's phone number
+        // to receive push notifications for night out group
         Log.e(TAG, "Group name: " + groupname);
         ParsePush.subscribeInBackground(groupname);
-        // Create group
+        // Create group as a member
         createGroup(theCreator);
     }
 

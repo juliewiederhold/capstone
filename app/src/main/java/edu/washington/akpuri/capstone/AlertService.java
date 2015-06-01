@@ -8,7 +8,9 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
 
+import com.parse.FunctionCallback;
 import com.parse.GetCallback;
+import com.parse.ParseCloud;
 import com.parse.ParseException;
 import com.parse.ParseObject;
 import com.parse.ParsePush;
@@ -16,6 +18,9 @@ import com.parse.ParseQuery;
 import com.parse.ParseUser;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Map;
 
 /**
  * Created by iguest on 5/20/15.
@@ -24,6 +29,7 @@ public class AlertService extends BroadcastReceiver{
 
     private static ArrayList<Contact> friendsInNightOutGroup = new ArrayList<Contact>();
     private static SingletonUser userInstance;
+    private static SingletonNightOutGroup groupInstance;
     public static final String TAG = AlertService.class.getSimpleName();
 
 
@@ -37,6 +43,8 @@ public class AlertService extends BroadcastReceiver{
 
     }*/
 
+    // TODO: send to all people in night out group
+
     @Override
     public void onReceive(Context context, Intent intent) {
         Contact temp = new Contact("Julie", "4082096381", 1);
@@ -44,6 +52,7 @@ public class AlertService extends BroadcastReceiver{
         if(friendsInNightOutGroup.size() < 1)
             friendsInNightOutGroup.add(temp);
         userInstance = SingletonUser.getInstance();
+        groupInstance = SingletonNightOutGroup.getInstance();
 
         final String user = ParseUser.getCurrentUser().getString("email");
         for(int i=0; i < friendsInNightOutGroup.size(); i++) {
@@ -76,6 +85,37 @@ public class AlertService extends BroadcastReceiver{
                     }
                 }
             });
+        }
+    }
+
+    private void sendAlerts(){
+
+        Log.e(TAG, "Members: " + groupInstance.getMembersAsString());
+        String message = userInstance.getName() + " (" + userInstance.getPhone() + ") sent you a night out request.";
+        Iterator<Map.Entry<String, Contact>> iterator = groupInstance.getGroupContact().entrySet().iterator();
+        while(iterator.hasNext()) {
+            Map.Entry<String, Contact> entry = (Map.Entry) iterator.next();
+            Log.e(TAG, entry.getValue().getPhone());
+            HashMap<String, Object> params = new HashMap<String, Object>();
+            params.put("groupcreator", userInstance.getPhone());
+            params.put("recipientId", entry.getValue().getObjectId());
+            params.put("recipientEmail", entry.getValue().getEmail());
+            params.put("message", message);
+            params.put("groupname", groupInstance.getGroupName());    // Group name temporarily the creator's phone number
+            Log.e(TAG, groupInstance.getMembersAsString());
+            params.put("members", groupInstance.getMembersAsString());
+            params.put("uri", "app://host/nightoutgroup");              // Go to MainMap.java
+            ParseCloud.callFunctionInBackground("sendPushToGroup", params, new FunctionCallback<String>() {
+                public void done(String success, ParseException e) {
+                    if (e == null) {
+                        // Push sent successfully
+                        Log.e(TAG, success);
+                    } else {
+                        Log.e(TAG, e.toString());
+                    }
+                }
+            });
+            iterator.remove();
         }
     }
 
