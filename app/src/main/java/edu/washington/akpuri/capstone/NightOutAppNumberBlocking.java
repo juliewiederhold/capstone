@@ -70,15 +70,20 @@ public class NightOutAppNumberBlocking extends ActionBarActivity {
         });
 
         Button editBlockedContacts = (Button) findViewById(R.id.editBlockedContacts);
-        editBlockedContacts.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if(nightOutBlockedAppsNumInstance.getNightOutBlockedContacts() != null && nightOutBlockedAppsNumInstance.getNightOutBlockedContacts().size() > 0){
-                    Intent editBlockedFriends = new Intent(NightOutAppNumberBlocking.this, NightOutEditBlockedContactsList.class);
-                    startActivity(editBlockedFriends);
+        if(nightOutBlockedAppsNumInstance.getNightOutBlockedContacts().size() < 1){
+            editBlockedContacts.setVisibility(View.INVISIBLE);
+        } else {
+            editBlockedContacts.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if(nightOutBlockedAppsNumInstance.getNightOutBlockedContacts() != null && nightOutBlockedAppsNumInstance.getNightOutBlockedContacts().size() > 0){
+                        Intent editBlockedFriends = new Intent(NightOutAppNumberBlocking.this, NightOutEditBlockedContactsList.class);
+                        startActivity(editBlockedFriends);
+                    }
                 }
-            }
-        });
+            });
+        }
+
 
         if(nightOutBlockedAppsNumInstance.getNightOutBlockedContacts() != null){
             ListView blockedNumberListView = (ListView) findViewById(R.id.blockedContacts);
