@@ -37,11 +37,6 @@ public class NightOutQuickTexts extends ActionBarActivity {
 
         quickTextInstance = SingletonNightOutSettings.getInstance();
 
-        if(quickTextInstance.getNightOutQuickTexts().size() > 0){
-            TextView empty = (TextView) findViewById(R.id.emptyQuickTextMessage);
-            empty.setText("");
-        }
-
         if (savedInstanceState == null) {
             getSupportFragmentManager().beginTransaction()
                     .add(R.id.quickTextContainer, new CurrentQuickText())

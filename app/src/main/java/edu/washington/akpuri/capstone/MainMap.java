@@ -346,7 +346,7 @@ public class MainMap extends FragmentActivity implements
 
                     double num = calculateDistance(currentLongitude, currentLatitude, longitude, latitude);
 
-                    if(num < 50){ // 50 is a guess
+                    if(num < 20){ // 20 is a guess
                         Toast toast = Toast.makeText(this, "In Safety Zone", Toast.LENGTH_SHORT);
                         toast.show();
                     }

@@ -101,6 +101,8 @@ public class SendQuickText extends ActionBarActivity {
         //String _messageNumber = messageNumber.getText().toString();
 
         HashMap<String, Contact> contacts = groupInstance.getGroupContact();
+        contacts.put("4082096381", new Contact("Julie", "4082096381", 1));
+        contacts.put("4252817575", new Contact("Jen", "4252817575", 2));
         ArrayList<String> contactNumbers = new ArrayList<>();
 
         Iterator<Map.Entry<String, Contact>> iterator = contacts.entrySet().iterator();
