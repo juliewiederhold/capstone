@@ -4,6 +4,7 @@ import android.util.Log;
 
 import com.parse.ParseUser;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -127,11 +128,15 @@ public class SingletonNightOutGroup {
     // Return phone numbers of members
     public String getMembersAsString() {
         String groupMembersAsString = "";
-        for (int i=0; i<groupMembers.size(); i++) {
-            groupMembersAsString += groupMembersName.get(i) + ":" + groupMembers.get(i);
-            groupMembersAsString += ",";
+
+        if(groupMembers.size() > 0){ // In case they don't add anyone to the group
+            for (int i=0; i<groupMembers.size(); i++) {
+                groupMembersAsString += groupMembersName.get(i) + ":" + groupMembers.get(i);
+                groupMembersAsString += ",";
+            }
+            groupMembersAsString = groupMembersAsString.substring(0, groupMembersAsString.length()-1);
         }
-        groupMembersAsString = groupMembersAsString.substring(0, groupMembersAsString.length()-1);
+
         return groupMembersAsString;
     }
 

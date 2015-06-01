@@ -55,7 +55,8 @@ public class SettingsActivity extends ActionBarActivity {
 
         ImageView profilePicture = (ImageView) findViewById(R.id.image_icon);
         Drawable picture = userInstance.getProfilePicture();
-        profilePicture.setImageDrawable(picture);
+        if(picture != null)
+            profilePicture.setImageDrawable(picture);
 
         Log.e(TAG, "SettingsActivity fired");
 

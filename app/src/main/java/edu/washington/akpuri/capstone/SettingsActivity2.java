@@ -70,7 +70,8 @@ public class SettingsActivity2 extends ActionBarActivity {
 
         ImageView profilePicture = (ImageView) findViewById(R.id.image_icon);
         Drawable picture = userInstance.getProfilePicture();
-        profilePicture.setImageDrawable(picture);
+        if(picture != null)
+            profilePicture.setImageDrawable(picture);
         profilePicture.setOnClickListener(new View.OnClickListener() {
             public void onClick(View view) {
                 Intent getIntent = new Intent(Intent.ACTION_GET_CONTENT);

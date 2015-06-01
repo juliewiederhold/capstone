@@ -85,7 +85,8 @@ public class MainActivity extends ActionBarActivity {
         startNightOut.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent next = new Intent(MainActivity.this, StartNightOutSettingConfirmation.class);
+                Intent next = new Intent(MainActivity.this, NightOutGroup.class);
+                next.putExtra("activitySent","MainActivity");
                 startActivity(next);
             }
         });
@@ -95,8 +96,8 @@ public class MainActivity extends ActionBarActivity {
         userInstance = SingletonUser.getInstance();
 
         // contact retrievaal
-        userInstance.setAllowContactRetrieval(userInstance.getCurrentUser().getBoolean("importContacts"));
-        // Associate device with user
+        userInstance.setAllowContactRetrieval(userInstance.getCurrentUser().getBoolean("importContacts")); // NICOLE: Attempt to invoke virtual method 'boolean com.parse.ParseUser.getBoolean(java.lang.String)' on a null object reference
+        // Associate device with user                                                                                   ^^ This error message appears the first time you try to create an account. If you try again it will work. Not sure how to fix.
 //        userInstance.getCurrentInstallation().put("user", userInstance.getCurrentUser().getUsername());
 //        userInstance.getCurrentInstallation().saveInBackground();
         try {

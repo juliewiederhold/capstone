@@ -37,7 +37,7 @@ public class SingletonUser {
         if (instance == null) {
             instance = new SingletonUser();
             allowContactRetrieval = false;
-            hasGoneThroughInitialSetUp = true;
+            hasGoneThroughInitialSetUp = false;
             allDefaultSettings = new ArrayList<>();
 
             existingSafetyZones = new ArrayList<>();
@@ -46,7 +46,7 @@ public class SingletonUser {
             allDefaultSettings.add("Blocked Apps and Contacts");
             allDefaultSettings.add("Quick Texts");
 
-            currentUser = ParseUser.getCurrentUser();
+            currentUser = ParseUser.getCurrentUser(); //
 
             if (currentUser != null) {
                 name = currentUser.get("firstname").toString() + " " + currentUser.get("lastname").toString();

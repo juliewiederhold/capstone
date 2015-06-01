@@ -12,8 +12,8 @@ import android.util.Log;
 public class CallBlocker extends IntentService {
     public static final String TAG = AlertService.class.getSimpleName();
 
-    public CallBlocker(String name){
-        super(name);
+    public CallBlocker(){
+        super("CallBlocker");
         Log.e(TAG, "In CallBlocker");
     }
 
