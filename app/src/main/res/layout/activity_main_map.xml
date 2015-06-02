@@ -96,10 +96,12 @@
 
         <ImageButton
             android:id="@+id/message_friends"
-            android:layout_width="65dp"
-            android:layout_height="65dp"
+            android:layout_width="55dp"
+            android:layout_height="55dp"
             android:src="@drawable/ic_messenger_black_48dp"
             android:background="@color/blue_main"
+            android:scaleType="centerCrop"
+            android:layout_gravity="bottom|left"
             android:layout_marginLeft="10dp" />
 
         <ImageButton
@@ -108,7 +110,9 @@
             android:layout_height="65dp"
             android:src="@drawable/ic_warning_amber_48dp"
             android:background="@color/blue_main"
-            android:layout_marginLeft="230dp" />
+            android:scaleType="centerCrop"
+            android:layout_gravity="bottom|right"
+            android:layout_marginLeft="245dp" />
 
     </LinearLayout>
 

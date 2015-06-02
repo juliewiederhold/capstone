@@ -3,16 +3,6 @@
     android:layout_width="match_parent" android:layout_height="match_parent"
     tools:context="edu.washington.akpuri.capstone.QuickText" tools:ignore="MergeRootFrame" >
 
-    <FrameLayout
-        android:layout_width="fill_parent"
-        android:layout_height="322dp"
-        android:layout_gravity="center_horizontal|top"
-        android:id="@+id/quickTextContainer"
-        android:layout_marginTop="100dp"
-        android:padding="6dp">
-
-    </FrameLayout>
-
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -38,6 +28,17 @@
         android:id="@+id/quickTextInstructions"
         android:layout_gravity="center_horizontal|top"
         android:padding="6dp"
-        android:layout_marginBottom="115dp" />
+        android:layout_marginBottom="115dp"
+        android:layout_marginTop="15dp" />
+
+    <FrameLayout
+        android:layout_width="fill_parent"
+        android:layout_height="284dp"
+        android:layout_gravity="center"
+        android:id="@+id/quickTextContainer"
+        android:padding="6dp"
+        android:layout_marginTop="20dp">
+
+    </FrameLayout>
 
 </FrameLayout>

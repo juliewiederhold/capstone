@@ -25,6 +25,7 @@ import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.SimpleAdapter;
 import android.widget.Toast;
@@ -108,10 +109,28 @@ public class MainMap extends FragmentActivity implements
         ImageButton friend3 = (ImageButton) findViewById(R.id.friend3);
         ImageButton friend4 = (ImageButton) findViewById(R.id.friend4);
 
+        ImageView safetyZone1 = (ImageView) findViewById(R.id.friend1_house);
+        ImageView safetyZone2 = (ImageView) findViewById(R.id.friend2_house);
+        ImageView safetyZone3 = (ImageView) findViewById(R.id.friend3_house);
+        ImageView safetyZone4 = (ImageView) findViewById(R.id.friend4_house);
+
+        if(!isFriendInSafetyZone(new Contact("Julie", "4082096381", 1))){
+            safetyZone1.setVisibility(View.INVISIBLE);
+            safetyZone2.setVisibility(View.INVISIBLE);
+            safetyZone3.setVisibility(View.INVISIBLE);
+            safetyZone4.setVisibility(View.INVISIBLE); // will make separate methods for each once we know this one works
+        }
+
         friend1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                //todo double friend1Latitude = get friend1's latitude from parse
+                //todo double friend1Longitude = get friend1's latitude from parse
+                // OR if you store their locations as a LatLng I can use that as well. See my description of putting their location on the map below for more info or fb message me :)
 
+                // Center's the map camera on Friend 1
+                //LatLng latLng = new LatLng(friend1Latitude, friend1Longitude);
+                //mMap.moveCamera(CameraUpdateFactory.newLatLng(latLng));
             }
         });
 
@@ -146,6 +165,12 @@ public class MainMap extends FragmentActivity implements
                     toast.show();
                 } else {
                     alarmManager.cancel(pendingIntent);
+
+                    Context context = getApplicationContext();
+                    CharSequence text = "You have turned off your alert";
+                    int duration = Toast.LENGTH_SHORT;
+                    Toast toast = Toast.makeText(context, text, duration);
+                    toast.show();
                 }
 
 
@@ -244,6 +269,12 @@ public class MainMap extends FragmentActivity implements
                 builder.show();
             }
         });
+    }
+
+    private boolean isFriendInSafetyZone(Contact friend){
+        //todo - we need a boolen value in parse to indicate if a friend is in their safety zone. I am thinking that once a person arrives to their safety zone, the notification is sent and the boolean value is set
+        // we check here if the friend is in th safety zone to control whether or not the house appears.
+        return false;
     }
 
     @Override
@@ -364,7 +395,7 @@ public class MainMap extends FragmentActivity implements
                 .position(latLng)
                 .title(locationName);
         mMap.addMarker(options);*/
-        // mMap.moveCamera(CameraUpdateFactory.newLatLng(latLng));
+        //mMap.moveCamera(CameraUpdateFactory.newLatLng(latLng));
 
         CameraUpdate center = CameraUpdateFactory.newLatLng(new LatLng(currentLatitude, currentLongitude));
         CameraUpdate zoom = CameraUpdateFactory.zoomTo(15);
@@ -378,10 +409,32 @@ public class MainMap extends FragmentActivity implements
 
             @Override
             public void run() {
-                // Send currentLatitude and currentLongitude to Parse for this user
-                // Pull the location of each Night Out Group Member
+                // Send currentLatitude and currentLongitude (both are existing variables defined line 342) to Parse for this user's location
+                    // Can also send the LatLng of the location (defined 390), may make things easier since one variable and is what I need to move the marker
+                // Pull the lat and long of each Night Out Group Member
 
-                
+                // Question: will the parse always pull information about each group member in the same order? example always nicole then jen then becca
+
+                /*
+                ArrayList<MarkerOptions> markers = new ArrayList<>();
+                if(markers == null || markers.size() < 1){
+
+                    for(int l = 0; l < locationOfGroupMembers.size(); l++){
+                        LatLng friendLatLng = new LtLng(locationOfGroupMembers.lat, locationOfGroupMembers.long);
+                        MarkerOptions options = new MarkerOptions()
+                            .position(friendLatLng)
+                            .title(locationName);
+                        mMap.addMarker(options);
+                        markers.add(options);
+                    }
+
+                } else {
+                    for(int x = 0; x < locationOfGroupMembers.size(); x++){
+                        LatLng friendLatLng = new LtLng(locationOfGroupMembers.lat, locationOfGroupMembers.long);
+                        markers.get(x).setPosition(friendLatLng);
+                    }
+                }
+                */
 
             }
 

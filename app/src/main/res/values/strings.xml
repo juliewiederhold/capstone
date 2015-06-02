@@ -72,7 +72,7 @@
     <string name="welcome_message">To get started, lets set up your Default Settings! </string>
 
     <!-- Start Night Out -->
-    <string name="confirm_default_settings">Confirm Night Out Settings</string>
+    <string name="confirm_default_settings">Confirm</string>
 
     <!-- Misc -->
     <string name="logout_full">Log out of So-So</string>
