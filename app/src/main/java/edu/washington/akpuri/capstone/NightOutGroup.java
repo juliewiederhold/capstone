@@ -134,7 +134,7 @@ public class NightOutGroup extends ActionBarActivity
         // Create Group As Creator
         createGroupAsCreator();
         createGroupOnParse();
-        Log.e(TAG, "Members: " + groupInstance.getMembersAsString());
+        Log.e(TAG, "Members: " + groupInstance.getMembersAsString() + " " + groupInstance.getGroupContact().size());
         String message = userInstance.getName() + " (" + userInstance.getPhone() + ") sent you a night out request.";
         Iterator<Map.Entry<String, Contact>> iterator = groupInstance.getGroupContact().entrySet().iterator();
         while(iterator.hasNext()) {

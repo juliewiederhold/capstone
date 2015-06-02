@@ -224,6 +224,12 @@
         <activity
             android:name=".MainMap"
             android:label="@string/title_activity_main_map">
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW"/>
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                <data android:scheme="app" android:host="host" android:path="/mainmap" />
+            </intent-filter>
         </activity>
         <activity
             android:name=".SendQuickText"

@@ -16,8 +16,9 @@ import java.util.Map;
 public class SingletonNightOutGroup {
 
     private static final String TAG = "SingletonNightOutGroup";
-    private static SingletonNightOutGroup instance = null;
+    private static SingletonNightOutGroup instance;
     private static Map<String, Contact> groupContact;
+    private static ArrayList<Contact> groupContacts;
     private static Map<String, ParseUser> groupParse;
     private static String groupName;
     private static Contact starter;
@@ -32,8 +33,10 @@ public class SingletonNightOutGroup {
 
     public static SingletonNightOutGroup getInstance() {
         if (instance == null) {
+            Log.e(TAG, "Instantiating a SingletonNightOutGroup");
             instance = new SingletonNightOutGroup();
             groupContact = new HashMap<>();
+            groupContacts = new ArrayList<>();
             groupParse = new HashMap<>();
             groupMembers = new ArrayList<>();
             groupMembersName = new ArrayList<>();
@@ -49,6 +52,7 @@ public class SingletonNightOutGroup {
         this.starter = starter;
         this.currentUser = SingletonUser.getInstance().getCurrentUser();
         this.groupContact.put(starter.getPhone(), starter);
+        this.groupContacts.add(starter);
         this.groupParse.put(starter.getPhone(), currentUser);
         this.hasBeenCreated = true;
         return "Created group: " + groupName;
@@ -61,6 +65,9 @@ public class SingletonNightOutGroup {
         return (HashMap) groupContact;
     }
 
+    public ArrayList<Contact> getGroupContacts() {
+        return groupContacts;
+    }
     /**
      *
      * @return ParseUser object of each member of the group
@@ -74,6 +81,7 @@ public class SingletonNightOutGroup {
      */
     public String addMember(Contact contact, ParseUser user) {
         groupContact.put(contact.getPhone(), contact);
+        groupContacts.add(contact);
         groupParse.put(contact.getPhone(), user);
         memberIds.add(user.getObjectId());
         Log.e(TAG, "Added " + user.getObjectId());
@@ -95,6 +103,7 @@ public class SingletonNightOutGroup {
      */
     public String removeMember(Contact contact) {
         groupContact.remove(contact.getPhone());
+        groupContacts.remove(contact); // dunno if this works
         groupParse.remove(contact.getPhone());
         return "Removed: " + contact.getEmail();
     }
@@ -116,6 +125,7 @@ public class SingletonNightOutGroup {
 
     public String clearGroup() {
         groupContact.clear();
+        groupContacts.clear();
         groupParse.clear();
         instance = null;
         return "Cleared: " + groupName;
@@ -130,6 +140,8 @@ public class SingletonNightOutGroup {
         }
         return groupMembers;
     }
+
+
 
     // Return name of members
     public String getMembersName(){
