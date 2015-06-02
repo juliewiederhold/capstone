@@ -61,23 +61,26 @@ public class AlertService extends BroadcastReceiver{
 //        while(iterator.hasNext()) {
 //            Map.Entry<String, Contact> entry = (Map.Entry) iterator.next();
         for (int i = 0; i < contactObjects.size(); i++) {
-            Log.e(TAG, contactObjects.get(i).getPhone());
-            HashMap<String, Object> params = new HashMap<String, Object>();
-            Log.e(TAG, "Sending to: " + contactObjects.get(i).getObjectId() + " " + contactObjects.get(i).getEmail());
-            params.put("recipientId", contactObjects.get(i).getObjectId());
-            params.put("recipientEmail", contactObjects.get(i).getEmail());
-            params.put("message", message);
-            params.put("uri", "app://host/mainmap");              // Go to MainMap.java
-            ParseCloud.callFunctionInBackground("sendPushToUser", params, new FunctionCallback<String>() {
-                public void done(String success, ParseException e) {
-                    if (e == null) {
-                        // Push sent successfully
-                        Log.e(TAG, success);
-                    } else {
-                        Log.e(TAG, e.toString());
+            String phoneNo = contactObjects.get(i).getPhone();
+            Log.e(TAG, phoneNo);
+            if (!phoneNo.equals(userInstance.getPhone())) {
+                HashMap<String, Object> params = new HashMap<String, Object>();
+                Log.e(TAG, "Sending to: " + contactObjects.get(i).getObjectId() + " " + contactObjects.get(i).getEmail());
+                params.put("recipientId", contactObjects.get(i).getObjectId());
+                params.put("recipientEmail", contactObjects.get(i).getEmail());
+                params.put("message", message);
+                params.put("uri", "app://host/mainmap");              // Go to MainMap.java
+                ParseCloud.callFunctionInBackground("sendPushToUser", params, new FunctionCallback<String>() {
+                    public void done(String success, ParseException e) {
+                        if (e == null) {
+                            // Push sent successfully
+                            Log.e(TAG, success);
+                        } else {
+                            Log.e(TAG, e.toString());
+                        }
                     }
-                }
-            });
+                });
+            }
 //            iterator.remove();
 //        }
         }

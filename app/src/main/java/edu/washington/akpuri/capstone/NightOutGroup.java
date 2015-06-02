@@ -139,27 +139,30 @@ public class NightOutGroup extends ActionBarActivity
         Iterator<Map.Entry<String, Contact>> iterator = groupInstance.getGroupContact().entrySet().iterator();
         while(iterator.hasNext()) {
             Map.Entry<String, Contact> entry = (Map.Entry) iterator.next();
-            Log.e(TAG, entry.getValue().getPhone());
-            HashMap<String, Object> params = new HashMap<String, Object>();
-            params.put("groupcreator", userInstance.getPhone());
-            params.put("recipientId", entry.getValue().getObjectId());
-            params.put("recipientEmail", entry.getValue().getEmail());
-            params.put("message", message);
-            params.put("groupname", groupInstance.getGroupName());    // Group name temporarily the creator's phone number
-            Log.e(TAG, groupInstance.getMembersAsString());
-            params.put("members", groupInstance.getMembersAsString());
-            params.put("uri", "app://host/nightoutgroup");
+            String phoneNo = entry.getValue().getPhone();
+            Log.e(TAG, phoneNo);
+            if (!phoneNo.equals(userInstance.getPhone())) {
+                HashMap<String, Object> params = new HashMap<String, Object>();
+                params.put("groupcreator", userInstance.getPhone());
+                params.put("recipientId", entry.getValue().getObjectId());
+                params.put("recipientEmail", entry.getValue().getEmail());
+                params.put("message", message);
+                params.put("groupname", groupInstance.getGroupName());    // Group name temporarily the creator's phone number
+                Log.e(TAG, groupInstance.getMembersAsString());
+                params.put("members", groupInstance.getMembersAsString());
+                params.put("uri", "app://host/nightoutgroup");            // TODO Should go to confirm settings?
 //            params.put("uri", "app://host/mainactivity");
-            ParseCloud.callFunctionInBackground("sendPushToGroup", params, new FunctionCallback<String>() {
-                public void done(String success, ParseException e) {
-                    if (e == null) {
-                        // Push sent successfully
-                        Log.e(TAG, success);
-                    } else {
-                        Log.e(TAG, e.toString());
+                ParseCloud.callFunctionInBackground("sendPushToGroup", params, new FunctionCallback<String>() {
+                    public void done(String success, ParseException e) {
+                        if (e == null) {
+                            // Push sent successfully
+                            Log.e(TAG, success);
+                        } else {
+                            Log.e(TAG, e.toString());
+                        }
                     }
-                }
-            });
+                });
+            }
             iterator.remove();
         }
     }
