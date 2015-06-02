@@ -58,8 +58,9 @@ public class SendQuickText extends ActionBarActivity {
             empty.setText("");
         }
 
+        final EditText currentMessage = (EditText)  findViewById(R.id.message);
         if(messageToBeSent != null){
-            EditText currentMessage = (EditText)  findViewById(R.id.message);
+            messageToBeSent = currentMessage.getText().toString() + " " + messageToBeSent;
             currentMessage.setText(messageToBeSent);
         } else {
             messageToBeSent = "";
@@ -76,6 +77,7 @@ public class SendQuickText extends ActionBarActivity {
         send.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                messageToBeSent = currentMessage.getText().toString();
                 sendMesage(v);
                 messageToBeSent = "";
                 Intent backToMap = new Intent(SendQuickText.this, MainMap.class);
@@ -134,6 +136,8 @@ public class SendQuickText extends ActionBarActivity {
                 }
             }, new IntentFilter(sent));
 
+            messageToBeSent = messageToBeSent;
+
             SmsManager sms = SmsManager.getDefault();
             sms.sendTextMessage(contactNumbers.get(i), null, messageToBeSent, sentPI, null);
         }
@@ -191,6 +195,11 @@ public class SendQuickText extends ActionBarActivity {
         @Override
         public View onCreateView(LayoutInflater inflater, ViewGroup container,
                                  Bundle savedInstanceState) {
+
+         /*   View temp = inflater.inflate(R.layout.activity_send_quick_text, container, false);
+            EditText custom = (EditText)temp.findViewById(R.id.message);
+            final String customMessage = custom.getText().toString();*/
+
             final View rootView = inflater.inflate(R.layout.current_quick_text_view, container, false);
             final ListView lv = (ListView) rootView.findViewById(R.id.listViewQuickText);
 
