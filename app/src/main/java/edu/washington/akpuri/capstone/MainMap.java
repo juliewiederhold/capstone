@@ -437,12 +437,15 @@ public class MainMap extends FragmentActivity implements
                 // Get location of each member as ParseGeoPoint object
                 // Where key = phone number, value = ParseGeoPoint object
                 HashMap<String, ParseGeoPoint> locations = nightOutGroup.getAllLocations();
+                //// CRASHING: locations seems to be empty even though it shouldn't be :/
                 Log.e(TAG, "# of locations: " + locations.size());
                 // Get Contact objects for each member
                 ArrayList<Contact> contactObjects = nightOutGroup.getGroupContacts();
               //  for (Contact contact : contactObjects)
                if(nightOutGroup.getGroupContacts().size() > 0){
-                    ParseGeoPoint memberLocation = locations.get(nightOutGroup.getGroupContacts().get(0).getPhone());   // Get ParseGeoPoint object
+                    String phoneNo = contactObjects.get(0).getPhone();
+                    Log.e(TAG, phoneNo);
+                    ParseGeoPoint memberLocation = locations.get(phoneNo);   // Get ParseGeoPoint object
                     double memberlat = memberLocation.getLatitude();                    // Get latitude
                     double memberlong = memberLocation.getLongitude();                  // Get longitude
                     LatLng friendLatLng = new LatLng(memberlat, memberlong);                  // Save as LatLng
