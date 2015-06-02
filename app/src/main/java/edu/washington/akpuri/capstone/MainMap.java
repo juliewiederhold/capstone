@@ -43,6 +43,7 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.parse.GetCallback;
 import com.parse.ParseException;
+import com.parse.ParseGeoPoint;
 import com.parse.ParseObject;
 import com.parse.ParsePush;
 import com.parse.ParseQuery;
@@ -50,6 +51,7 @@ import com.parse.ParseUser;
 import com.parse.SaveCallback;
 
 import java.io.IOException;
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -66,7 +68,7 @@ public class MainMap extends FragmentActivity implements
     public static SingletonNightOutSettings instance;
     private AlarmManager alarmManager;
     private PendingIntent pendingIntent;
-    private static SingletonNightOutGroup nightOutGroup;
+    private static SingletonNightOutGroup nightOutGroup = SingletonNightOutGroup.getInstance();
 
     final SingletonUser userInstance = SingletonUser.getInstance();
 
@@ -269,10 +271,27 @@ public class MainMap extends FragmentActivity implements
                 builder.show();
             }
         });
+
+        // TODO: So I put everything here, coz I can't get it to save inside the handleNewLocation method for some reason
+        userInstance.saveLocationToParse(40,40);
+        // Get location of each member as ParseGeoPoint object
+        // Where key = phone number, value = ParseGeoPoint object
+        HashMap<String, ParseGeoPoint> locations = nightOutGroup.getAllLocations();
+        // Get Contact objects for each member
+        ArrayList<Contact> contactObjects = nightOutGroup.getGroupContacts();
+        for (Contact contact : contactObjects) {
+            ParseGeoPoint memberLocation = locations.get(contact.getPhone());   // Get ParseGeoPoint object
+            double memberlat = memberLocation.getLatitude();                    // Get latitude
+            double memberlong = memberLocation.getLongitude();                  // Get longitude
+            LatLng latLng = new LatLng(memberlat, memberlong);                  // Save as LatLng
+            Log.e(TAG, "Location of + " + userInstance.getPhone() + " " + memberlat + "," + memberlong);
+        }
+
+        // To get location for each member: locations.get(<USER PHONE NUMBER>)
     }
 
     private boolean isFriendInSafetyZone(Contact friend){
-        //todo - we need a boolen value in parse to indicate if a friend is in their safety zone. I am thinking that once a person arrives to their safety zone, the notification is sent and the boolean value is set
+        //todo - we need a boolean value in parse to indicate if a friend is in their safety zone. I am thinking that once a person arrives to their safety zone, the notification is sent and the boolean value is set
         // we check here if the friend is in th safety zone to control whether or not the house appears.
         return false;
     }
@@ -341,7 +360,7 @@ public class MainMap extends FragmentActivity implements
         Log.d(TAG, location.toString());
 
         final double currentLatitude = location.getLatitude();
-        double currentLongitude = location.getLongitude();
+        final double currentLongitude = location.getLongitude();
 
         List<SafetyZone> safetyZones = instance.getNightOutSafetyZones();
 
@@ -403,7 +422,7 @@ public class MainMap extends FragmentActivity implements
         mMap.moveCamera(center);
         mMap.animateCamera(zoom);
 
-   //todo
+   // TODO
         Handler mHandler = new Handler();
         mHandler.postDelayed(new Runnable() {
 
@@ -411,9 +430,27 @@ public class MainMap extends FragmentActivity implements
             public void run() {
                 // Send currentLatitude and currentLongitude (both are existing variables defined line 342) to Parse for this user's location
                     // Can also send the LatLng of the location (defined 390), may make things easier since one variable and is what I need to move the marker
-                // Pull the lat and long of each Night Out Group Member
+                userInstance.saveLocationToParse(currentLatitude, currentLongitude);
+                // Hey Julie! I don't know that this is working. It doesn't seem to do anything?
+
+                // TODO: Pull the lat and long of each Night Out Group Member
+                // Get location of each member as ParseGeoPoint object
+                // Where key = phone number, value = ParseGeoPoint object
+                HashMap<String, ParseGeoPoint> locations = nightOutGroup.getAllLocations();
+                Log.e(TAG, "# of locations: " + locations.size());
+                // Get Contact objects for each member
+                ArrayList<Contact> contactObjects = nightOutGroup.getGroupContacts();
+                for (Contact contact : contactObjects) {
+                    ParseGeoPoint memberLocation = locations.get(contact.getPhone());   // Get ParseGeoPoint object
+                    double memberlat = memberLocation.getLatitude();                    // Get latitude
+                    double memberlong = memberLocation.getLongitude();                  // Get longitude
+                    LatLng latLng = new LatLng(memberlat, memberlong);                  // Save as LatLng
+                    Log.e(TAG, "Location of + " + userInstance.getPhone() + " " + memberlat + "," + memberlong);
+                }
 
                 // Question: will the parse always pull information about each group member in the same order? example always nicole then jen then becca
+                // I would say no. The order seems pretty random.
+
 
                 /*
                 ArrayList<MarkerOptions> markers = new ArrayList<>();

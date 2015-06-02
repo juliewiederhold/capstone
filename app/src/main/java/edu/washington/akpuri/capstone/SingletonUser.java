@@ -3,10 +3,14 @@ package edu.washington.akpuri.capstone;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
+import android.util.Log;
 import android.widget.ImageView;
 
+import com.parse.ParseException;
+import com.parse.ParseGeoPoint;
 import com.parse.ParseInstallation;
 import com.parse.ParseUser;
+import com.parse.SaveCallback;
 
 import java.util.ArrayList;
 
@@ -14,6 +18,7 @@ import java.util.ArrayList;
  * Created by Julie on 4/20/15.
  */
 public class SingletonUser {
+    private static final String TAG = "SingletonUser";
     private static boolean allowContactRetrieval;
     private static SingletonUser instance = null;
     private static boolean hasGoneThroughInitialSetUp;
@@ -109,4 +114,21 @@ public class SingletonUser {
     public void setProfilePicture(Drawable pic) {this.profilePicture = pic;}
 
     public Drawable getProfilePicture() {return this.profilePicture;}
+
+    public ParseGeoPoint saveLocationToParse(double latitude, double longitude) {
+        final ParseGeoPoint point = new ParseGeoPoint(latitude, longitude);
+        instance.getCurrentUser().put("userLocation", point);
+        instance.getCurrentUser().saveInBackground(new SaveCallback() {
+            @Override
+            public void done(ParseException e) {
+                if (e == null) {
+                    Log.e(TAG, "Saved " + point.toString());
+                } else {
+                    Log.e(TAG, "Error saving " + point.toString());
+                    Log.e(TAG, "Error: " + e.getCode());
+                }
+            }
+        });
+        return point;
+    }
 }

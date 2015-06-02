@@ -1,7 +1,12 @@
 package edu.washington.akpuri.capstone;
 
+
 import android.util.Log;
 
+import com.parse.GetCallback;
+import com.parse.ParseException;
+import com.parse.ParseGeoPoint;
+import com.parse.ParseQuery;
 import com.parse.ParseUser;
 
 import java.lang.reflect.Array;
@@ -15,11 +20,13 @@ import java.util.Map;
  */
 public class SingletonNightOutGroup {
 
+
     private static final String TAG = "SingletonNightOutGroup";
     private static SingletonNightOutGroup instance;
     private static Map<String, Contact> groupContact;
     private static ArrayList<Contact> groupContacts;
     private static Map<String, ParseUser> groupParse;
+    private static Map<String, ParseGeoPoint> groupLocation;  // phone number, location
     private static String groupName;
     private static Contact starter;
     private static ParseUser currentUser;
@@ -43,6 +50,7 @@ public class SingletonNightOutGroup {
             groupName = "";
             memberIds = new ArrayList<>();
             hasBeenCreated = false;
+            groupLocation = new HashMap<>();
         }
         return instance;
     }
@@ -112,6 +120,7 @@ public class SingletonNightOutGroup {
     public void saveLocation(String location) {
         // Save location for individuals
 
+
     }
     // TODO temporarily void
     public void getLocations() {
@@ -179,6 +188,24 @@ public class SingletonNightOutGroup {
         }
 
         return groupMembersAsString;
+    }
+
+    public HashMap<String, ParseGeoPoint> getAllLocations() {
+
+        for (final Contact contact : groupContacts ) {
+            ParseQuery<ParseUser> query = ParseUser.getQuery();
+            query.whereContains("phone", contact.getPhone());
+            query.getFirstInBackground(new GetCallback<ParseUser>() {
+                @Override
+                public void done(ParseUser parseUser, ParseException e) {
+                    if (parseUser != null) {
+                        groupLocation.put(contact.getPhone(), (ParseGeoPoint) parseUser.get("userLocation"));
+                    }
+                }
+            });
+        }
+
+        return (HashMap) groupLocation;
     }
 
 }
