@@ -273,7 +273,7 @@ public class MainMap extends FragmentActivity implements
         });
 
         // TODO: So I put everything here, coz I can't get it to save inside the handleNewLocation method for some reason
-        userInstance.saveLocationToParse(40,40);
+    /*    userInstance.saveLocationToParse(40,40);
         // Get location of each member as ParseGeoPoint object
         // Where key = phone number, value = ParseGeoPoint object
         HashMap<String, ParseGeoPoint> locations = nightOutGroup.getAllLocations();
@@ -285,7 +285,7 @@ public class MainMap extends FragmentActivity implements
             double memberlong = memberLocation.getLongitude();                  // Get longitude
             LatLng latLng = new LatLng(memberlat, memberlong);                  // Save as LatLng
             Log.e(TAG, "Location of + " + userInstance.getPhone() + " " + memberlat + "," + memberlong);
-        }
+        }*/
 
         // To get location for each member: locations.get(<USER PHONE NUMBER>)
     }
@@ -440,16 +440,20 @@ public class MainMap extends FragmentActivity implements
                 Log.e(TAG, "# of locations: " + locations.size());
                 // Get Contact objects for each member
                 ArrayList<Contact> contactObjects = nightOutGroup.getGroupContacts();
-                for (Contact contact : contactObjects) {
-                    ParseGeoPoint memberLocation = locations.get(contact.getPhone());   // Get ParseGeoPoint object
+              //  for (Contact contact : contactObjects)
+               if(nightOutGroup.getGroupContacts().size() > 0){
+                    ParseGeoPoint memberLocation = locations.get(nightOutGroup.getGroupContacts().get(0).getPhone());   // Get ParseGeoPoint object
                     double memberlat = memberLocation.getLatitude();                    // Get latitude
                     double memberlong = memberLocation.getLongitude();                  // Get longitude
-                    LatLng latLng = new LatLng(memberlat, memberlong);                  // Save as LatLng
+                    LatLng friendLatLng = new LatLng(memberlat, memberlong);                  // Save as LatLng
                     Log.e(TAG, "Location of + " + userInstance.getPhone() + " " + memberlat + "," + memberlong);
+
+                   MarkerOptions friendMarker = new MarkerOptions()
+                               .position(friendLatLng);
+                   mMap.addMarker(friendMarker);
                 }
 
-                // Question: will the parse always pull information about each group member in the same order? example always nicole then jen then becca
-                // I would say no. The order seems pretty random.
+// ^^ NOT WORKING
 
 
                 /*
