@@ -46,6 +46,7 @@ public class SingletonContacts {
             currentContacts = new ArrayList<>();
             allPendingRequests = new ArrayList<>();
             sosoGroups = new HashMap<>();
+            sosoFriends = new ArrayList<>();
             contacts = new LinkedHashSet<>();
         }
         return instance;

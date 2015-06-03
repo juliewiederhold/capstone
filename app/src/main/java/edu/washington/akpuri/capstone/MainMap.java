@@ -399,7 +399,7 @@ public class MainMap extends FragmentActivity implements
        final Geocoder geocoder = new Geocoder(this);
        List<Address> addresses;
 
-        for(int i = 0; i < safetyZones.size(); i++){
+    /*    for(int i = 0; i < safetyZones.size(); i++){
             try{
                 addresses = geocoder.getFromLocationName(safetyZones.get(i).returnAddress(), 1);
                 //locationName = geocoder.getFromLocation(currentLatitude, currentLongitude, 1).get(0).getLocality();
@@ -424,9 +424,9 @@ public class MainMap extends FragmentActivity implements
             } catch (IOException e){
                 Log.e(TAG, "Unable connect to Geocoder", e);
             }
-        }
+        } */
 
-      /*  for(int i = 0; i < safetyZones.size(); i++){
+        for(int i = 0; i < safetyZones.size(); i++){
             try{
                 addresses = geocoder.getFromLocationName(safetyZones.get(i).returnAddress(), 1);
                 //locationName = geocoder.getFromLocation(currentLatitude, currentLongitude, 1).get(0).getLocality();
@@ -444,7 +444,7 @@ public class MainMap extends FragmentActivity implements
             } catch (IOException e){
                 Log.e(TAG, "Unable connect to Geocoder", e);
             }
-        }*/
+        }
 
 
         LatLng latLng = new LatLng(currentLatitude, currentLongitude);

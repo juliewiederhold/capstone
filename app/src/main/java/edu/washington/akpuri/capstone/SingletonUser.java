@@ -51,6 +51,11 @@ public class SingletonUser {
             allDefaultSettings.add("Blocked Apps and Contacts");
             allDefaultSettings.add("Quick Texts");
 
+            currentInstallation = ParseInstallation.getCurrentInstallation();
+            currentInstallation.saveInBackground();
+        }
+
+        if(currentUser == null){
             currentUser = ParseUser.getCurrentUser(); //
 
             if (currentUser != null) {
@@ -61,10 +66,8 @@ public class SingletonUser {
                 userContact = new Contact(name, phone, 0);
                 userContact.setEmail(email);
             }
-
-            currentInstallation = ParseInstallation.getCurrentInstallation();
-            currentInstallation.saveInBackground();
         }
+
         return instance;
     }
 

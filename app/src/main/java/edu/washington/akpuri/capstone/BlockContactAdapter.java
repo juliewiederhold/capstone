@@ -65,9 +65,9 @@ public class BlockContactAdapter extends ArrayAdapter<Contact> {
                                     blockedContacts.add(person);
                             } else {
                                 // Remove from pending contactList
-                                Toast.makeText(context,
+                            /*    Toast.makeText(context,
                                         "Removed: " + person.getName(),
-                                        Toast.LENGTH_SHORT).show();
+                                        Toast.LENGTH_SHORT).show();*/
                                 blockedContacts.remove(person);
 
                             }
