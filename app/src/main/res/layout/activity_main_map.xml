@@ -22,7 +22,10 @@
             android:layout_width="55dp"
             android:layout_height="55dp"
             android:id="@+id/friend1"
-            android:layout_marginTop="5dp" />
+            android:layout_marginTop="3dp"
+            android:scaleType="centerCrop"
+            android:src="@drawable/profile_picture_julie"
+            android:background="@color/blue_main" />
 
         <ImageButton
             android:name="@+id/exit_night_out"
