@@ -74,6 +74,7 @@ public class MainMap extends FragmentActivity implements
     private static SingletonNightOutGroup nightOutGroup = SingletonNightOutGroup.getInstance();
     private MarkerOptions friendMarker;
     private LatLng theHub;
+    private boolean inSafetyZone;
 
     final SingletonUser userInstance = SingletonUser.getInstance();
 
@@ -126,6 +127,39 @@ public class MainMap extends FragmentActivity implements
             }
 
         }, 10000);
+
+        final Geocoder geocoder = new Geocoder(this);
+        List<Address> addresses;
+        List<SafetyZone> safetyZones = instance.getNightOutSafetyZones();
+
+        for(int i = 0; i < safetyZones.size(); i++){
+            try{
+                addresses = geocoder.getFromLocationName(safetyZones.get(i).returnAddress(), 1);
+                //locationName = geocoder.getFromLocation(currentLatitude, currentLongitude, 1).get(0).getLocality();
+                if(addresses.size() > 0) {
+                    Location mLastLocation = LocationServices.FusedLocationApi.getLastLocation(
+                            mGoogleApiClient);
+
+                    double currentLongitude = 0;
+                    double currentLatitude = 0;
+                    if (mLastLocation != null) {
+                        currentLatitude = mLastLocation.getLatitude();
+                        currentLongitude = mLastLocation.getLongitude();
+                    }
+                    double latitude= addresses.get(0).getLatitude();
+                    double longitude= addresses.get(0).getLongitude();
+
+                    double num = calculateDistance(currentLongitude, currentLatitude, longitude, latitude);
+
+                    if(num < 20 && !inSafetyZone){ // 20 is a guess
+                        Toast toast = Toast.makeText(this, "In Safety Zone", Toast.LENGTH_SHORT);
+                        toast.show();
+                    }
+                }
+            } catch (IOException e){
+                Log.e(TAG, "Unable connect to Geocoder", e);
+            }
+        }
 
 
         if(!isFriendInSafetyZone(new Contact("Julie", "4082096381", 1))){
@@ -193,6 +227,7 @@ public class MainMap extends FragmentActivity implements
             @Override
             public void run() {
                 if(instance.isHasSetOffAlert()){
+                    instance.setHasSetOffAlert(false);
                     alarmManager.cancel(pendingIntent);
                 }
                 LayoutInflater inflater = getLayoutInflater();
@@ -247,6 +282,7 @@ public class MainMap extends FragmentActivity implements
                                     instance.restartInstance();
 
                                     if(instance.isHasSetOffAlert()){
+                                        instance.setHasSetOffAlert(false);
                                         alarmManager.cancel(pendingIntent);
                                     }
 
@@ -387,8 +423,8 @@ public class MainMap extends FragmentActivity implements
             Log.e(TAG, "Unable connect to Geocoder", e);
         }
 
-        final Geocoder geocoder = new Geocoder(this);
-        List<Address> addresses;
+       final Geocoder geocoder = new Geocoder(this);
+    /*     List<Address> addresses;
 
         for(int i = 0; i < safetyZones.size(); i++){
             try{
@@ -408,7 +444,7 @@ public class MainMap extends FragmentActivity implements
             } catch (IOException e){
                 Log.e(TAG, "Unable connect to Geocoder", e);
             }
-        }
+        }*/
 
 
         LatLng latLng = new LatLng(currentLatitude, currentLongitude);
@@ -481,29 +517,6 @@ public class MainMap extends FragmentActivity implements
                    mMap.addMarker(friendMarker);
                 }
 */
-// ^^ NOT WORKING
-
-
-                /*
-                ArrayList<MarkerOptions> markers = new ArrayList<>();
-                if(markers == null || markers.size() < 1){
-
-                    for(int l = 0; l < locationOfGroupMembers.size(); l++){
-                        LatLng friendLatLng = new LtLng(locationOfGroupMembers.lat, locationOfGroupMembers.long);
-                        MarkerOptions options = new MarkerOptions()
-                            .position(friendLatLng)
-                            .title(locationName);
-                        mMap.addMarker(options);
-                        markers.add(options);
-                    }
-
-                } else {
-                    for(int x = 0; x < locationOfGroupMembers.size(); x++){
-                        LatLng friendLatLng = new LtLng(locationOfGroupMembers.lat, locationOfGroupMembers.long);
-                        markers.get(x).setPosition(friendLatLng);
-                    }
-                }
-                */
 
             }
 
