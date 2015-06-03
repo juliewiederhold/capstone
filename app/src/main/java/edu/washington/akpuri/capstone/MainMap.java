@@ -129,37 +129,10 @@ public class MainMap extends FragmentActivity implements
         }, 10000);
 
         final Geocoder geocoder = new Geocoder(this);
-        List<Address> addresses;
+
         List<SafetyZone> safetyZones = instance.getNightOutSafetyZones();
 
-        for(int i = 0; i < safetyZones.size(); i++){
-            try{
-                addresses = geocoder.getFromLocationName(safetyZones.get(i).returnAddress(), 1);
-                //locationName = geocoder.getFromLocation(currentLatitude, currentLongitude, 1).get(0).getLocality();
-                if(addresses.size() > 0) {
-                    Location mLastLocation = LocationServices.FusedLocationApi.getLastLocation(
-                            mGoogleApiClient);
 
-                    double currentLongitude = 0;
-                    double currentLatitude = 0;
-                    if (mLastLocation != null) {
-                        currentLatitude = mLastLocation.getLatitude();
-                        currentLongitude = mLastLocation.getLongitude();
-                    }
-                    double latitude= addresses.get(0).getLatitude();
-                    double longitude= addresses.get(0).getLongitude();
-
-                    double num = calculateDistance(currentLongitude, currentLatitude, longitude, latitude);
-
-                    if(num < 20 && !inSafetyZone){ // 20 is a guess
-                        Toast toast = Toast.makeText(this, "In Safety Zone", Toast.LENGTH_SHORT);
-                        toast.show();
-                    }
-                }
-            } catch (IOException e){
-                Log.e(TAG, "Unable connect to Geocoder", e);
-            }
-        }
 
 
         if(!isFriendInSafetyZone(new Contact("Julie", "4082096381", 1))){
@@ -399,8 +372,8 @@ public class MainMap extends FragmentActivity implements
     private void handleNewLocation(Location location) {
         Log.d(TAG, location.toString());
 
-        final double currentLatitude = location.getLatitude();
-        final double currentLongitude = location.getLongitude();
+         double currentLatitude = location.getLatitude();
+         double currentLongitude = location.getLongitude();
 
         List<SafetyZone> safetyZones = instance.getNightOutSafetyZones();
 
@@ -424,9 +397,36 @@ public class MainMap extends FragmentActivity implements
         }
 
        final Geocoder geocoder = new Geocoder(this);
-    /*     List<Address> addresses;
+       List<Address> addresses;
 
         for(int i = 0; i < safetyZones.size(); i++){
+            try{
+                addresses = geocoder.getFromLocationName(safetyZones.get(i).returnAddress(), 1);
+                //locationName = geocoder.getFromLocation(currentLatitude, currentLongitude, 1).get(0).getLocality();
+                if(addresses.size() > 0) {
+                    Location mLastLocation = LocationServices.FusedLocationApi.getLastLocation(
+                            mGoogleApiClient);
+
+                    if (mLastLocation != null) {
+                        currentLatitude = mLastLocation.getLatitude();
+                        currentLongitude = mLastLocation.getLongitude();
+                    }
+                    double latitude= addresses.get(0).getLatitude();
+                    double longitude= addresses.get(0).getLongitude();
+
+                    double num = calculateDistance(currentLongitude, currentLatitude, longitude, latitude);
+
+                    if(num < 20){ // 20 is a guess
+                        Toast toast = Toast.makeText(this, "In Safety Zone", Toast.LENGTH_SHORT);
+                        toast.show();
+                    }
+                }
+            } catch (IOException e){
+                Log.e(TAG, "Unable connect to Geocoder", e);
+            }
+        }
+
+      /*  for(int i = 0; i < safetyZones.size(); i++){
             try{
                 addresses = geocoder.getFromLocationName(safetyZones.get(i).returnAddress(), 1);
                 //locationName = geocoder.getFromLocation(currentLatitude, currentLongitude, 1).get(0).getLocality();
@@ -473,7 +473,7 @@ public class MainMap extends FragmentActivity implements
                 String name = "Unknown Location";
                 List<Address> address;
                 try{
-                    address = geocoder.getFromLocation(currentLatitude, currentLongitude, 1);
+                    address = geocoder.getFromLocation(47.6553169, -122.3049381, 1);
                     name = address.get(0).getAddressLine(0);
                     name = name + ", " + address.get(0).getLocality();
                     name = name + ", " + address.get(0).getAdminArea();
