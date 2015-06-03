@@ -150,8 +150,7 @@ public class NightOutGroup extends ActionBarActivity
                 params.put("groupname", groupInstance.getGroupName());    // Group name temporarily the creator's phone number
                 Log.e(TAG, groupInstance.getMembersAsString());
                 params.put("members", groupInstance.getMembersAsString());
-                params.put("uri", "app://host/nightoutgroup");            // TODO Should go to confirm settings?
-//            params.put("uri", "app://host/mainactivity");
+                params.put("uri", "app://host/nightoutgroup"); // startnightoutsettingconfirmation
                 ParseCloud.callFunctionInBackground("sendPushToGroup", params, new FunctionCallback<String>() {
                     public void done(String success, ParseException e) {
                         if (e == null) {
@@ -169,8 +168,10 @@ public class NightOutGroup extends ActionBarActivity
 
     // Creates the group as a creator
     public void createGroupAsCreator() {
+
         // Create group name
-        String groupname = userInstance.getName().substring(0, 3) + userInstance.getPhone();
+        String groupname = "group" + userInstance.getPhone();
+        ParsePush.subscribeInBackground(groupname);
         // Create NightOutGroup
         groupInstance.createGroup(groupname, userInstance.getContactObject());
         // Todo Add self as member BELOW DOESN'T SEEM TO WORK
@@ -200,9 +201,14 @@ public class NightOutGroup extends ActionBarActivity
     // Creates the group as a member and adds members to it
     public void createGroup(Contact theCreator) {
         groupInstance.createGroup(groupname, theCreator);
+        ParsePush.subscribeInBackground(groupname);
         for (String phone : groupMemberPhones) {
             addMember(phone);
         }
+        // Go to app://host/startnightoutsettingconfirmation
+        Intent intent = new Intent(NightOutGroup.this, StartNightOutSettingConfirmation.class);
+        startActivity(intent);
+//        finish();
     }
 
     // Destroys group and returns true if successfully destroyed, or false if not
@@ -308,8 +314,7 @@ public class NightOutGroup extends ActionBarActivity
         // User touched Accept
         // Subscribe to Parse channel, which is the group name, which is the group creator's phone number
         // to receive push notifications for night out group
-        Log.e(TAG, "Group name: " + groupname);
-        ParsePush.subscribeInBackground(groupname);
+
         // Create group as a member
         createGroup(theCreator);
     }
@@ -318,24 +323,6 @@ public class NightOutGroup extends ActionBarActivity
     @Override
     public void onDialogNegativeClick(DialogFragment dialog) {
         // User touched - button
-        // Send notification to group creator that user rejected request
-//        String message = userInstance.getName() + " (" + userInstance.getPhone() + ") rejected the invite.";
-//        HashMap<String, Object> params = new HashMap<String, Object>();
-//        params.put("recipientId", theCreator.getObjectId());
-//        params.put("recipientEmail", theCreator.getEmail());
-//        params.put("message", message);
-//        params.put("uri", "app://host/mainactivity");
-//        ParseCloud.callFunctionInBackground("sendPushToUser", params, new FunctionCallback<String>() {
-//            public void done(String success, ParseException e) {
-//                if (e == null) {
-//                    // Push sent successfully
-//                    Log.e(TAG, success);
-//                }
-//                else {
-//                    Log.e(TAG, e.toString());
-//                }
-//            }
-//        });
         deleteMemberFromGroup(userInstance.getCurrentUser().getObjectId());
     }
 

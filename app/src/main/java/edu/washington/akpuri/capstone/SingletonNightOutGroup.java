@@ -22,36 +22,36 @@ public class SingletonNightOutGroup {
 
 
     private static final String TAG = "SingletonNightOutGroup";
-    private static SingletonNightOutGroup instance;
-    private static Map<String, Contact> groupContact;
-    private static ArrayList<Contact> groupContacts;
-    private static Map<String, ParseUser> groupParse;
-    private static Map<String, ParseGeoPoint> groupLocation;  // phone number, location
-    private static String groupName;
+    private static SingletonNightOutGroup instance = new SingletonNightOutGroup();
+    private static Map<String, Contact> groupContact = new HashMap<>();
+    private static ArrayList<Contact> groupContacts = new ArrayList<>();
+    private static Map<String, ParseUser> groupParse = new HashMap<>();
+    private static Map<String, ParseGeoPoint> groupLocation = new HashMap<>();  // phone number, location
+    private static String groupName = "";
     private static Contact starter;
     private static ParseUser currentUser;
-    private static ArrayList<String> groupMembers, groupMembersName;
-    private static ArrayList<String> memberIds;
-    private static boolean hasBeenCreated;
+    private static ArrayList<String> groupMembers = new ArrayList<>();
+    private static ArrayList<String> groupMembersName = new ArrayList<>();
+    private static ArrayList<String> memberIds = new ArrayList<>();
+    private static boolean hasBeenCreated = false;;
 
     protected SingletonNightOutGroup() {
         // Empty
     }
 
     public static SingletonNightOutGroup getInstance() {
-        if (instance == null) {
-            Log.e(TAG, "Instantiating a SingletonNightOutGroup");
-            instance = new SingletonNightOutGroup();
-            groupContact = new HashMap<>();
-            groupContacts = new ArrayList<>();
-            groupParse = new HashMap<>();
-            groupMembers = new ArrayList<>();
-            groupMembersName = new ArrayList<>();
-            groupName = "";
-            memberIds = new ArrayList<>();
-            hasBeenCreated = false;
-            groupLocation = new HashMap<>();
-        }
+//        if (instance == null) {
+////            instance = new SingletonNightOutGroup();
+//            groupContact = new HashMap<>();
+//            groupContacts = new ArrayList<>();
+//            groupParse = new HashMap<>();
+//            groupMembers = new ArrayList<>();
+//            groupMembersName = new ArrayList<>();
+//            groupName = "";
+//            memberIds = new ArrayList<>();
+//            hasBeenCreated = false;
+//            groupLocation = new HashMap<>();
+//        }
         return instance;
     }
 
@@ -114,18 +114,6 @@ public class SingletonNightOutGroup {
         groupContacts.remove(contact); // dunno if this works
         groupParse.remove(contact.getPhone());
         return "Removed: " + contact.getEmail();
-    }
-
-    // TODO temporarily a string. Need to google how (should be in MainMap.java)
-    public void saveLocation(String location) {
-        // Save location for individuals
-
-
-    }
-    // TODO temporarily void
-    public void getLocations() {
-        // Get locations for each member in the night out group
-
     }
 
     public String getGroupName(){
