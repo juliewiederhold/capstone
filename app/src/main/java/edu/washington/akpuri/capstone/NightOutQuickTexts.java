@@ -212,7 +212,7 @@ public class NightOutQuickTexts extends ActionBarActivity {
                     // Pass null as the parent view because its going in the dialog layout
                     builder.setView(fragmentView)
                             // Add action buttons
-                            .setPositiveButton(R.string.update_safety_zone, new DialogInterface.OnClickListener(){
+                            .setPositiveButton(R.string.update_quick_text, new DialogInterface.OnClickListener(){
                                 @Override
                                 public void onClick(DialogInterface dialog, int id) {
                                     EditText messageText = (EditText) fragmentView.findViewById(R.id.quickText);

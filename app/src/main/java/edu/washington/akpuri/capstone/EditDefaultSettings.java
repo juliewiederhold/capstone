@@ -26,8 +26,8 @@ public class EditDefaultSettings extends ActionBarActivity {
         edit_profile.setImageResource(R.drawable.ic_person_black_48dp);
         edit_friends.setImageResource(R.drawable.ic_people_black_48dp);
         edit_safety_zones.setImageResource(R.drawable.ic_home_black_48dp);
-        edit_app_num_blocking.setImageResource(R.drawable.ic_dnd_forwardslash_black_48dp);
-        edit_quick_texts.setImageResource(R.drawable.ic_messenger_black_48dp);
+        edit_app_num_blocking.setImageResource(R.drawable.ic_do_not_disturb_alt_black_48dp);
+        edit_quick_texts.setImageResource(R.drawable.ic_sms_black_48dp);
 
         edit_profile.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -80,16 +80,15 @@ public class EditDefaultSettings extends ActionBarActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
+        switch (item.getItemId()) {
+            case R.id.action_settings:
+                Intent intent = new Intent(this, SettingsActivity.class);
+                intent.putExtra("activitySent","EditDefaultSettings");
+                this.startActivity(intent);
+                break;
+            default:
+                return super.onOptionsItemSelected(item);
         }
-
-        return super.onOptionsItemSelected(item);
+        return true;
     }
 }

@@ -95,11 +95,8 @@ public class MainActivity extends ActionBarActivity {
         instance = SingletonContacts.getInstance();
         userInstance = SingletonUser.getInstance();
 
-        // contact retrievaal
-        userInstance.setAllowContactRetrieval(userInstance.getCurrentUser().getBoolean("importContacts")); // NICOLE: Attempt to invoke virtual method 'boolean com.parse.ParseUser.getBoolean(java.lang.String)' on a null object reference
-        // Associate device with user                                                                                   ^^ This error message appears the first time you try to create an account. If you try again it will work. Not sure how to fix.
-//        userInstance.getCurrentInstallation().put("user", userInstance.getCurrentUser().getUsername());
-//        userInstance.getCurrentInstallation().saveInBackground();
+        // contact retrieval
+        userInstance.setAllowContactRetrieval(userInstance.getCurrentUser().getBoolean("importContacts"));
         try {
             ParseInstallation installation = ParseInstallation.getCurrentInstallation();
             installation.put("user", userInstance.getCurrentUser().getUsername());
@@ -136,7 +133,7 @@ public class MainActivity extends ActionBarActivity {
                         public void done(final ParseObject parseObject, ParseException e) {
                             String name = parseObject.getString("name");
                             String phone = parseObject.getString("phone");
-                            Log.e(TAG, "Adding " + name + " " + phone + " to pendingFriends");
+//                            Log.e(TAG, "Adding " + name + " " + phone + " to pendingFriends");
                             Contact currentFriend = new Contact(name, phone, 0);
                             pendingContacts.add(currentFriend);
                         }

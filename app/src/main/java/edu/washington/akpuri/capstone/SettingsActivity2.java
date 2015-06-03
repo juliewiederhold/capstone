@@ -25,8 +25,10 @@ import android.widget.Toast;
 import com.parse.LogInCallback;
 import com.parse.Parse;
 import com.parse.ParseException;
+import com.parse.ParseFile;
 import com.parse.ParseUser;
 
+import java.io.ByteArrayOutputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
@@ -54,6 +56,7 @@ public class SettingsActivity2 extends ActionBarActivity {
     private TextView newPassword2TextView;
     private TextView emailTextView;
     private TextView phoneTextView;
+    private Drawable picture;
 
     private boolean correctOldPassword;
 
@@ -69,10 +72,10 @@ public class SettingsActivity2 extends ActionBarActivity {
 
 
         ImageView profilePicture = (ImageView) findViewById(R.id.image_icon);
-        Drawable picture = userInstance.getProfilePicture();
+        picture = userInstance.getProfilePicture();
         if(picture != null)
             profilePicture.setImageDrawable(picture);
-        profilePicture.setOnClickListener(new View.OnClickListener() {
+            profilePicture.setOnClickListener(new View.OnClickListener() {
             public void onClick(View view) {
                 Intent getIntent = new Intent(Intent.ACTION_GET_CONTENT);
                 getIntent.setType("image/*");
@@ -130,20 +133,6 @@ public class SettingsActivity2 extends ActionBarActivity {
         } else {
             //
         }
-
-        // Set up the log out button click handler
-//        Button logoutButton = (Button) findViewById(R.id.logout_button);
-//        logoutButton.setOnClickListener(new View.OnClickListener() {
-//            public void onClick(View v) {
-//                // Call the Parse log out method
-//                ParseUser.logOut();
-//                // Start and intent for the dispatch activity
-//                // Below will start invalidate user's session and redirect to WelcomeActivity
-//                Intent intent = new Intent(SettingsActivity2.this, DispatchActivity.class);
-//                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
-//                startActivity(intent);
-//            }
-//        });
     }
 
     @Override
@@ -256,6 +245,15 @@ public class SettingsActivity2 extends ActionBarActivity {
             user.put("firstname", firstname);
             user.put("lastname", lastname);
             user.put("phone", phone);
+//            if (picture != null) {
+//                Bitmap bitmap = ((BitmapDrawable)picture).getBitmap();
+//                ByteArrayOutputStream stream = new ByteArrayOutputStream();
+//                bitmap.compress(Bitmap.CompressFormat.JPEG, 100, stream);
+//                byte[] bitmapdata = stream.toByteArray();
+//                ParseFile file = new ParseFile("photo", bitmapdata);
+//                file.saveInBackground();
+//                user.put("photo", file);
+//            }
             user.saveInBackground();
 
             new CountDownTimer(1000, 1000) {
@@ -283,23 +281,7 @@ public class SettingsActivity2 extends ActionBarActivity {
         } catch (Exception e) {
 
         }
-//        ParseUser.logInInBackground(ParseUser.getCurrentUser().getUsername(), oldPassword,
-//                new LogInCallback() {
-//                    @Override
-//                    public void done(ParseUser parseUser, ParseException e) {
-//                        if (parseUser != null) {
-//                            // old password is correct
-//                            correctOldPassword = true;
-//                            Log.e(TAG, "correctOldPassword TRUE: " + correctOldPassword);
-//                        } else {
-//                            // old password is incorrect
-//                            correctOldPassword = true;
-//                            Log.e(TAG, "correctOldPassword FALSE: " + correctOldPassword);
-//                        }
-//                    }
-//                });
         Log.e(TAG, "correctOldPassword: " + correctOldPassword + " " + oldPassword);
-        // put code below in a method that will be called once done above
         return correctOldPassword;
     }
 

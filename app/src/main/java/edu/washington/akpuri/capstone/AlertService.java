@@ -50,7 +50,6 @@ public class AlertService extends BroadcastReceiver{
         sendAlerts();
     }
 
-    // TODO don't send to self
     private void sendAlerts(){
 
         Log.e(TAG, "Members: " + groupInstance.getMembersAsString() + " " + groupInstance.getGroupContact().size() + " " + groupInstance.getMembers().size());

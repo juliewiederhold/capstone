@@ -204,7 +204,7 @@ public class FriendAdapter extends ArrayAdapter<Contact> {
         holder.contactName.setText(data.getName());
         if (data.isPending()) {
             // TEMPORARY ****
-            holder.contactName.setText(holder.contactName.getText() + " Pending");
+            holder.contactName.setText(holder.contactName.getText());
         }
         holder.contactNumber.setText(data.getPhone());
 //        Log.e("height", getCount()+ "");
