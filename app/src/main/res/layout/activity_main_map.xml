@@ -22,57 +22,17 @@
             android:layout_width="55dp"
             android:layout_height="55dp"
             android:id="@+id/friend1"
-            android:layout_marginTop="5dp" />
-
-        <ImageView
-            android:layout_width="20dp"
-            android:layout_height="20dp"
-            android:id="@+id/friend2_house"
-            android:src="@drawable/ic_home_black_48dp"
-            android:layout_marginTop="35dp"
-            android:layout_marginLeft="10dp" />
-
-        <ImageButton
-            android:layout_width="55dp"
-            android:layout_height="55dp"
-            android:id="@+id/friend2"
-            android:layout_marginTop="5dp" />
-
-        <ImageView
-            android:layout_width="20dp"
-            android:layout_height="20dp"
-            android:id="@+id/friend3_house"
-            android:src="@drawable/ic_home_black_48dp"
-            android:layout_marginTop="35dp"
-            android:layout_marginLeft="10dp" />
-
-        <ImageButton
-            android:layout_width="55dp"
-            android:layout_height="55dp"
-            android:id="@+id/friend3"
-            android:layout_marginTop="5dp" />
-
-        <ImageView
-            android:layout_width="20dp"
-            android:layout_height="20dp"
-            android:id="@+id/friend4_house"
-            android:src="@drawable/ic_home_black_48dp"
-            android:layout_marginTop="35dp"
-            android:layout_marginLeft="10dp" />
-
-        <ImageButton
-            android:layout_width="55dp"
-            android:layout_height="55dp"
-            android:id="@+id/friend4"
-            android:layout_marginTop="5dp"
-            android:layout_marginLeft="0dp" />
+            android:layout_marginTop="3dp"
+            android:scaleType="centerCrop"
+            android:src="@drawable/profile_picture_julie"
+            android:background="@color/blue_main" />
 
         <ImageButton
             android:name="@+id/exit_night_out"
             android:src="@drawable/ic_clear_black_48dp"
             android:layout_width="25dp"
             android:layout_height="25dp"
-            android:layout_marginLeft="10dp"
+            android:layout_marginLeft="275dp"
             android:background="@color/blue_main"
             android:id="@+id/exit_night_out"
             android:layout_marginTop="5dp" />

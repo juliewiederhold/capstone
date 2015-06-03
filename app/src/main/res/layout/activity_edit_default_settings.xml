@@ -14,7 +14,8 @@
         android:layout_alignParentLeft="false"
         android:layout_alignParentStart="false"
         android:layout_marginTop="70dp"
-        android:scaleType="centerCrop" />
+        android:scaleType="centerCrop"
+        android:background="@color/background_grey" />
 
     <ImageButton
         android:id="@+id/edit_friends_button"
@@ -23,7 +24,8 @@
         android:src="@drawable/add"
         android:layout_alignTop="@+id/edit_profile_button"
         android:layout_centerHorizontal="true"
-        android:scaleType="centerCrop" />
+        android:scaleType="centerCrop"
+        android:background="@color/background_grey" />
 
     <ImageButton
         android:id="@+id/edit_safety_zones_button"
@@ -33,7 +35,8 @@
         android:layout_alignTop="@+id/edit_friends_button"
         android:layout_alignParentRight="true"
         android:layout_alignParentEnd="true"
-        android:scaleType="centerCrop" />
+        android:scaleType="centerCrop"
+        android:background="@color/background_grey" />
 
     <ImageButton
         android:id="@+id/edit_app_number_blocking"
@@ -44,7 +47,8 @@
         android:layout_below="@+id/textView9"
         android:layout_toLeftOf="@+id/textView8"
         android:layout_toStartOf="@+id/textView8"
-        android:scaleType="centerCrop" />
+        android:scaleType="centerCrop"
+        android:background="@color/background_grey" />
 
     <ImageButton
         android:id="@+id/edit_quick_texts_button"
@@ -54,7 +58,8 @@
         android:layout_alignTop="@+id/edit_app_number_blocking"
         android:layout_toRightOf="@+id/edit_friends_button"
         android:layout_toEndOf="@+id/edit_friends_button"
-        android:scaleType="centerCrop" />
+        android:scaleType="centerCrop"
+        android:background="@color/background_grey" />
 
     <TextView
         android:layout_width="wrap_content"

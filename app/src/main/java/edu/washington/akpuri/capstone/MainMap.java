@@ -28,6 +28,7 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.SimpleAdapter;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.common.ConnectionResult;
@@ -39,7 +40,9 @@ import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.parse.GetCallback;
 import com.parse.ParseException;
@@ -69,6 +72,9 @@ public class MainMap extends FragmentActivity implements
     private AlarmManager alarmManager;
     private PendingIntent pendingIntent;
     private static SingletonNightOutGroup nightOutGroup = SingletonNightOutGroup.getInstance();
+    private MarkerOptions friendMarker;
+    private LatLng theHub;
+    private boolean inSafetyZone;
 
     final SingletonUser userInstance = SingletonUser.getInstance();
 
@@ -107,32 +113,64 @@ public class MainMap extends FragmentActivity implements
                 .setFastestInterval(1 * 1000); // 1 second, in milliseconds
 
         ImageButton friend1 = (ImageButton) findViewById(R.id.friend1);
-        ImageButton friend2 = (ImageButton) findViewById(R.id.friend2);
-        ImageButton friend3 = (ImageButton) findViewById(R.id.friend3);
-        ImageButton friend4 = (ImageButton) findViewById(R.id.friend4);
-
+        friend1.setVisibility(View.INVISIBLE);
         ImageView safetyZone1 = (ImageView) findViewById(R.id.friend1_house);
-        ImageView safetyZone2 = (ImageView) findViewById(R.id.friend2_house);
-        ImageView safetyZone3 = (ImageView) findViewById(R.id.friend3_house);
-        ImageView safetyZone4 = (ImageView) findViewById(R.id.friend4_house);
+
+        Handler friendHandler = new Handler();
+        friendHandler.postDelayed(new Runnable() {
+
+            @Override
+            public void run() {
+                ImageButton friend1 = (ImageButton) findViewById(R.id.friend1);
+                friend1.setVisibility(View.VISIBLE);
+                friend1.setImageResource(R.drawable.profile_picture_julie);
+            }
+
+        }, 10000);
+
+        final Geocoder geocoder = new Geocoder(this);
+        List<Address> addresses;
+        List<SafetyZone> safetyZones = instance.getNightOutSafetyZones();
+
+        for(int i = 0; i < safetyZones.size(); i++){
+            try{
+                addresses = geocoder.getFromLocationName(safetyZones.get(i).returnAddress(), 1);
+                //locationName = geocoder.getFromLocation(currentLatitude, currentLongitude, 1).get(0).getLocality();
+                if(addresses.size() > 0) {
+                    Location mLastLocation = LocationServices.FusedLocationApi.getLastLocation(
+                            mGoogleApiClient);
+
+                    double currentLongitude = 0;
+                    double currentLatitude = 0;
+                    if (mLastLocation != null) {
+                        currentLatitude = mLastLocation.getLatitude();
+                        currentLongitude = mLastLocation.getLongitude();
+                    }
+                    double latitude= addresses.get(0).getLatitude();
+                    double longitude= addresses.get(0).getLongitude();
+
+                    double num = calculateDistance(currentLongitude, currentLatitude, longitude, latitude);
+
+                    if(num < 20 && !inSafetyZone){ // 20 is a guess
+                        Toast toast = Toast.makeText(this, "In Safety Zone", Toast.LENGTH_SHORT);
+                        toast.show();
+                    }
+                }
+            } catch (IOException e){
+                Log.e(TAG, "Unable connect to Geocoder", e);
+            }
+        }
+
 
         if(!isFriendInSafetyZone(new Contact("Julie", "4082096381", 1))){
             safetyZone1.setVisibility(View.INVISIBLE);
-            safetyZone2.setVisibility(View.INVISIBLE);
-            safetyZone3.setVisibility(View.INVISIBLE);
-            safetyZone4.setVisibility(View.INVISIBLE); // will make separate methods for each once we know this one works
         }
 
         friend1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //todo double friend1Latitude = get friend1's latitude from parse
-                //todo double friend1Longitude = get friend1's latitude from parse
-                // OR if you store their locations as a LatLng I can use that as well. See my description of putting their location on the map below for more info or fb message me :)
-
                 // Center's the map camera on Friend 1
-                //LatLng latLng = new LatLng(friend1Latitude, friend1Longitude);
-                //mMap.moveCamera(CameraUpdateFactory.newLatLng(latLng));
+                mMap.moveCamera(CameraUpdateFactory.newLatLng(theHub));
             }
         });
 
@@ -189,6 +227,7 @@ public class MainMap extends FragmentActivity implements
             @Override
             public void run() {
                 if(instance.isHasSetOffAlert()){
+                    instance.setHasSetOffAlert(false);
                     alarmManager.cancel(pendingIntent);
                 }
                 LayoutInflater inflater = getLayoutInflater();
@@ -243,6 +282,7 @@ public class MainMap extends FragmentActivity implements
                                     instance.restartInstance();
 
                                     if(instance.isHasSetOffAlert()){
+                                        instance.setHasSetOffAlert(false);
                                         alarmManager.cancel(pendingIntent);
                                     }
 
@@ -383,8 +423,8 @@ public class MainMap extends FragmentActivity implements
             Log.e(TAG, "Unable connect to Geocoder", e);
         }
 
-        Geocoder geocoder = new Geocoder(this);
-        List<Address> addresses;
+       final Geocoder geocoder = new Geocoder(this);
+    /*     List<Address> addresses;
 
         for(int i = 0; i < safetyZones.size(); i++){
             try{
@@ -404,7 +444,7 @@ public class MainMap extends FragmentActivity implements
             } catch (IOException e){
                 Log.e(TAG, "Unable connect to Geocoder", e);
             }
-        }
+        }*/
 
 
         LatLng latLng = new LatLng(currentLatitude, currentLongitude);
@@ -428,9 +468,30 @@ public class MainMap extends FragmentActivity implements
 
             @Override
             public void run() {
+
+                theHub = new LatLng(47.6553169, -122.3049381);
+                String name = "Unknown Location";
+                List<Address> address;
+                try{
+                    address = geocoder.getFromLocation(currentLatitude, currentLongitude, 1);
+                    name = address.get(0).getAddressLine(0);
+                    name = name + ", " + address.get(0).getLocality();
+                    name = name + ", " + address.get(0).getAdminArea();
+                    name = name + ", " + address.get(0).getCountryName();
+                    name = name + ", " + address.get(0).getFeatureName();
+                }catch (IOException e){
+                    Log.e(TAG, "Unable connect to Geocoder", e);
+                }
+
+                friendMarker = new MarkerOptions()
+                        .position(theHub);
+                        //.title("Julie's location" + name);
+                mMap.addMarker(friendMarker);
+                mMap.setInfoWindowAdapter(new MyInfoWindowAdapter("Julie's Location", name));
+
                 // Send currentLatitude and currentLongitude (both are existing variables defined line 342) to Parse for this user's location
                     // Can also send the LatLng of the location (defined 390), may make things easier since one variable and is what I need to move the marker
-                userInstance.saveLocationToParse(currentLatitude, currentLongitude);
+     /*           userInstance.saveLocationToParse(currentLatitude, currentLongitude);
                 // Hey Julie! I don't know that this is working. It doesn't seem to do anything?
 
                 // TODO: Pull the lat and long of each Night Out Group Member
@@ -455,34 +516,44 @@ public class MainMap extends FragmentActivity implements
                                .position(friendLatLng);
                    mMap.addMarker(friendMarker);
                 }
-
-// ^^ NOT WORKING
-
-
-                /*
-                ArrayList<MarkerOptions> markers = new ArrayList<>();
-                if(markers == null || markers.size() < 1){
-
-                    for(int l = 0; l < locationOfGroupMembers.size(); l++){
-                        LatLng friendLatLng = new LtLng(locationOfGroupMembers.lat, locationOfGroupMembers.long);
-                        MarkerOptions options = new MarkerOptions()
-                            .position(friendLatLng)
-                            .title(locationName);
-                        mMap.addMarker(options);
-                        markers.add(options);
-                    }
-
-                } else {
-                    for(int x = 0; x < locationOfGroupMembers.size(); x++){
-                        LatLng friendLatLng = new LtLng(locationOfGroupMembers.lat, locationOfGroupMembers.long);
-                        markers.get(x).setPosition(friendLatLng);
-                    }
-                }
-                */
+*/
 
             }
 
-        }, 60000);
+        }, 10000);
+    }
+
+    class MyInfoWindowAdapter implements GoogleMap.InfoWindowAdapter {
+
+        private final View myContentsView;
+        private String name, address;
+
+        public MyInfoWindowAdapter(String name, String vicinity) {
+            myContentsView = getLayoutInflater().inflate(
+                    R.layout.custom_info_contents, null);
+            this.name = name;
+            this.address = vicinity;
+        }
+
+        @Override
+        public View getInfoContents(Marker marker) {
+
+            TextView tvTitle = ((TextView) myContentsView
+                    .findViewById(R.id.title));
+            tvTitle.setText(name);
+            TextView tvSnippet = ((TextView) myContentsView
+                    .findViewById(R.id.snippet));
+            tvSnippet.setText(address);
+
+            return myContentsView;
+        }
+
+        @Override
+        public View getInfoWindow(Marker marker) {
+            // TODO Auto-generated method stub
+            return null;
+        }
+
     }
 
     private double calculateDistance(double fromLong, double fromLat,
