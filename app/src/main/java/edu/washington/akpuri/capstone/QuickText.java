@@ -248,7 +248,7 @@ public class QuickText extends ActionBarActivity {
                     // Pass null as the parent view because its going in the dialog layout
                     builder.setView(fragmentView)
                             // Add action buttons
-                            .setPositiveButton("Edit Quick Text", new DialogInterface.OnClickListener(){
+                            .setPositiveButton("Update Quick Text", new DialogInterface.OnClickListener(){
                                 @Override
                                 public void onClick(DialogInterface dialog, int id) {
                                     EditText messageText = (EditText) fragmentView.findViewById(R.id.quickText);

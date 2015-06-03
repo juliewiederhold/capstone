@@ -156,15 +156,15 @@ public class MainActivity extends ActionBarActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
-            case R.id.action_settings:
+            /*case R.id.action_settings:
                 Intent intent = new Intent(this, SettingsActivity.class);
                 intent.putExtra("activitySent","MainActivity");
                 this.startActivity(intent);
-                break;
+                break;*/
             case R.id.action_logout:
                 logout();
                 break;
-            case R.id.action_safetyzones:
+            /*case R.id.action_safetyzones:
                 Intent intent2 = new Intent(this, SafetyZonePage.class);
                 intent2.putExtra("activitySent","MainActivity");
                 this.startActivity(intent2);
@@ -178,7 +178,7 @@ public class MainActivity extends ActionBarActivity {
                 Intent intent4 = new Intent(this, NightOutGroup.class);
                 intent4.putExtra("activitySent","MainActivity");
                 this.startActivity(intent4);
-                break;
+                break;*/
             default:
                 return super.onOptionsItemSelected(item);
         }
