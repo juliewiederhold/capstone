@@ -84,6 +84,21 @@ public class AlertService extends BroadcastReceiver{
 //            iterator.remove();
 //        }
         }
+//        HashMap<String, Object> params = new HashMap<String, Object>();
+//        Log.e(TAG, "Sending alert to: " + groupInstance.getGroupName());
+//        params.put("channel", groupInstance.getGroupName());
+//        params.put("message", message);
+//        params.put("uri", "app://host/mainmap");              // Go to MainMap.java
+//        ParseCloud.callFunctionInBackground("sendToGroup", params, new FunctionCallback<String>() {
+//            public void done(String success, ParseException e) {
+//                if (e == null) {
+//                    // Push sent successfully
+//                    Log.e(TAG, success);
+//                } else {
+//                    Log.e(TAG, e.toString());
+//                }
+//            }
+//        });
     }
 
 }

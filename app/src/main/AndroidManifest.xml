@@ -200,6 +200,12 @@
         <activity
             android:name=".StartNightOutSettingConfirmation"
             android:label="@string/title_activity_start_night_out" >
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW"/>
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                <data android:scheme="app" android:host="host" android:path="/startnightoutsettingconfirmation" />
+            </intent-filter>
         </activity>
         <activity
             android:name=".NightOutSafetyZones"
