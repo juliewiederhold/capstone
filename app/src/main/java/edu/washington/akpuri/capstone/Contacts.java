@@ -56,7 +56,6 @@ public class Contacts extends ActionBarActivity {
         allowContactRetrieval = userInstance.getAllowContactRetrieval();
 
 
-
         //Get the actionbar
         // setup action bar for tabs
         actionBar = this.getSupportActionBar();
@@ -91,6 +90,7 @@ public class Contacts extends ActionBarActivity {
                 @Override
                 public void onClick(View v) {
                     Log.e(TAG, "contactsNext button pressed");
+                    finish();
                     Intent safeZones = new Intent(Contacts.this, EditDefaultSettings.class);
                     startActivity(safeZones);
                 }
@@ -225,21 +225,21 @@ public class Contacts extends ActionBarActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
-            case R.id.action_settings:
+            /*case R.id.action_settings:
                 Intent intent = new Intent(this, SettingsActivity.class);
                 this.startActivity(intent);
-                break;
+                break;*/
             case R.id.action_logout:
                 logout();
                 break;
-            case R.id.action_safetyzones:
+            /*case R.id.action_safetyzones:
                 Intent intent2 = new Intent(this, SafetyZonePage.class);
                 this.startActivity(intent2);
                 break;
             case R.id.action_contacts:
                 Intent intent3 = new Intent(this, Contacts.class);
                 this.startActivity(intent3);
-                break;
+                break;*/
             default:
                 return super.onOptionsItemSelected(item);
         }

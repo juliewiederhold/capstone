@@ -38,8 +38,8 @@ public class SingletonNightOutSettings {
             nightOutSafetyZones = new ArrayList<>();
             nightOutBlockedApps = new ArrayList<>();
             nightOutBlockedContacts = new ArrayList<>();
-            nightOutSafetyZones.add(new SafetyZone("home", "Mary Gates Hall, University of Washington", "Seattle", 98105, "WA"));
-            nightOutSafetyZones.add(new SafetyZone("home 2", "4746 20th Ave NE", "Seattle", 98105, "WA"));
+            nightOutSafetyZones.add(new SafetyZone("Home Away From Home", "Mary Gates Hall, University of Washington", "Seattle", 98105, "WA"));
+            nightOutSafetyZones.add(new SafetyZone("Home", "4746 20th Ave NE", "Seattle", 98105, "WA"));
 
             durationHours = 0;
             durationMinutes = 0;
