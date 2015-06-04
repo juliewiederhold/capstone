@@ -229,7 +229,8 @@
         </activity>
         <activity
             android:name=".MainMap"
-            android:label="@string/title_activity_main_map">
+            android:label="@string/title_activity_main_map"
+            android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.VIEW"/>
                 <category android:name="android.intent.category.DEFAULT" />
