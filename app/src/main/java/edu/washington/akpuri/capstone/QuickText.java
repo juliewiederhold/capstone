@@ -24,6 +24,8 @@ import android.widget.SimpleAdapter;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.parse.ParseUser;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -188,11 +190,24 @@ public class QuickText extends ActionBarActivity {
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
+        if (id == R.id.action_logout) {
+            logout();
             return true;
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    private void logout() {
+        // Call the Parse log out method
+        ParseUser.logOut();
+        ParseUser currentUser = ParseUser.getCurrentUser(); // this will now be null
+        userInstance.setCurrentUser(currentUser);
+        // Start and intent for the dispatch activity
+        // Below will start invalidate user's session and redirect to WelcomeActivity
+        Intent intent = new Intent(this, DispatchActivity.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+        startActivity(intent);
     }
 
     /**

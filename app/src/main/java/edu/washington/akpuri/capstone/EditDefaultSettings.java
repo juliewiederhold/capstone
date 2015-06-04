@@ -9,13 +9,18 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
 
+import com.parse.ParseUser;
+
 
 public class EditDefaultSettings extends ActionBarActivity {
+    private static SingletonUser userInstance;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_edit_default_settings);
+
+        userInstance = SingletonUser.getInstance();
 
         ImageButton edit_profile = (ImageButton) findViewById(R.id.edit_profile_button);
         ImageButton edit_friends = (ImageButton) findViewById(R.id.edit_friends_button);
@@ -81,14 +86,24 @@ public class EditDefaultSettings extends ActionBarActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
-            case R.id.action_settings:
-                Intent intent = new Intent(this, SettingsActivity.class);
-                intent.putExtra("activitySent","EditDefaultSettings");
-                this.startActivity(intent);
+            case R.id.action_logout:
+                logout();
                 break;
             default:
                 return super.onOptionsItemSelected(item);
         }
         return true;
+    }
+
+    private void logout() {
+        // Call the Parse log out method
+        ParseUser.logOut();
+        ParseUser currentUser = ParseUser.getCurrentUser(); // this will now be null
+        userInstance.setCurrentUser(currentUser);
+        // Start and intent for the dispatch activity
+        // Below will start invalidate user's session and redirect to WelcomeActivity
+        Intent intent = new Intent(this, DispatchActivity.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+        startActivity(intent);
     }
 }
