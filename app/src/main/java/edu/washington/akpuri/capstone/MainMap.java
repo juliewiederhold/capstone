@@ -123,7 +123,10 @@ public class MainMap extends FragmentActivity implements
             public void run() {
                 ImageButton friend1 = (ImageButton) findViewById(R.id.friend1);
                 friend1.setVisibility(View.VISIBLE);
-                friend1.setImageResource(R.drawable.profile_picture_julie);
+                if(userInstance.getPhone().equals("4082096381"))
+                    friend1.setImageResource(R.drawable.profile_picture_julie);
+                else
+                    friend1.setImageResource(R.drawable.profile_picture_nicole);
             }
 
         }, 10000);
