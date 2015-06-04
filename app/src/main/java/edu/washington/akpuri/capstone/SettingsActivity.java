@@ -55,8 +55,10 @@ public class SettingsActivity extends ActionBarActivity {
 
         ImageView profilePicture = (ImageView) findViewById(R.id.image_icon);
         Drawable picture = userInstance.getProfilePicture();
-        if(picture != null)
+        if(picture != null) {
+            Log.e(TAG, "Picture from local storage loaded.");
             profilePicture.setImageDrawable(picture);
+        }
 
         Log.e(TAG, "SettingsActivity fired");
 
@@ -90,6 +92,12 @@ public class SettingsActivity extends ActionBarActivity {
             lastnameEditText.setKeyListener(null);
             emailEditText.setKeyListener(null);
             phoneEditText.setKeyListener(null);
+
+//            Drawable picture2 = userInstance.getProfilePictureFromParse();
+//            if (picture2 != null) {
+//                Log.e(TAG, "Setting profile picture");
+//                profilePicture.setImageDrawable(picture2);
+//            }
 
             Button editSettingsButton = (Button) findViewById(R.id.edit_settings_button);
             editSettingsButton.setOnClickListener(new View.OnClickListener() {

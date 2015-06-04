@@ -1,6 +1,7 @@
 package edu.washington.akpuri.capstone;
 
 import android.content.Intent;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.support.v7.app.ActionBarActivity;
@@ -143,6 +144,17 @@ public class MainActivity extends ActionBarActivity {
             instance.setSosoFriends(pendingContacts);
 
         }
+
+
+        // Get profile picture
+        if (userInstance.hasPhoto() || userInstance.getCurrentUser().getBoolean("hasPhoto")) {
+            Drawable picture = userInstance.getProfilePictureFromParse();
+            if (picture != null) {
+                userInstance.setProfilePicture(picture);
+            }
+        } /*else if (userInstance.getCurrentUser().getBoolean("hasPhoto")) {
+            Log.e(TAG, "testing");
+        }*/
 
     }
 

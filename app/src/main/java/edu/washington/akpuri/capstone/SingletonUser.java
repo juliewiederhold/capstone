@@ -1,17 +1,23 @@
 package edu.washington.akpuri.capstone;
 
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.util.Log;
 import android.widget.ImageView;
 
+import com.parse.GetDataCallback;
 import com.parse.ParseException;
+import com.parse.ParseFile;
 import com.parse.ParseGeoPoint;
 import com.parse.ParseInstallation;
+import com.parse.ParseObject;
+import com.parse.ParseQuery;
 import com.parse.ParseUser;
 import com.parse.SaveCallback;
 
+import java.io.ByteArrayInputStream;
 import java.util.ArrayList;
 
 /**
@@ -32,6 +38,8 @@ public class SingletonUser {
     private static String email;
     private static Drawable profilePicture;
     private static Contact userContact;
+    private static Drawable parseProfilePicture;
+    private static boolean hasPhoto;
 
     //Empty Constructor, it's a singleton
     protected SingletonUser(){
@@ -41,6 +49,7 @@ public class SingletonUser {
     public static SingletonUser getInstance() {
         if (instance == null) {
             instance = new SingletonUser();
+            hasPhoto = false;
             allowContactRetrieval = false;
             hasGoneThroughInitialSetUp = false;
             allDefaultSettings = new ArrayList<>();
@@ -116,7 +125,51 @@ public class SingletonUser {
 
     public void setProfilePicture(Drawable pic) {this.profilePicture = pic;}
 
-    public Drawable getProfilePicture() {return this.profilePicture;}
+    public Drawable getProfilePicture() {
+        if (this.profilePicture == null) {
+            getProfilePictureFromParse();
+        }
+        return this.profilePicture;
+    }
+
+    public Drawable getProfilePictureFromParse() {
+        if (instance.getCurrentUser().getBoolean("hasPhoto")) {
+            ParseFile file = (ParseFile) instance.getCurrentUser().get("photo");
+            file.getDataInBackground(new GetDataCallback() {
+                @Override
+                public void done(byte[] bytes, ParseException e) {
+                    if (e == null) {
+                        // Get bytes
+//                    Bitmap bmp = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
+                        if (bytes != null) {
+                            Bitmap bmp = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
+                            parseProfilePicture = (Drawable) new BitmapDrawable(bmp);
+                            // Set profile picture
+                            profilePicture = parseProfilePicture;
+                            hasPhoto = true;
+//                            instance.getCurrentUser().put("hasPhoto", true);
+//                            instance.getCurrentUser().saveInBackground(new SaveCallback() {
+//                                @Override
+//                                public void done(ParseException e) {
+//                                    Log.e(TAG, "hasPhoto = true");
+//                                }
+//                            });
+                            Log.e(TAG, "Downloaded photo form Parse.");
+                        }
+                    } else {
+                        // Something went wrong
+                        Log.e(TAG, "Error downloading the photo from Parse.");
+                    }
+                }
+            });
+        }
+        return parseProfilePicture;
+    }
+
+    // Check if user has photo saved
+    public boolean hasPhoto(){
+        return this.hasPhoto;
+    }
 
     public ParseGeoPoint saveLocationToParse(double latitude, double longitude) {
         final ParseGeoPoint point = new ParseGeoPoint(latitude, longitude);

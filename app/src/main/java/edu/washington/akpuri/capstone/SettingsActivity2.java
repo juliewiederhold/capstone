@@ -27,6 +27,7 @@ import com.parse.Parse;
 import com.parse.ParseException;
 import com.parse.ParseFile;
 import com.parse.ParseUser;
+import com.parse.SaveCallback;
 
 import java.io.ByteArrayOutputStream;
 import java.io.FileNotFoundException;
@@ -235,7 +236,7 @@ public class SettingsActivity2 extends ActionBarActivity {
             dialog.show();
 
             // Set up a new Parse user
-            ParseUser user = ParseUser.getCurrentUser();
+            final ParseUser user = ParseUser.getCurrentUser();
             user.setUsername(email);
             if (newPassword2.length() > 0) {
                 user.setPassword(newPassword2);
@@ -245,16 +246,37 @@ public class SettingsActivity2 extends ActionBarActivity {
             user.put("firstname", firstname);
             user.put("lastname", lastname);
             user.put("phone", phone);
-//            if (picture != null) {
-//                Bitmap bitmap = ((BitmapDrawable)picture).getBitmap();
-//                ByteArrayOutputStream stream = new ByteArrayOutputStream();
-//                bitmap.compress(Bitmap.CompressFormat.JPEG, 100, stream);
-//                byte[] bitmapdata = stream.toByteArray();
-//                ParseFile file = new ParseFile("photo", bitmapdata);
-//                file.saveInBackground();
-//                user.put("photo", file);
-//            }
-            user.saveInBackground();
+
+            if (userInstance.getProfilePicture() != null) {
+                Bitmap bitmap = ((BitmapDrawable)userInstance.getProfilePicture()).getBitmap();
+                ByteArrayOutputStream stream = new ByteArrayOutputStream();
+                bitmap.compress(Bitmap.CompressFormat.JPEG, 100, stream);
+                byte[] bitmapdata = stream.toByteArray();
+                final ParseFile file = new ParseFile("photo", bitmapdata);
+                file.saveInBackground(new SaveCallback() {
+                    @Override
+                    public void done(ParseException e) {
+                        user.put("photo", file);
+                        user.put("hasPhoto", true);
+                        user.saveInBackground(new SaveCallback() {
+                            @Override
+                            public void done(ParseException e) {
+                                Log.e(TAG, "Saved on Parse.");
+                                user.saveInBackground(new SaveCallback() {
+                                    @Override
+                                    public void done(ParseException e) {
+                                        Log.e(TAG, "hasPhoto = true");
+                                    }
+                                });
+                            }
+                        });
+                    }
+                });
+
+            } else {
+                Log.e(TAG, "NULLL");
+                user.saveInBackground();
+            }
 
             new CountDownTimer(1000, 1000) {
                 @Override
