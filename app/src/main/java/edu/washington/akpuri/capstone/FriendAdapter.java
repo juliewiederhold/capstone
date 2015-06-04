@@ -94,9 +94,9 @@ public class FriendAdapter extends ArrayAdapter<Contact> {
                                     instance.getSosoFriends().remove(data);
 
                                     // Add deleted So-So friend back to Contacts list
-                                    if (!data.hasBeenAdded()) {
+//                                    if (!data.hasBeenAdded()) {
                                         instance.getAllContacts().add(data);
-                                    }
+//                                    }
 
                                     // Remove from list
                                     remove(getItem(position));
