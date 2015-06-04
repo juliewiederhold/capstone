@@ -124,9 +124,9 @@ public class MainMap extends FragmentActivity implements
                 ImageButton friend1 = (ImageButton) findViewById(R.id.friend1);
                 friend1.setVisibility(View.VISIBLE);
                 if(userInstance.getPhone().equals("4082096381"))
-                    friend1.setImageResource(R.drawable.profile_picture_julie);
-                else
                     friend1.setImageResource(R.drawable.profile_picture_nicole);
+                else
+                    friend1.setImageResource(R.drawable.profile_picture_julie);
             }
 
         }, 10000);
@@ -490,7 +490,10 @@ public class MainMap extends FragmentActivity implements
                         .position(theHub);
                         //.title("Julie's location" + name);
                 mMap.addMarker(friendMarker);
-                mMap.setInfoWindowAdapter(new MyInfoWindowAdapter("Julie's Location", name));
+                if(userInstance.getPhone().equals("4082096381"))
+                    mMap.setInfoWindowAdapter(new MyInfoWindowAdapter("Nicole's Location", name));
+                else
+                    mMap.setInfoWindowAdapter(new MyInfoWindowAdapter("Julie's Location", name));
 
                 // Send currentLatitude and currentLongitude (both are existing variables defined line 342) to Parse for this user's location
                     // Can also send the LatLng of the location (defined 390), may make things easier since one variable and is what I need to move the marker
