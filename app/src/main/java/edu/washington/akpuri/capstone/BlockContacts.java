@@ -91,6 +91,7 @@ public class BlockContacts extends ActionBarActivity {
         sendRequest.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                finish();
                 Intent backToBlocking = new Intent(BlockContacts.this, AppNumberBlocking.class);
                 startActivity(backToBlocking);
             }
