@@ -28,6 +28,8 @@ import com.parse.ParseQuery;
 import com.parse.ParseRelation;
 import com.parse.ParseUser;
 
+import org.json.JSONObject;
+
 import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
@@ -193,7 +195,49 @@ public class Contacts extends ActionBarActivity {
             instance.setHasSavedRequests(true);
         }
 
-        // https://parse.com/questions/how-do-i-get-the-json-from-a-push-notification-in-android-when-the-activity-is-opened-by-clicking-on-the-notification
+        Intent intent = getIntent();
+        Bundle extras = intent.getExtras();
+        if (extras != null) {
+            String jsonData = extras.getString("com.parse.Data");
+            Log.e(TAG, jsonData);
+            if (jsonData != null) {
+                try {
+                    JSONObject jsonObject = new JSONObject(jsonData);
+                    String uri = jsonObject.getString("uri");
+                    if (uri.equals("app://host/contacts")) {
+                        // Get friend requests again or add
+                        String message = jsonObject.getString("message");
+                        String phone = getNumberFromMessage(message);
+                        ParseQuery<ParseUser> query1 = ParseUser.getQuery();
+                        query1.whereContains("phone", phone);
+                        query1.getFirstInBackground(new GetCallback<ParseUser>() {
+                            @Override
+                            public void done(ParseUser parseUser, ParseException e) {
+                                try {
+                                    Contact person = new Contact(parseUser.get("firstname").toString() + " " + parseUser.get("lastname").toString(),
+                                            parseUser.get("phone").toString(),
+                                            counter);
+                                    person.setEmail(parseUser.getUsername());
+                                    instance.addPendingRequests(person);
+                                    counter++;
+                                } catch (Exception e1) {
+                                    e1.printStackTrace();
+                                }
+                            }
+                        });
+
+                    }
+                } catch (Exception err) {
+                    err.printStackTrace();
+                }
+            }
+
+            // https://parse.com/questions/how-do-i-get-the-json-from-a-push-notification-in-android-when-the-activity-is-opened-by-clicking-on-the-notification
+        }
+    }
+
+    public static String getNumberFromMessage(String str){
+        return str.substring(str.indexOf('(')+1,str.indexOf(')'));
     }
 
     @Override
@@ -212,6 +256,54 @@ public class Contacts extends ActionBarActivity {
 //        Log.e(TAG, "pending friends: " + instance.getSosoFriends().toString());
 //        Log.e(TAG, "pending contacts: " + instance.getPendingContacts().toString());
 //        Log.e(TAG, "pending requests: " + instance.getPendingRequests().toString());
+        Intent intent = getIntent();
+        Bundle extras = intent.getExtras();
+        if (extras != null) {
+            String jsonData = extras.getString("com.parse.Data");
+            Log.e(TAG, jsonData);
+            if (jsonData != null) {
+                try {
+                    JSONObject jsonObject = new JSONObject(jsonData);
+                    String uri = jsonObject.getString("uri");
+                    if (uri.equals("app://host/contacts")) {
+                        // Get friend requests again or add
+                        String message = jsonObject.getString("alert");
+                        String phone = getNumberFromMessage(message);
+                        boolean exists = false;
+                        for (Contact contact : instance.getPendingRequests()) {
+                            if (contact.getPhone().equals(phone)) {
+                                exists = true;
+                            }
+                        }
+                        if (!exists) {
+                            Log.e(TAG, "Does not exist yet.");
+                            ParseQuery<ParseUser> query1 = ParseUser.getQuery();
+                            query1.whereContains("phone", phone);
+                            query1.getFirstInBackground(new GetCallback<ParseUser>() {
+                                @Override
+                                public void done(ParseUser parseUser, ParseException e) {
+                                    try {
+                                        Contact person = new Contact(parseUser.get("firstname").toString() + " " + parseUser.get("lastname").toString(),
+                                                parseUser.get("phone").toString(),
+                                                0);
+                                        person.setEmail(parseUser.getUsername());
+                                        instance.addPendingRequests(person);
+//                                        counter++;
+                                    } catch (Exception e1) {
+                                        e1.printStackTrace();
+                                    }
+                                }
+                            });
+                        }
+
+                    }
+                } catch (Exception err) {
+                    err.printStackTrace();
+                }
+            }
+
+            // https://parse.com/questions/how-do-i-get-the-json-from-a-push-notification-in-android-when-the-activity-is-opened-by-clicking-on-the-notification
+        }
     }
 
 
@@ -265,6 +357,7 @@ public class Contacts extends ActionBarActivity {
         @Override
         public void onCreate(Bundle savedInstanceState) {
             super.onCreate(savedInstanceState);
+
         }
 
         @Override

@@ -72,129 +72,168 @@ public class RequestsAdapter extends ArrayAdapter<Contact> {
                 @Override
                 public void onClick(View v) {
                     Log.e(TAG, "Accepting request from " + person.getName() + " " + person.getPhone());
-                    ParseQuery<ParseUser> query = ParseUser.getQuery();
-                    query.whereContains("phone", person.getPhone());
-                    query.getFirstInBackground(new GetCallback<ParseUser>() {
-                        @Override
-                        public void done(ParseUser parseUser, ParseException e) {
+                    // Check if friend already exists
+                    boolean exists = false;
+//                    boolean exists = instance.getSosoFriends().contains(person);
+//                    Log.e(TAG, "Exists: " + exists);
+                    // TODO ideally, if contact already exists, dont add again
+                    // Would be possible if HashMap was used instead of arraylist
+                    for (Contact contact : instance.getSosoFriends()) {
+                        if (person.getPhone().equals(contact.getPhone())) {
+                            exists = true;
+                        }
+                    }
 
-                            if ( parseUser != null) {
-                                try {
-                                    person.setIsPending(false);
+                    if (!exists) {
+                        ParseQuery<ParseUser> query = ParseUser.getQuery();
+                        query.whereContains("phone", person.getPhone());
+                        query.getFirstInBackground(new GetCallback<ParseUser>() {
+                            @Override
+                            public void done(ParseUser parseUser, ParseException e) {
+
+                                if (parseUser != null) {
+                                    try {
+                                        person.setIsPending(false);
 //                                final ParseUser currentUser = ParseUser.getCurrentUser();
-                                    // Add to currentUser's Friends on Parse.com
-                                    ParseRelation<ParseUser> relation = userInstance.getCurrentUser().getRelation("Friends");
-                                    relation.add(parseUser);
+                                        // Add to currentUser's Friends on Parse.com
+                                        ParseRelation<ParseUser> relation = userInstance.getCurrentUser().getRelation("Friends");
+                                        relation.add(parseUser);
 //                                currentUser.save();
-                                    userInstance.getCurrentUser().saveEventually();
-                                    // Remove from pending requests
+                                        userInstance.getCurrentUser().saveEventually();
+                                        // Remove from pending requests
 //                                instance.getPendingRequests().remove(person);
-                                    pendingRequests.remove(person);
-                                    // Change contact pending to false
-                                    Log.e(TAG, position + "");
+                                        pendingRequests.remove(person);
+                                        // Change contact pending to false
+                                        Log.e(TAG, position + "");
 //                                remove(getItem(position));
-                                    notifyDataSetChanged();
-                                    // TODO: Add to pending contacts
-                                    // TODO: Probably should be pending friends
+                                        notifyDataSetChanged();
+                                        // TODO: Add to pending contacts
+                                        // TODO: Probably should be pending friends
 //                                instance.addPendingContact(person);
-                                    instance.addSosoFriend(person);
-                                    // Create contact object for current user - Parse.com
+                                        instance.addSosoFriend(person);
+                                        // Create contact object for current user - Parse.com
 
-                                    ////// Create contact ParseObject here
-                                    final ParseObject contact = new ParseObject("contact");
-                                    contact.put("name", person.getName());
-                                    contact.put("phone", person.getPhone());
-                                    contact.put("user", userInstance.getCurrentUser().getUsername());
-                                    contact.put("id", person.getId());
-                                    contact.put("pending", false);
-                                    contact.saveInBackground(new SaveCallback() {
+                                        ////// Create contact ParseObject here
+                                        final ParseObject contact = new ParseObject("contact");
+                                        contact.put("name", person.getName());
+                                        contact.put("phone", person.getPhone());
+                                        contact.put("user", userInstance.getCurrentUser().getUsername());
+                                        contact.put("id", person.getId());
+                                        contact.put("pending", false);
+                                        contact.saveInBackground(new SaveCallback() {
+                                            @Override
+                                            public void done(ParseException e) {
+                                                if (e != null) {
+                                                    Log.e(TAG, "Error saving contactsId: " + e);
+                                                } else {
+                                                    // Add to instance current contacts
+                                                    instance.addCurrentContact(contact.getObjectId());
+                                                    person.setObjectId(contact.getObjectId());
+                                                    Log.e(TAG, person.getObjectId());
+                                                    // Add to currentUser's contacts[]
+                                                    userInstance.getCurrentUser().add("contacts", contact.getObjectId());
+                                                    userInstance.getCurrentUser().saveInBackground();
+                                                    // ContactsObject[]
+                                                    ParseQuery<ParseObject> query = ParseQuery.getQuery("ContactsObject");
+                                                    query.whereEqualTo("user", userInstance.getCurrentUser().getUsername());
+                                                    query.getFirstInBackground(new GetCallback<ParseObject>() {
+                                                        @Override
+                                                        public void done(final ParseObject parseObject, ParseException e) {
+                                                            if (parseObject != null) {
+                                                                // User exists and has a ContactsObject
+                                                                parseObject.add("contacts", contact.getObjectId());
+                                                                parseObject.saveInBackground(new SaveCallback() {
+                                                                    @Override
+                                                                    public void done(ParseException e) {
+                                                                        // Log.e(TAG, "ContactsObject: " + parseObject.get("contacts").toString());
+                                                                    }
+                                                                });
+                                                            } else {
+                                                                // Something went wrong
+                                                                Log.e("Contacts", "Failed to retrieve contactsObject: " + e);
+                                                            }
+                                                        }
+                                                    });
+                                                }
+                                            }
+//                                    instance.getPendingContacts().clear();
+                                        });
+
+                                        ParseQuery<ParseObject> query = ParseQuery.getQuery("contact");
+                                        query.whereEqualTo("phone", userInstance.getCurrentUser().get("phone"));
+                                        query.whereEqualTo("user", parseUser.getUsername().toString());
+                                        query.getFirstInBackground(new GetCallback<ParseObject>() {
+                                            @Override
+                                            public void done(ParseObject object, ParseException e) {
+                                                try {
+                                                    if (e == null) {
+                                                        object.put("pending", false);
+                                                        Log.e(TAG, object.get("user").toString() + " " + object.get("phone").toString() + " " + object.get("pending").toString());
+                                                        object.save();
+                                                    } else {
+                                                        e.printStackTrace();
+                                                    }
+                                                } catch (Exception error) {
+                                                    error.printStackTrace();
+                                                }
+                                            }
+                                        });
+                                        // Add to current user's instance: sosoFriends?
+                                    } catch (Exception err) {
+                                        err.printStackTrace();
+                                        Log.e(TAG, "Request DNE");
+                                    }
+                                } else {
+                                    Log.e(TAG, "Request doesn't exist on Parse anymore.");
+                                }
+                            }
+                        });
+                        // Get contact's contact object containing pending request
+                        ParseQuery<ParseObject> query1 = ParseQuery.getQuery("contact");
+                        query1.whereEqualTo("user", person.getEmail());
+                        query1.whereEqualTo("phone", person.getPhone());
+                        query1.getFirstInBackground(new GetCallback<ParseObject>() {
+                            @Override
+                            public void done(final ParseObject parseObject, ParseException e) {
+                                if (parseObject != null) {
+                                    parseObject.put("pending", false);
+                                    parseObject.saveInBackground(new SaveCallback() {
                                         @Override
                                         public void done(ParseException e) {
-                                            if (e != null) {
-                                                Log.e(TAG, "Error saving contactsId: " + e);
-                                            } else {
-                                                // Add to instance current contacts
-                                                instance.addCurrentContact(contact.getObjectId());
-                                                person.setObjectId(contact.getObjectId());
-                                                Log.e(TAG, person.getObjectId());
-                                                // Add to currentUser's contacts[]
-                                                userInstance.getCurrentUser().add("contacts", contact.getObjectId());
-                                                userInstance.getCurrentUser().saveInBackground();
-                                                // ContactsObject[]
-                                                ParseQuery<ParseObject> query = ParseQuery.getQuery("ContactsObject");
-                                                query.whereEqualTo("user", userInstance.getCurrentUser().getUsername());
-                                                query.getFirstInBackground(new GetCallback<ParseObject>() {
-                                                    @Override
-                                                    public void done(final ParseObject parseObject, ParseException e) {
-                                                        if (parseObject != null) {
-                                                            // User exists and has a ContactsObject
-                                                            parseObject.add("contacts", contact.getObjectId());
-                                                            parseObject.saveInBackground(new SaveCallback() {
-                                                                @Override
-                                                                public void done(ParseException e) {
-                                                                    // Log.e(TAG, "ContactsObject: " + parseObject.get("contacts").toString());
-                                                                }
-                                                            });
-                                                        } else {
-                                                            // Something went wrong
-                                                            Log.e("Contacts", "Failed to retrieve contactsObject: " + e);
-                                                        }
-                                                    }
-                                                });
-                                            }
-                                        }
-//                                    instance.getPendingContacts().clear();
-                                    });
-
-                                    ParseQuery<ParseObject> query = ParseQuery.getQuery("contact");
-                                    query.whereEqualTo("phone", userInstance.getCurrentUser().get("phone"));
-                                    query.whereEqualTo("user", parseUser.getUsername().toString());
-                                    query.getFirstInBackground(new GetCallback<ParseObject>() {
-                                        @Override
-                                        public void done(ParseObject object, ParseException e) {
-                                            try {
-                                                if (e == null) {
-                                                    object.put("pending", false);
-                                                    Log.e(TAG, object.get("user").toString() + " " + object.get("phone").toString() + " " + object.get("pending").toString());
-                                                    object.save();
-                                                } else {
-                                                    e.printStackTrace();
-                                                }
-                                            } catch (Exception error) {
-                                                error.printStackTrace();
-                                            }
+                                            Log.e(TAG, parseObject.get("user").toString() + " " + parseObject.get("phone") + "Pending: " + parseObject.get("pending").toString());
                                         }
                                     });
-                                    // Add to current user's instance: sosoFriends?
-                                } catch (Exception err) {
-                                    err.printStackTrace();
-                                    Log.e(TAG, "Request DNE");
+                                } else {
+                                    // Something went wrong
                                 }
-                            } else {
-                                Log.e(TAG, "Request doesn't exist on Parse anymore.");
                             }
-                        }
-                    });
-                    // Get contact's contact object containing pending request
-                    ParseQuery<ParseObject> query1 = ParseQuery.getQuery("contact");
-                    query1.whereEqualTo("user", person.getEmail());
-                    query1.whereEqualTo("phone", person.getPhone());
-                    query1.getFirstInBackground(new GetCallback<ParseObject>() {
-                        @Override
-                        public void done(final ParseObject parseObject, ParseException e) {
-                            if (parseObject != null) {
-                                parseObject.put("pending", false);
-                                parseObject.saveInBackground(new SaveCallback() {
-                                    @Override
-                                    public void done(ParseException e) {
-                                        Log.e(TAG, parseObject.get("user").toString() + " " + parseObject.get("phone") + "Pending: " + parseObject.get("pending").toString());
-                                    }
-                                });
-                            } else {
-                                // Something went wrong
+                        });
+                    } else {
+                        Log.e(TAG, "Exists but accept request from " + person.getName() + " " + person.getPhone());
+                        // Already exists for current user
+                        pendingRequests.remove(person);
+                        notifyDataSetChanged();
+                        // Get contact's contact object containing pending request
+                        ParseQuery<ParseObject> query1 = ParseQuery.getQuery("contact");
+                        query1.whereEqualTo("user", person.getEmail());
+                        query1.whereEqualTo("phone", person.getPhone());
+                        query1.getFirstInBackground(new GetCallback<ParseObject>() {
+                            @Override
+                            public void done(final ParseObject parseObject, ParseException e) {
+                                if (parseObject != null) {
+                                    parseObject.put("pending", false);
+                                    parseObject.saveInBackground(new SaveCallback() {
+                                        @Override
+                                        public void done(ParseException e) {
+                                            Log.e(TAG, parseObject.get("user").toString() + " " + parseObject.get("phone") + "Pending: " + parseObject.get("pending").toString());
+                                        }
+                                    });
+                                } else {
+                                    // Something went wrong
+                                }
                             }
-                        }
-                    });
+                        });
+                    }
                 }
             });
             viewHolder.rejectRequest.setOnClickListener(new View.OnClickListener(){
