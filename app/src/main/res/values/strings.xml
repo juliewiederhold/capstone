@@ -56,7 +56,7 @@
     <string name="no_blocked_contacts_description">You currently have no blocked contacts.</string>
 
     <!-- Contact / Friends Information -->
-    <string name="contact_group_description">Create a group with friends you commonly go out with to make adding inviting friends to a Night Out faster! </string>
+    <string name="contact_group_description">Create a group with friends you commonly go out with to make adding friends to a Night Out faster! </string>
     <string name="contact_group_message_when_contacts_empty">You currently do not have any So-So friends. Add contacts or wait for your friends to accept your invite!</string>
 
     <!-- General Button Texts -->
